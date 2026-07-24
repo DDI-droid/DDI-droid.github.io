@@ -2,64 +2,35 @@
 layout: page
 title: projects
 permalink: /projects/
-description: A growing collection of your cool projects.
+description: Research and things I have built. Blog links where a write-up exists.
 nav: true
 nav_order: 3
-display_categories: [work, fun]
-horizontal: false
 ---
 
-<!-- pages/projects.md -->
-<div class="projects">
-{% if site.enable_project_categories and page.display_categories %}
-  <!-- Display categorized projects -->
-  {% for category in page.display_categories %}
-  <a id="{{ category }}" href=".#{{ category }}">
-    <h2 class="category">{{ category }}</h2>
-  </a>
-  {% assign categorized_projects = site.projects | where: "category", category %}
-  {% assign sorted_projects = categorized_projects | sort: "importance" %}
-  <!-- Generate cards for each project -->
-  {% if page.horizontal %}
-  <div class="container">
-    <div class="row row-cols-1 row-cols-md-2">
-    {% for project in sorted_projects %}
-      {% include projects_horizontal.liquid %}
-    {% endfor %}
-    </div>
-  </div>
-  {% else %}
-  <div class="row row-cols-1 row-cols-md-3">
-    {% for project in sorted_projects %}
-      {% include projects.liquid %}
-    {% endfor %}
-  </div>
-  {% endif %}
-  {% endfor %}
+## Research
 
-{% else %}
+- **[Policy Language Models](/blog/2026/policy-language-models/)** — a meta-reasoning inference paradigm: the LLM reasons about the goal on its trajectory and expresses its computation as policies in a persistent REPL, instead of grinding everything inline. My main current work.
 
-<!-- Display projects without categories -->
+- **[PolyTM](/blog/2025/polytm/)** — a reinforcement learning environment where a neural network learns to write the computation that solves a problem, tape machines, add/multiply instructions, rewards for correct results in polynomial time.
 
-{% assign sorted_projects = site.projects | sort: "importance" %}
+- **ForTest** — a forecasting benchmark and evaluation harness: drop in a custom LLM agent and test it on financial forecasting tasks with temporal isolation, so no agent quietly reads the future.
 
-  <!-- Generate cards for each project -->
+- **[Forecasters](/blog/2026/forecasting-season/)** — LLM forecasting agents built at Kairosity, the line of work behind our GIFT-Eval and ProphetHacks results.
 
-{% if page.horizontal %}
+## Systems
 
-  <div class="container">
-    <div class="row row-cols-1 row-cols-md-2">
-    {% for project in sorted_projects %}
-      {% include projects_horizontal.liquid %}
-    {% endfor %}
-    </div>
-  </div>
-  {% else %}
-  <div class="row row-cols-1 row-cols-md-3">
-    {% for project in sorted_projects %}
-      {% include projects.liquid %}
-    {% endfor %}
-  </div>
-  {% endif %}
-{% endif %}
-</div>
+- **[AFramework](/blog/2025/aframework/)** — an agent framework that separates applications from LLM inference: a self-starting daemon that runs agent tasks across worker processes with cost-based routing, rate limits, verifiers, and durable results.
+
+- **[Table OCR with RL](/blog/2025/table-ocr-rl/)** — training a network to repair a table detector's bounding boxes on financial documents, geometric rewards in the open version, a vision-model judge in the applied one. Built at Decimal Point Analytics.
+
+- **UAV pathfinding with reinforcement learning** — path planning for UAVs learned end to end with RL.
+
+## Kairosity
+
+- **Boltzmann** — <!-- TODO: description + link once Anshul provides the URL -->
+
+- **Risk Terminal** — <!-- TODO: description + link once Anshul provides the URL -->
+
+## Early
+
+- **A vibe-coding harness** — a startup idea I am building. Write-up when it is ready.
