@@ -8,7 +8,7 @@ categories: research
 related_posts: false
 ---
 
-This post introduces what I'm working on right now, Policy Language Models. It is drawn from the paper, compressed, and linked at the end.
+This post introduces what I'm working on right now, Policy Language Models. The paper is linked at the end.
 
 ## The trajectory
 
