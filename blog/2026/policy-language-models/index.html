@@ -1,0 +1,181 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> Policy Language Models | Anshul Thakur </title> <meta name="author" content="Anshul Thakur"> <meta name="description" content="A complementary axis of inference-time scaling that biases the LLM toward abstract computational reasoning. What an RLM does for its input, a PLM does for all its computation."> <meta name="keywords" content="Anshul Thakur, policy language models, meta-reasoning, LLM, machine learning research"> <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;"> <style>
+  :root {
+    --max-content-width: 930px;
+  }
+</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%A7%A0&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=f0b101217084a90093badfe99ff9a7d1"> <link rel="canonical" href="https://ddi-droid.github.io/blog/2026/policy-language-models/"> <script src="/assets/js/theme.js?v=7af685e2ba20b37fef545c97b8064050"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+    initTheme();
+  </script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> <span class="font-weight-bold">Anshul</span> Thakur </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">projects </a> </li> <li class="nav-item "> <a class="nav-link" href="/academics/">academics </a> </li> <li class="nav-item "> <a class="nav-link" href="/news/">news </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">Policy Language Models</h1> <p class="post-meta"> Created on July 24, 2026 </p> <p class="post-tags"> <a href="/blog/2026"> <i class="fa-solid fa-calendar fa-sm"></i> 2026 </a>   ·   <a href="/blog/tag/llm"> <i class="fa-solid fa-hashtag fa-sm"></i> llm</a>   <a href="/blog/tag/meta-reasoning"> <i class="fa-solid fa-hashtag fa-sm"></i> meta-reasoning</a>   ·   <a href="/blog/category/research"> <i class="fa-solid fa-tag fa-sm"></i> research</a> </p> </header> <article class="post-content"> <div id="markdown-content"> <p>This post introduces the work I care about most right now, Policy Language Models, a paper in progress. It is drawn from the paper directly, compressed; the full draft is linked at the end.</p> <h2 id="the-trajectory">The trajectory</h2> <p>Frontier large language models and the harnesses built around them can now tackle complex long-horizon problems, resolve software issues, conduct deep research, and drive hours-long sessions. The gains that enabled this have largely arrived through inference-time scaling. Models are trained to spend more tokens deliberating, and ReAct systems extend those capabilities by interleaving reasoning with actions and observations. ReAct remains the dominant substrate for this work, and a ReAct trajectory is a growing sequence of those thoughts, actions, and observations.</p> <p>The trajectory only grows, every thought, action, and observation is appended, and LLM outputs degrade as the context window fills. The most popular general remedy is context compaction, where the trajectory is repeatedly summarized when it exceeds a length threshold. Compaction loses information, and it does not repair the reasoning inside the window. Trajectories pushed to length fail in characteristic ways. The paper studies them one by one, exploration that fragments the reasoning, self-reflection that strains against load-bearing mistakes, the capacity of the window itself; the short version is a single mismatch. The model repeatedly reaches for reasoning shapes the autoregressive substrate cannot hold: it branches to weigh alternatives, reverts to undo a wrong step, and explores before committing, yet every such move is flattened back into one forward sequence. We believe these failures act as a dampener on reasoning LLMs, and that solving them will yield far more capable reasoners.</p> <h2 id="taking-work-off-the-line">Taking work off the line</h2> <p>Recently, <a href="https://arxiv.org/abs/2512.24601" rel="external nofollow noopener" target="_blank">Zhang, Kraska, and Khattab</a> introduced Recursive Language Models (RLMs), a general-purpose inference paradigm for dramatically scaling the effective input and output lengths of LLMs. Their key insight is that an arbitrarily long prompt should not be fed into the neural network directly, but treated as part of the environment that the LLM symbolically and recursively interacts with. Given a prompt \(P\), an RLM initializes a REPL environment in which \(P\) is set as the value of a variable, and the model writes code that peeks into and decomposes \(P\), observes the side effects of execution, and invokes the LLM itself on as many slices of the input as necessary. What leaves the trajectory, though, is the input/output processing alone. Thinking, exploration, reflection, action, and observation still accumulate on it, and the thinking is still done the ReAct way.</p> <h2 id="policy-language-models">Policy Language Models</h2> <p>We introduce Policy Language Models (PLMs), a general-purpose meta-reasoning inference paradigm for dramatically scaling the reasoning power of LLMs. What an RLM does for its input/output, a PLM does for all its computation. Instead of reasoning and computing inline, a PLM authors policies: programmatic artifacts it can run, edit, and compose, and lets them carry the work a trajectory would otherwise hold, the mechanical steps, the reasoning, the interaction with the world. Policies live and execute in a persistent REPL environment. The harness also provides sub-LLM functional policies, so a PLM can create policies capable of reasoning and computation, and its constraint abstraction lets the PLM fix the invariants of any policy’s output, the sub-LLM policies included. The REPL is the only way a PLM acts. It is not confined to authoring policies there, it can inspect, compute, and act directly, much as an RLM does. What makes it a meta-reasoner is not a prohibition on doing the work itself but a disposition, trained into it, to author policies that do the work better than it would inline.</p> <p>The trajectory itself is responsible for abstract reasoning. There the PLM reasons over the goal and authors the policies that set its plans in motion: policies to test its hypotheses, policies to process inputs, policies to write and output code. A PLM’s job is not to run systems but to reason; it engineers its instruments with an understanding of the goal, sees the work they did, and reasons onward. And since reading an input is itself computation, the RLM capability comes along as a special case, a long input can sit in the environment and be worked through with policies.</p> <div class="text-center"> <img src="/assets/img/posts/plm-evolab.png" alt="A PLM authoring an evolutionary policy" style="max-width: 100%;"> </div> <p class="text-center" style="font-size: 0.9em; color: #6b7280;"><em>A PLM reasons about the goal abstractly and expresses the computation as policies. Here, the PLM authors a single evolutionary policy that breeds candidate policies through sub-LLM builders, selects among them by played outcomes, and folds only gated winners into its deliverable.</em></p> <p>What the substrate buys is compounding. A policy authored once can be rerun, revised, and composed into larger ones, so the work of reasoning accumulates as artifacts rather than as tokens. The substrate alone, however, does not produce the behavior. In our experiments, current LLMs placed on the PLM harness do not spontaneously meta-reason, they grind the work inline out of habit, or scatter one-off delegations that are at best half-cooked. The disposition has to be trained in. We take that as the finding that matters: meta-reasoning is a trainable surface of improvement that today’s models have never been optimized for.</p> <h2 id="the-harness">The harness</h2> <p>A Policy Language Model is a large language model that meta-reasons: it reasons about the goal on its own trajectory and expresses the computation as policies in a persistent programming environment \(\mathcal{E}\). Each round the model thinks abstractly, then acts through one code tool call that executes in \(\mathcal{E}\) and updates its state. A PLM trajectory holds only three things: the abstract reasoning, the code, and the code’s output as the tool result.</p> <p>Meta-reasoning is the axis of inference along which the model reasons about the goal and reasons about generating the computations that will help attain it. It is three abilities held together: the ability to reason abstractly about the goal; the ability to reason and generate optimal compute structures for tasks; and the behavior that binds the two, in which the model reasons about what to do and how to do it, inlines or expresses the task as computation, benefits from its result, and reasons on.</p> <p>A policy is any computation the PLM expresses rather than performs. The definition is behavioral, not syntactic, and the harness gives it support: the <code class="language-plaintext highlighter-rouge">@policy</code> decorator turns a function or a class into a named artifact that persists across rounds, holds global scope so it is used by name and never imported, and can be edited in place and duplicated. Authored once, it can be rerun, edited, and composed into larger policies.</p> <p>The harness gives the PLM three LLM policies to build with: <code class="language-plaintext highlighter-rouge">natural_llm</code> is a single llm call; <code class="language-plaintext highlighter-rouge">react_llm</code> is an LLM with the python tool, run in ReAct rounds; and <code class="language-plaintext highlighter-rouge">react_verifier_llm</code> is a special <code class="language-plaintext highlighter-rouge">react_llm</code> with a policy that runs after each round to manipulate the llm’s trajectory. Bare minimum on their own, they can be used to build arbitrarily complex information processing circuits. The building, however, is deliberate work: every sub-llm call begins empty. Every input, helper, prompt, any policy it will use, the <code class="language-plaintext highlighter-rouge">@policy</code> decorator and the LLM policies themselves, are handed to it. Nothing about a sub-llm is ambient, so a working one is constructed, not summoned. Fanning out is never a reflex but a decision the PLM has to make and build, so it decomposes only when it decides to. And this costs no expressive power: a PLM can build an RLM, or even an unbounded-depth PLM, as a policy inside its depth-two harness. Computation can never be fully controlled or predicted, but a harness decides who holds what control there is. Ours concentrates it in the PLM. An RLM scatters it across the tree.</p> <p>Constraints and message weaving complete the harness. A constraint is a way to define invariants over a computation’s output, authored as a typed class. An LLM’s judgment so becomes a typed value in ordinary control flow, <code class="language-plaintext highlighter-rouge">while react_llm("...", constraint=Bool)</code> either runs or raises, and there is no third outcome. Message weaving makes trajectories the same kind of object: messages pass by reference, so a <code class="language-plaintext highlighter-rouge">react_llm</code> run over a list leaves its turns on that list, and the list can be handed onward as an object, to a second policy that inspects the reasoning, never as pasted text; the PLM’s own trajectory is available the same way, as a live copy.</p> <h2 id="what-has-to-be-trained">What has to be trained</h2> <p>Placed on the harness untrained, current models delegate but do not meta-reason, and the affinity improves little under prompting, even with detailed, optimized system prompts, reasoning models hold to the habits of the single trajectory. The disposition has to be trained in, and the training is not only subtractive. Taking work off the trajectory is half of it, the other half is new duties, authoring, granting, briefing, weaving, that no model has ever been trained to perform. How meta-reasoning is enforced, how it is rewarded, how it is discovered at all, are open questions, and we leave them open deliberately. The substrate is more powerful than the one it is compared to, and that is exactly why it must be trained. Developing that training is the program of this work.</p> <hr> <p><em>The paper is in progress.</em> </p> </div> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Anshul Thakur. </div> </footer> <script>
+  window.alFolio = {
+    compatBootstrap: false
+  };
+</script> <script src="/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/al_math/js/mathjax-setup.js"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script src="/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script> <script src="/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script> <script defer src="/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/al_img_tools/js/zoom.js"></script> <script defer src="/assets/js/progress-bar.js?v=499464c5c63ced6cf7ad62509f1e2610" type="text/javascript"></script> <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script> <script>
+    addBackToTop();
+  </script> <script type="module" src="/assets/al_search/js/search/ninja-keys.min.js"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/al_search/js/search-setup.js"></script> <script>
+// get the ninja-keys element
+const ninja = document.querySelector('ninja-keys');
+
+// add the home and posts menu items
+ninja.data = [{
+    id: "nav-about",
+    title: "about",
+    section: "Navigation",
+    handler: () => {
+      window.location.href = "/";
+    },
+  },{id: "nav-blog",
+          title: "blog",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/blog/";
+          },
+        },{id: "nav-publications",
+          title: "publications",
+          description: "publications by categories in reversed chronological order. generated by jekyll-scholar.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/publications/";
+          },
+        },{id: "nav-projects",
+          title: "projects",
+          description: "A growing collection of your cool projects.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/projects/";
+          },
+        },{id: "nav-academics",
+          title: "academics",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/academics/";
+          },
+        },{id: "nav-news",
+          title: "news",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/news/";
+          },
+        },{id: "post-policy-language-models",
+        
+          title: "Policy Language Models",
+        
+        description: "A complementary axis of inference-time scaling that biases the LLM toward abstract computational reasoning. What an RLM does for its input, a PLM does for all its computation.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/policy-language-models/";
+          
+        },
+      },{id: "post-forecasting-season",
+        
+          title: "Forecasting season",
+        
+        description: "The competitions we entered at Kairosity, the agents we built for them, and what live leaderboards taught us about reliability, calibration, and consistency.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/forecasting-season/";
+          
+        },
+      },{id: "post-aframework",
+        
+          title: "AFramework",
+        
+        description: "Why I built an agent framework that separates applications from LLM inference, and a tour of how it works.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/aframework/";
+          
+        },
+      },{id: "post-pks-we-thought-this-was-hard",
+        
+          title: "PKS: We thought this was hard",
+        
+        description: "How a problem we couldn&#39;t crack for weeks fell to a greedy algorithm, from our paper on manipulating the Kemeny score.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/possible-kemeny-score/";
+          
+        },
+      },{id: "post-fixing-table-bounding-boxes-with-rl",
+        
+          title: "Fixing Table Bounding Boxes with RL",
+        
+        description: "Teaching a neural network to repair a table detector&#39;s bounding boxes, with geometric rewards in the open version and a vision model as the judge in the applied one.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/table-ocr-rl/";
+          
+        },
+      },{id: "post-polytm-learning-polynomial-time-oracles",
+        
+          title: "PolyTM: learning polynomial-time oracles",
+        
+        description: "An RL environment where a neural network learns to write the computation that solves a problem, instead of guessing the answer.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/polytm/";
+          
+        },
+      },{id: "news-samay-our-time-series-foundation-model-at-kairosity-is-top-3-on-the-gift-eval-benchmark-ahead-of-models-from-amazon-ibm-and-google",
+          title: 'Samay, our time-series foundation model at Kairosity, is Top-3 on the GIFT-Eval benchmark,...',
+          description: "",
+          section: "News",},{id: "news-our-forecaster-reached-top-3-on-the-prophethacks-live-leaderboard-an-ai-forecasting-hackathon-hosted-at-uchicago-and-sponsored-by-sigma-lab-fleet-ai-and-kalshi",
+          title: 'Our forecaster reached Top-3 on the ProphetHacks live leaderboard, an AI forecasting hackathon...',
+          description: "",
+          section: "News",},{
+        id: 'social-email',
+        title: 'email',
+        section: 'Socials',
+        handler: () => {
+          window.open("mailto:%74%68%61%6B%75%72.%31%37@%69%69%74%6A.%61%63.%69%6E", "_blank");
+        },
+      },{
+        id: 'social-github',
+        title: 'GitHub',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://github.com/DDI-droid", "_blank");
+        },
+      },{
+        id: 'social-rss',
+        title: 'RSS Feed',
+        section: 'Socials',
+        handler: () => {
+          window.open("/feed.xml", "_blank");
+        },
+      },{
+      id: 'light-theme',
+      title: 'Change theme to light',
+      description: 'Change the theme of the site to Light',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("light");
+      },
+    },
+    {
+      id: 'dark-theme',
+      title: 'Change theme to dark',
+      description: 'Change the theme of the site to Dark',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("dark");
+      },
+    },
+    {
+      id: 'system-theme',
+      title: 'Use system default theme',
+      description: 'Change the theme of the site to System Default',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("system");
+      },
+    },];
+
+</script> <script src="/assets/al_search/js/shortcut-key.js"></script> </body> </html>
