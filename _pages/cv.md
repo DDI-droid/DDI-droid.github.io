@@ -7,21 +7,39 @@ nav_order: 4
 description:
 ---
 
-## Education
+## School
 
-**Indian Institute of Technology, Jodhpur** — B.Tech. in Computer Science and Engineering, 2021–2025. CGPA 8.27/10.
+I graduated with a B.Tech. in Computer Science and Engineering from IIT Jodhpur (2021–2025), CGPA 8.27/10.
 
-## Relevant coursework
-
-Mathematics 1 (A) · Introduction to Computer Science (A) · Mathematics 2 (A) · Data Structures & Algorithms (A−) · Probability, Statistics & Stochastic Processes (A−) · Software Engineering (A−) · Computer Networks (A) · Design & Analysis of Algorithms (A) · Computer Vision (A) · Deep Learning · Foundation Models and Generative AI (A−) · Pattern Recognition & ML
-
-## Achievements
-
-- CGPA of 9.27 in the first semester.
+- CGPA of 9.27 in my first semester.
 - ICPC 2023 Regionals, rank 81.
+- Presented at the IIT Jodhpur Winter School 2024 on Kemeny-score manipulation; volunteered at the 2023 edition.
 
-## Teaching and volunteering
+---
 
-- Teaching Assistant for Introduction to Computer Science, under Dr. Richa Singh.
-- Mentored two undergraduates on the Algorithm Visualization project, from problem scoping through implementation and presentation.
-- Volunteered at the IIT Jodhpur Winter School 2023; presented at the 2024 edition on Kemeny-score manipulation.
+## Coursework
+
+**Computer science**
+
+- Introduction to Computer Science
+- Data Structures & Algorithms
+- Design & Analysis of Algorithms
+- Software Engineering
+- Computer Networks
+- Computer Vision
+- Deep Learning
+- Foundation Models and Generative AI
+- Pattern Recognition & Machine Learning
+
+**Mathematics**
+
+- Mathematics 1
+- Mathematics 2
+- Probability, Statistics & Stochastic Processes
+
+---
+
+## Teaching
+
+- Introduction to Computer Science — Teaching Assistant, under Dr. Richa Singh.
+- Mentored two undergraduates on the Algorithm Visualization project.
