@@ -44,15 +44,15 @@ In other words, is there a completion of the evidence under which $$X$$ scores a
 
 ## Why we thought it was hard
 
-Everything in this problem's neighborhood is hard. Computing the Kemeny score is NP-complete. It is NP-hard already for four voters, and the case of three voters has been open for years. The corresponding manipulation questions for Kemeny *Consensus* are coNP-complete and $$\Sigma_2^p$$-complete. And the most famous problem of exactly this shape, the Possible Winner problem, where partial votes get completed to make a favorite candidate win, is NP-hard for most voting rules. Pattern matching says: partial rankings plus a target, that is hard.
+Everything in this problem's neighborhood is hard. Computing the Kemeny score is NP-complete (Bartholdi, Tovey & Trick, 1989). It is NP-hard already for four rankings, and the case of three rankings has been open for years (Dwork, Kumar, Naor & Sivakumar, 2001; Biedl, Brandenburg & Deng, 2009). The corresponding manipulation questions for Kemeny *Consensus* are coNP-complete and $$\Sigma_2^p$$-complete (Fitzsimmons & Hemaspaandra, 2021). And the most widely studied problem of this shape, the Possible Winner problem, where partial votes are completed to make a favorite candidate win, is NP-hard for most common voting rules (Xia & Conitzer, 2011). All of this pointed at the same thing: the problem is hard. Or so we thought.
 
-But our stuckness was more concrete than pattern matching. Try to solve it. You have to insert the missing candidates into a ballot, and there are two levels of freedom, and both looked unmanageable.
+But our stuckness was more concrete than that. Try to solve it. You have to insert the missing candidates into a ballot, and there are two levels of freedom, and both looked unmanageable.
 
 First level. In what relative order do the missing candidates go in? You might guess "in the order $$X$$ ranks them," but we had no reason to believe that. The candidates already sitting in the ballot do not agree with $$X$$, they are in whatever order the voter put them. So maybe following $$X$$'s order among the new candidates generates extra disagreements against those already-placed candidates, and some other order does better. We could not rule that out, and without it we had nothing to hold on to.
 
 Second level. Even if you somehow knew the right relative order, where do the candidates actually go? Place the first one at some position. Nothing guarantees that position is consistent with any optimal completion. It felt like every placement decision could poison the ones after it, which is exactly the situation where you expect to need search, and search over interleavings is exponential.
 
-We could not find an approach. It is not the hardest problem we have ever faced, but for a while we found nothing at all.
+We could not find an approach.
 
 ## The first insight
 
