@@ -104,8 +104,4 @@ async def register_my_tools(registry):
 
 Model backends and verifiers carry the same `@model_backend` and `@verifier` decorators. Everything in the system is a plugin sitting behind a name, which is what lets a task spec be nothing but plain dicts naming the pieces it wants.
 
-## What is not here
-
-There are no benchmark numbers in this post because none are published yet; everything above is a claim about design, not measurements. The TODO list is public in the repo, multi-tenant MCP transport, router enhancements, the usual honest backlog.
-
 AFramework is open source on [GitHub](https://github.com/Curiosity-Oneiroi/AFramework).
