@@ -66,4 +66,4 @@ Calibration wants machinery, not vibes. The explicit shrink formula, verifiers w
 
 And the one that became a research question. Ask a strong model the same question in different clothes, a binary here, the same thing as a multiple choice there, and the numbers stop agreeing with each other. Accuracy kept improving all season. Consistency did not. That observation turned into our working paper, [Brittle Prophets](https://openreview.net/forum?id=Z51qVtmHAv), where the forecaster first builds an explicit causal model of the question and then reasons probabilistically over it, and preliminary results show it helps both accuracy and consistency. The next generation of our tournament bot is being built in the same spirit, question decomposition trees, base-rate anchoring, adversarial auditors on every node.
 
-The season's summary is one sentence. The models are already better forecasters than their harnesses let them be, and the next season is about the harness.
+The models are better forecasters than the harnesses we put them in. We are working on the harness next.
