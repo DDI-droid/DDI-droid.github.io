@@ -80,9 +80,9 @@ The algorithm that resolves it looks like this.
 
 Take the missing candidates in $$X$$'s order. Insert each one at the **leftmost** position that minimizes its disagreements with the already-ranked candidates. And after you place a candidate, never look to the left of it again, the pointer $$l$$ only moves right.
 
-A small example. Let $$X = a \succ b \succ c \succ d \succ e$$ and let the ballot be $$R = c \succ a \succ e$$, so $$b$$ and $$d$$ are missing and get inserted in that order.
+A small example. Let $$X = a \prec b \prec c \prec d \prec e$$ and let the ballot be $$R = c \prec a \prec e$$, so $$b$$ and $$d$$ are missing and get inserted in that order.
 
-For $$b$$, the four available slots cost $$1, 2, 1, 2$$ disagreements against the fixed candidates. Positions $$0$$ and $$2$$ tie, so the leftmost wins and $$b$$ goes first: $$b \succ c \succ a \succ e$$. For $$d$$, the slots from the pointer onward cost $$2, 1, 0, 1$$, so $$d$$ goes after $$a$$: $$b \succ c \succ a \succ d \succ e$$. Total distance to $$X$$: the ballot's own inversion $$(c,a)$$, plus $$1$$ for $$b$$, plus $$0$$ for $$d$$. You can check by brute force that no completion of $$R$$ does better.
+For $$b$$, the four available slots cost $$1, 2, 1, 2$$ disagreements against the fixed candidates. Positions $$0$$ and $$2$$ tie, so the leftmost wins and $$b$$ goes first: $$b \prec c \prec a \prec e$$. For $$d$$, the slots from the pointer onward cost $$2, 1, 0, 1$$, so $$d$$ goes after $$a$$: $$b \prec c \prec a \prec d \prec e$$. Total distance to $$X$$: the ballot's own inversion $$(c,a)$$, plus $$1$$ for $$b$$, plus $$0$$ for $$d$$. You can check by brute force that no completion of $$R$$ does better.
 
 It is a greedy algorithm, and greedy algorithms on ranking problems usually die on a counterexample. We looked for the counterexample for a while. There isn't one.
 
