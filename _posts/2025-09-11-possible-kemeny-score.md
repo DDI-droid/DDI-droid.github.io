@@ -1,6 +1,6 @@
 ---
 layout: post
-title: We thought this was hard
+title: "PKS: We thought this was hard"
 date: 2025-09-11 12:00:00
 description: How a problem we couldn't crack for weeks fell to a greedy algorithm, from our paper on manipulating the Kemeny score.
 tags: social-choice algorithms
