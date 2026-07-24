@@ -1,0 +1,148 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> PolyTM: learning polynomial-time oracles | Anshul Thakur </title> <meta name="author" content="Anshul Thakur"> <meta name="description" content="An RL environment where a neural network learns to write the computation that solves a problem, instead of guessing the answer."> <meta name="keywords" content="Anshul Thakur, policy language models, meta-reasoning, LLM, machine learning research"> <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;"> <style>
+  :root {
+    --max-content-width: 930px;
+  }
+</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%A7%A0&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=f0b101217084a90093badfe99ff9a7d1"> <link rel="canonical" href="https://ddi-droid.github.io/blog/2025/polytm/"> <script src="/assets/js/theme.js?v=7af685e2ba20b37fef545c97b8064050"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+    initTheme();
+  </script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> <span class="font-weight-bold">Anshul</span> Thakur </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">projects </a> </li> <li class="nav-item "> <a class="nav-link" href="/academics/">academics </a> </li> <li class="nav-item "> <a class="nav-link" href="/news/">news </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">PolyTM: learning polynomial-time oracles</h1> <p class="post-meta"> Created on July 08, 2025 </p> <p class="post-tags"> <a href="/blog/2025"> <i class="fa-solid fa-calendar fa-sm"></i> 2025 </a>   ·   <a href="/blog/tag/rl"> <i class="fa-solid fa-hashtag fa-sm"></i> rl</a>   <a href="/blog/tag/algorithms"> <i class="fa-solid fa-hashtag fa-sm"></i> algorithms</a>   ·   <a href="/blog/category/research"> <i class="fa-solid fa-tag fa-sm"></i> research</a> </p> </header> <article class="post-content"> <div id="markdown-content"> <p>PolyTM is a reinforcement learning environment I built inside <a href="https://github.com/DDI-droid/PufferLib/tree/poly_tm" rel="external nofollow noopener" target="_blank">PufferLib</a>, around one question: can a neural network learn to discover algorithms? Not to answer a problem instance, but to produce the procedure that answers every instance, and to do it in polynomial time.</p> <h2 id="the-idea">The idea</h2> <p>The environment is a machine. There is a tape of integers holding the problem, and the agent does not output answers, it outputs instructions: pick two cells, pick an operation, add or multiply, pick a cell to write the result into. Step by step it edits the tape, and when it halts, the reward depends on whether the designated result cells hold the right values. The network is not being trained to know the answer. It is being trained to build the computation that produces the answer.</p> <p>The environment also keeps the two honest ledgers of computation: how many steps an episode took and how many cells it wrote. Running time and space, logged for every episode, because an algorithm that exists but wastes the tape is not the algorithm we are looking for.</p> <p>The committed version is this register machine. The version it was growing into is a proper multi-tape Turing machine, separate work, state, and result tapes, read heads with observation windows, an alphabet, penalties for refusing to halt. Same idea, stricter machine.</p> <p>The policy that drives it is a transformer over the tape. Each integer cell is read as its bytes, its sign, and a hashed identity, embedded and attended over, with an LSTM carrying memory across steps, trained with PufferLib 3.0’s PPO. The one thing this setup refuses to do is memorize instances: the problems are random every episode, so the only thing worth learning is the procedure.</p> <h2 id="where-it-came-from">Where it came from</h2> <p>The question came out of algorithms, not machine learning. Working with Pallavi Jain on fair division, the open problem in the air was EFX, whether an envy-free-up-to-any-good allocation always exists, and she encouraged me to hunt for a counterexample. Hunting for counterexamples and hunting for algorithms are the same kind of search, discrete, enormous, and allergic to gradients, and I wanted to know whether a learned searcher could walk spaces like that. PolyTM was the small, controlled version of the question.</p> <p>It did work, for some of it. The network learned to compose correct computations for the arithmetic tasks, and the work pushed further from there. What it did not give me is the thing I wanted next: you can watch the tape and see <em>that</em> it computes, but not read back <em>what</em> algorithm it found. Explainability was the planned second half, extracting the discovered procedure from the trained policy, and it stayed planned.</p> <hr> <p><em>Edit: I did not see it at the time, but this was an early run at the idea I now work on. A model that, given a task, produces the computation that solves it rather than grinding out the answer itself, that is the whole shape of my current work on meta-reasoning in language models. PolyTM was the same bet, placed on a tape instead of a trajectory.</em></p> </div> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Anshul Thakur. </div> </footer> <script>
+  window.alFolio = {
+    compatBootstrap: false
+  };
+</script> <script src="/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/al_math/js/mathjax-setup.js"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script src="/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script> <script src="/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script> <script defer src="/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/al_img_tools/js/zoom.js"></script> <script defer src="/assets/js/progress-bar.js?v=499464c5c63ced6cf7ad62509f1e2610" type="text/javascript"></script> <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script> <script>
+    addBackToTop();
+  </script> <script type="module" src="/assets/al_search/js/search/ninja-keys.min.js"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/al_search/js/search-setup.js"></script> <script>
+// get the ninja-keys element
+const ninja = document.querySelector('ninja-keys');
+
+// add the home and posts menu items
+ninja.data = [{
+    id: "nav-about",
+    title: "about",
+    section: "Navigation",
+    handler: () => {
+      window.location.href = "/";
+    },
+  },{id: "nav-blog",
+          title: "blog",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/blog/";
+          },
+        },{id: "nav-publications",
+          title: "publications",
+          description: "publications by categories in reversed chronological order. generated by jekyll-scholar.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/publications/";
+          },
+        },{id: "nav-projects",
+          title: "projects",
+          description: "A growing collection of your cool projects.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/projects/";
+          },
+        },{id: "nav-academics",
+          title: "academics",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/academics/";
+          },
+        },{id: "nav-news",
+          title: "news",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/news/";
+          },
+        },{id: "post-aframework",
+        
+          title: "AFramework",
+        
+        description: "Why I built an agent framework that separates applications from LLM inference, and a tour of how it works.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/aframework/";
+          
+        },
+      },{id: "post-pks-we-thought-this-was-hard",
+        
+          title: "PKS: We thought this was hard",
+        
+        description: "How a problem we couldn&#39;t crack for weeks fell to a greedy algorithm, from our paper on manipulating the Kemeny score.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/possible-kemeny-score/";
+          
+        },
+      },{id: "post-polytm-learning-polynomial-time-oracles",
+        
+          title: "PolyTM: learning polynomial-time oracles",
+        
+        description: "An RL environment where a neural network learns to write the computation that solves a problem, instead of guessing the answer.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/polytm/";
+          
+        },
+      },{id: "news-samay-our-time-series-foundation-model-at-kairosity-is-top-3-on-the-gift-eval-benchmark-ahead-of-models-from-amazon-ibm-and-google",
+          title: 'Samay, our time-series foundation model at Kairosity, is Top-3 on the GIFT-Eval benchmark,...',
+          description: "",
+          section: "News",},{id: "news-our-forecaster-reached-top-3-on-the-prophethacks-live-leaderboard-an-ai-forecasting-hackathon-hosted-at-uchicago-and-sponsored-by-sigma-lab-fleet-ai-and-kalshi",
+          title: 'Our forecaster reached Top-3 on the ProphetHacks live leaderboard, an AI forecasting hackathon...',
+          description: "",
+          section: "News",},{
+        id: 'social-email',
+        title: 'email',
+        section: 'Socials',
+        handler: () => {
+          window.open("mailto:%74%68%61%6B%75%72.%31%37@%69%69%74%6A.%61%63.%69%6E", "_blank");
+        },
+      },{
+        id: 'social-github',
+        title: 'GitHub',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://github.com/DDI-droid", "_blank");
+        },
+      },{
+        id: 'social-rss',
+        title: 'RSS Feed',
+        section: 'Socials',
+        handler: () => {
+          window.open("/feed.xml", "_blank");
+        },
+      },{
+      id: 'light-theme',
+      title: 'Change theme to light',
+      description: 'Change the theme of the site to Light',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("light");
+      },
+    },
+    {
+      id: 'dark-theme',
+      title: 'Change theme to dark',
+      description: 'Change the theme of the site to Dark',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("dark");
+      },
+    },
+    {
+      id: 'system-theme',
+      title: 'Use system default theme',
+      description: 'Change the theme of the site to System Default',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("system");
+      },
+    },];
+
+</script> <script src="/assets/al_search/js/shortcut-key.js"></script> </body> </html>
