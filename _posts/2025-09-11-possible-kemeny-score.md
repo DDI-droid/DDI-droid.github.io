@@ -70,7 +70,7 @@ This kills the first level of freedom completely. The internal order of the inse
 
 ## The second insight, and the algorithm
 
-The position problem was still standing, and for a while we were stuck again in the same way. Insert the candidates in $$X$$'s order, fine, but put the first one somewhere and you still have no guarantee that any optimal completion has it there.
+The position problem was still standing. Insert the candidates in $$X$$'s order, fine, but put the first one somewhere and you still have no guarantee that any optimal completion has it there.
 
 The algorithm that resolves it looks like this.
 
