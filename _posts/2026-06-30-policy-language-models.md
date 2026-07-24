@@ -53,4 +53,4 @@ Placed on the harness untrained, current models delegate but do not meta-reason,
 
 ---
 
-*The paper is in progress; a read-only draft is available [here](https://www.overleaf.com/read/npgkvjmftsyj#aeb894).*
+*A paper in progress, available [here](https://www.overleaf.com/read/npgkvjmftsyj#aeb894).*
