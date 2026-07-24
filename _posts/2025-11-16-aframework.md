@@ -104,4 +104,65 @@ async def register_my_tools(registry):
 
 Model backends and verifiers carry the same `@model_backend` and `@verifier` decorators. Everything in the system is a plugin sitting behind a name, which is what lets a task spec be nothing but plain dicts naming the pieces it wants.
 
+## A small example
+
+Here is the shape a real app takes: an agent that can factor numbers, because a model is bad at arithmetic and a tool is exact. The tool is an ordinary Python function.
+
+```python
+# tools.py
+def factorize(n: int) -> list[int]:
+    """Return the prime factors of n."""
+    factors, d = [], 2
+    while d * d <= n:
+        while n % d == 0:
+            factors.append(d)
+            n //= d
+        d += 1
+    if n > 1:
+        factors.append(n)
+    return factors
+```
+
+The app wires a backend, a verifier, and that tool onto a client, then asks a question and waits for the answer.
+
+```python
+import asyncio
+from AFramework.agent_core import BaseAgentCoreClient
+
+model_backend = {
+    "model_backend_class_name": "OpenAIBackend",
+    "model": "gpt-4o",
+}
+
+async def main():
+    client = BaseAgentCoreClient(agent_id="factorizer")
+    client.register_model_backend(**model_backend)
+    client.register_verifier(
+        verifier_class_name="BaseVerifier",
+        model_backend=model_backend,
+        max_verification_steps=10,
+    )
+    client.register_tool_spec(
+        name="factorize",
+        import_module="tools",
+        attr="factorize",
+        description="Return the prime factors of an integer n.",
+        parameters={
+            "type": "object",
+            "properties": {"n": {"type": "integer"}},
+            "required": ["n"],
+        },
+    )
+
+    result = await client.execute(
+        messages=[{"role": "user", "content": "What are the prime factors of 1001? Use the tool."}],
+    )
+    print(result["task_result"])
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+Nothing here starts a server or manages a process. The daemon comes up on the first call, the worker registers the tool from its import path, the agent calls it, the verifier watches the loop, and the answer comes back. The application only ever described what it wanted.
+
 AFramework is open source on [GitHub](https://github.com/Curiosity-Oneiroi/AFramework).
