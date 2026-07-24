@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Forecasting season"
+title: "Forecasting"
 date: 2026-07-24 12:00:00
 description: The competitions we entered at Kairosity, the agents we built for them, and what live leaderboards taught us about reliability, calibration, and consistency.
 tags: forecasting agents
@@ -8,7 +8,7 @@ categories: research
 related_posts: false
 ---
 
-For the first half of 2026, a good part of our work at Kairosity went into competitive forecasting. Not backtests. Live competitions, real questions, real resolution dates, leaderboards that move while you sleep. Forecasting is one of the few tasks where the world itself grades your reasoning, on a schedule, with no partial credit, and frontier models have been closing the gap to human superforecasters fast enough that the competitions got interesting. We entered four. This post is about what we built for each and what the season taught us.
+For the first half of 2026, a good part of our work at Kairosity went into competitive forecasting. It is one of the few tasks where the world itself grades your reasoning, on a schedule, with no partial credit, and frontier models have been closing the gap to human superforecasters fast enough that the competitions got interesting. We entered four. This post is about what we built for each and what the season taught us.
 
 ## The arenas
 
