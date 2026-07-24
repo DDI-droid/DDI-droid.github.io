@@ -16,6 +16,13 @@ pagination:
     after: 3 # The number of links after the current page
 ---
 
+<style>
+  .header-bar h1 {
+    color: var(--global-text-color) !important;
+    font-family: "Brush Script MT", "Segoe Script", cursive;
+  }
+</style>
+
 <div class="post">
 
 {% assign blog_name_size = site.blog_name | size %}
