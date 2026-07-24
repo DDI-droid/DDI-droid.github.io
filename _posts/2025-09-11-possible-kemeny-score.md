@@ -1,7 +1,7 @@
 ---
 layout: post
 title: We thought this was hard
-date: 2026-07-24 12:00:00
+date: 2025-09-11 12:00:00
 description: How a problem we couldn't crack for weeks fell to a greedy algorithm, from our SAGT 2026 paper on manipulating the Kemeny score.
 tags: social-choice algorithms
 categories: research
