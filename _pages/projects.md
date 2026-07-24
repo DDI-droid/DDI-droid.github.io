@@ -27,7 +27,7 @@ nav_order: 3
 
 ## Kairosity
 
-- **Boltzmann** — <!-- TODO: description + link once Anshul provides the URL -->
+- **[Boltzmann](https://platform.kairosity.ai/boltzmann/#home)** — Kairosity's population-simulation platform: build simulated audiences, put briefs to them, and listen, to understand customers before the real world weighs in.
 
 - **Risk Terminal** — <!-- TODO: description + link once Anshul provides the URL -->
 
