@@ -1,0 +1,170 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> Forecasting season | Anshul Thakur </title> <meta name="author" content="Anshul Thakur"> <meta name="description" content="The competitions we entered at Kairosity, the agents we built for them, and what live leaderboards taught us about reliability, calibration, and consistency."> <meta name="keywords" content="Anshul Thakur, policy language models, meta-reasoning, LLM, machine learning research"> <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;"> <style>
+  :root {
+    --max-content-width: 930px;
+  }
+</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%A7%A0&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=f0b101217084a90093badfe99ff9a7d1"> <link rel="canonical" href="https://ddi-droid.github.io/blog/2026/forecasting-season/"> <script src="/assets/js/theme.js?v=7af685e2ba20b37fef545c97b8064050"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+    initTheme();
+  </script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> <span class="font-weight-bold">Anshul</span> Thakur </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">projects </a> </li> <li class="nav-item "> <a class="nav-link" href="/academics/">academics </a> </li> <li class="nav-item "> <a class="nav-link" href="/news/">news </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">Forecasting season</h1> <p class="post-meta"> Created on July 24, 2026 </p> <p class="post-tags"> <a href="/blog/2026"> <i class="fa-solid fa-calendar fa-sm"></i> 2026 </a>   ·   <a href="/blog/tag/forecasting"> <i class="fa-solid fa-hashtag fa-sm"></i> forecasting</a>   <a href="/blog/tag/agents"> <i class="fa-solid fa-hashtag fa-sm"></i> agents</a>   ·   <a href="/blog/category/research"> <i class="fa-solid fa-tag fa-sm"></i> research</a> </p> </header> <article class="post-content"> <div id="markdown-content"> <p>For the first half of 2026, a good part of our work at Kairosity went into competitive forecasting. Not backtests. Live competitions, real questions, real resolution dates, leaderboards that move while you sleep. Forecasting is one of the few tasks where the world itself grades your reasoning, on a schedule, with no partial credit, and frontier models have been closing the gap to human superforecasters fast enough that the competitions got interesting. We entered four. This post is about what we built for each and what the season taught us.</p> <h2 id="the-arenas">The arenas</h2> <p><strong>The Metaculus AI Benchmark, Spring 2026.</strong> A bot-only tournament, a few hundred questions over the season, log-scored against how the world resolves, with the bots benchmarked against the Metaculus community’s own predictions. Alongside it runs MiniBench, back-to-back two-week sprints of about sixty auto-resolving questions, which we used as a fast feedback loop.</p> <p><strong>ProphetHacks.</strong> A 32-hour hackathon out of UChicago in May, run by Sigma Lab, Fleet AI, and Kalshi. You ship an agent that predicts on live Kalshi prediction-market events, and the leaderboard ranks agents by live PnL over a two-week evaluation window. Nothing concentrates the mind like a leaderboard that re-ranks every fifteen seconds.</p> <p><strong>Prophet Arena.</strong> The live benchmark from the LLM-as-a-Prophet group, which continuously evaluates forecasters on real prediction-market events, Brier-scored, across multiple horizons. After the hackathon we kept an agent standing there.</p> <p><strong>The Upstart Macro Index competition.</strong> The quiet one. Monthly forecasts of a macroeconomic index, judged over months rather than minutes.</p> <h2 id="metaculus-or-the-committee-that-writes-code">Metaculus, or the committee that writes code</h2> <p>Our Metaculus bot is a committee of three researchers with one editor, and the rule that defines it is that the researchers are not allowed to hand-wave. Each question first goes through iterative research. A search agent pulls from news and web sources through a single gateway, an analyst critiques what came back, and a supervisor either declares the evidence sufficient or emits targeted sub-queries for another round.</p> <p>Then three researchers attack the question in parallel, each deliberately running on a different model, so their mistakes decorrelate. Each researcher must anchor on prediction-market and community priors where they exist, and downweight thin ones. Each must state a base rate before updating on news. And each must express its final model as Python. Real scipy distributions, Monte Carlo with at least ten thousand samples, no magic numbers, every constant tagged as researched or assumed. The code actually runs. If <code class="language-plaintext highlighter-rouge">predict()</code> fails or returns the wrong outcome keys, the error goes back to the researcher and it tries again.</p> <p>A consensus agent then reads all three, scores each on analysis quality and model soundness, assigns weights, is allowed to throw a researcher out entirely, fixes unit mistakes (a researcher who says “75” when the question wants 75,000,000 gets corrected, not trusted), and takes the weighted average. Before anything is submitted, there is one last discipline, an overconfidence tax applied exactly once:</p> \[X = \min(10 - c,\ 0.2\,p)\] <p>where \(c\) is the researcher’s own certainty out of ten and \(p\) is the leaning-side estimate in percent, and the estimate gets shaved by \(X\) toward the middle. The rule comes with a clause we consider load-bearing: you are not allowed to tune \(c\) to keep the number you already wanted.</p> <p>The other half of the Metaculus story is operations. The bot runs every twenty minutes, first from CI, then from a server with cron, tmux, and a lockfile so runs never overlap. Every external API sits behind a dispatcher that enforces per-service rate limits with adaptive backoff, because Metaculus wants one request every four seconds and news APIs want less than that. And we have the war story that justifies all of it. One night the dispatcher process died at 03:20 UTC. Cron kept firing every twenty minutes, each run hit connection refused, and by 04:40 the question had closed without our forecast. The forecasting was fine. The plumbing lost the points. In live tournaments, reliability is not an engineering nicety, it is a scoring term.</p> <p>Watching the bot work is its own reward. In one captured run it spent seven minutes on a Slovenian parliamentary seat-redistribution question, building Wilson intervals over local polls, modeling D’Hondt seat allocation, and rewriting its search queries in Slovene with site filters for Ljubljana pollsters. The bot had opinions about Slovenian coalition politics. We mostly watched.</p> <h2 id="prophethacks-or-32-hours-and-a-bot-called-greeniebot">ProphetHacks, or 32 hours and a bot called GreenieBot</h2> <p>Before writing any code for the hackathon, we did something that felt almost like cheating and is actually just forecasting. Metaculus bots post their reasoning publicly, and we had been reading the traces of a strong one called GreenieBot. So we reverse-engineered it from its own words. We pulled its public traces, distilled them into two lists, behaviors to copy and behaviors to avoid, and baked both into our prompts as few-shot examples. Some of those lessons are still in our prompt files verbatim, like the reminder that models systematically underprice questions where a benchmark score is already near the threshold, and the line we quote at each other: overweighting formal caution can be as damaging as overconfidence.</p> <p>The hackathon agent itself is small and paranoid. One HTTP endpoint. Retrieval is bounded Exa search planned by a cheap model, two rounds, a handful of queries per round, at most ten sources, under a hard 420-second wall clock. Forecasting is two independent forecaster-verifier branches running in parallel, the verifier hunting resolver mistakes, prior misuse, and overconfidence, and a synthesizer that merges the branches without ever smearing to uniform. And if anything anywhere throws, the agent returns a uniform fallback rather than nothing, because completion rate is scored and a missed submission is worse than an honest coin flip. The line from our submission notes: a beautiful forecast that misses the schema is still a failed forecast.</p> <p>One Kalshi-specific detail cost us real thought. Listed outcomes on a market do not have to sum to one, the resolver semantics are per-label, so the agent preserves calibrated per-label probabilities and refuses to normalize unless the resolver says the outcomes are exhaustive and exclusive. It is exactly the kind of detail that silently costs points if your pipeline helpfully normalizes behind your back.</p> <p>On the live PnL leaderboard we sat first for a moment. We ended third.</p> <h2 id="prophet-arena-or-staying-live">Prophet Arena, or staying live</h2> <p>After the hackathon we took the same core, scrubbed it into a clean deployment, and kept it standing on Prophet Arena, where events keep arriving from real markets and the grading never stops. The engineering brief changes when there is no closing ceremony. Under load testing, three parallel requests complete in about 39 seconds each with both forecast branches running, and the whole pipeline stays comfortably under the ten-minute budget per question. Same philosophy as the hackathon, calibration over confidence, schema over beauty, always answer.</p> <h2 id="upstart-or-knowing-when-not-to-send-an-agent">Upstart, or knowing when not to send an agent</h2> <p>The Upstart Macro Index competition asked for monthly index forecasts with uncertainty bands. We tracked the index’s regime, fit AR(1) models on the recent window, and bootstrapped the intervals. The index peaked around 1.67 in late 2023 and read 1.39 in December 2025, with California diverging well below the national line, and our submissions came down to reading monetary policy and sector layoffs correctly, then letting a two-parameter model from a statistics textbook do the arithmetic. Knowing when the right forecaster is not an agent is also a forecasting skill.</p> <h2 id="what-carried-over">What carried over</h2> <p>Across four arenas, the same three lessons kept re-proving themselves.</p> <p>Reliability is a scoring term. Fallbacks, rate limits, lockfiles, timeouts, completion rate. Nearly every point we lost all season was lost by plumbing, not by reasoning.</p> <p>Calibration wants machinery, not vibes. The explicit shrink formula, verifiers whose job is to attack overconfidence, market priors as anchors, unit-checking before aggregation. Every one of these exists because we watched a raw model be confidently wrong in a specific, repeatable way.</p> <p>And the one that became a research question. Ask a strong model the same question in different clothes, a binary here, the same thing as a multiple choice there, and the numbers stop agreeing with each other. Accuracy kept improving all season. Consistency did not. That observation turned into our working paper, <a href="https://openreview.net/forum?id=Z51qVtmHAv" rel="external nofollow noopener" target="_blank">Brittle Prophets</a>, where the forecaster first builds an explicit causal model of the question and then reasons probabilistically over it, and preliminary results show it helps both accuracy and consistency. The next generation of our tournament bot is being built in the same spirit, question decomposition trees, base-rate anchoring, adversarial auditors on every node.</p> <p>The season’s summary is one sentence. The models are already better forecasters than their harnesses let them be, and the next season is about the harness.</p> </div> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Anshul Thakur. </div> </footer> <script>
+  window.alFolio = {
+    compatBootstrap: false
+  };
+</script> <script src="/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/al_math/js/mathjax-setup.js"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script src="/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script> <script src="/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script> <script defer src="/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/al_img_tools/js/zoom.js"></script> <script defer src="/assets/js/progress-bar.js?v=499464c5c63ced6cf7ad62509f1e2610" type="text/javascript"></script> <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script> <script>
+    addBackToTop();
+  </script> <script type="module" src="/assets/al_search/js/search/ninja-keys.min.js"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/al_search/js/search-setup.js"></script> <script>
+// get the ninja-keys element
+const ninja = document.querySelector('ninja-keys');
+
+// add the home and posts menu items
+ninja.data = [{
+    id: "nav-about",
+    title: "about",
+    section: "Navigation",
+    handler: () => {
+      window.location.href = "/";
+    },
+  },{id: "nav-blog",
+          title: "blog",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/blog/";
+          },
+        },{id: "nav-publications",
+          title: "publications",
+          description: "publications by categories in reversed chronological order. generated by jekyll-scholar.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/publications/";
+          },
+        },{id: "nav-projects",
+          title: "projects",
+          description: "A growing collection of your cool projects.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/projects/";
+          },
+        },{id: "nav-academics",
+          title: "academics",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/academics/";
+          },
+        },{id: "nav-news",
+          title: "news",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/news/";
+          },
+        },{id: "post-forecasting-season",
+        
+          title: "Forecasting season",
+        
+        description: "The competitions we entered at Kairosity, the agents we built for them, and what live leaderboards taught us about reliability, calibration, and consistency.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/forecasting-season/";
+          
+        },
+      },{id: "post-aframework",
+        
+          title: "AFramework",
+        
+        description: "Why I built an agent framework that separates applications from LLM inference, and a tour of how it works.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/aframework/";
+          
+        },
+      },{id: "post-pks-we-thought-this-was-hard",
+        
+          title: "PKS: We thought this was hard",
+        
+        description: "How a problem we couldn&#39;t crack for weeks fell to a greedy algorithm, from our paper on manipulating the Kemeny score.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/possible-kemeny-score/";
+          
+        },
+      },{id: "post-fixing-table-boxes-with-rl",
+        
+          title: "Fixing table boxes with RL",
+        
+        description: "Teaching an agent to repair a table detector&#39;s bounding boxes, with geometric rewards in the open version and a vision model as the judge in the applied one.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/table-ocr-rl/";
+          
+        },
+      },{id: "post-polytm-learning-polynomial-time-oracles",
+        
+          title: "PolyTM: learning polynomial-time oracles",
+        
+        description: "An RL environment where a neural network learns to write the computation that solves a problem, instead of guessing the answer.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/polytm/";
+          
+        },
+      },{id: "news-samay-our-time-series-foundation-model-at-kairosity-is-top-3-on-the-gift-eval-benchmark-ahead-of-models-from-amazon-ibm-and-google",
+          title: 'Samay, our time-series foundation model at Kairosity, is Top-3 on the GIFT-Eval benchmark,...',
+          description: "",
+          section: "News",},{id: "news-our-forecaster-reached-top-3-on-the-prophethacks-live-leaderboard-an-ai-forecasting-hackathon-hosted-at-uchicago-and-sponsored-by-sigma-lab-fleet-ai-and-kalshi",
+          title: 'Our forecaster reached Top-3 on the ProphetHacks live leaderboard, an AI forecasting hackathon...',
+          description: "",
+          section: "News",},{
+        id: 'social-email',
+        title: 'email',
+        section: 'Socials',
+        handler: () => {
+          window.open("mailto:%74%68%61%6B%75%72.%31%37@%69%69%74%6A.%61%63.%69%6E", "_blank");
+        },
+      },{
+        id: 'social-github',
+        title: 'GitHub',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://github.com/DDI-droid", "_blank");
+        },
+      },{
+        id: 'social-rss',
+        title: 'RSS Feed',
+        section: 'Socials',
+        handler: () => {
+          window.open("/feed.xml", "_blank");
+        },
+      },{
+      id: 'light-theme',
+      title: 'Change theme to light',
+      description: 'Change the theme of the site to Light',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("light");
+      },
+    },
+    {
+      id: 'dark-theme',
+      title: 'Change theme to dark',
+      description: 'Change the theme of the site to Dark',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("dark");
+      },
+    },
+    {
+      id: 'system-theme',
+      title: 'Use system default theme',
+      description: 'Change the theme of the site to System Default',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("system");
+      },
+    },];
+
+</script> <script src="/assets/al_search/js/shortcut-key.js"></script> </body> </html>
