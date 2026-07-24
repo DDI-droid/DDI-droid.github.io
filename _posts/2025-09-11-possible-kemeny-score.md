@@ -84,8 +84,6 @@ A small example. Let $$X = a \prec b \prec c \prec d \prec e$$ and let the ballo
 
 For $$b$$, the four available slots cost $$1, 2, 1, 2$$ disagreements against the fixed candidates. Positions $$0$$ and $$2$$ tie, so the leftmost wins and $$b$$ goes first: $$b \prec c \prec a \prec e$$. For $$d$$, the slots from the pointer onward cost $$2, 1, 0, 1$$, so $$d$$ goes after $$a$$: $$b \prec c \prec a \prec d \prec e$$. Total distance to $$X$$: the ballot's own inversion $$(c,a)$$, plus $$1$$ for $$b$$, plus $$0$$ for $$d$$. You can check by brute force that no completion of $$R$$ does better.
 
-It is a greedy algorithm, and greedy algorithms on ranking problems usually die on a counterexample. We looked for the counterexample for a while. There isn't one.
-
 ## Why it works
 
 Two facts carry the proof.
