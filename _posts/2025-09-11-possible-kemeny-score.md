@@ -2,13 +2,13 @@
 layout: post
 title: We thought this was hard
 date: 2025-09-11 12:00:00
-description: How a problem we couldn't crack for weeks fell to a greedy algorithm, from our SAGT 2026 paper on manipulating the Kemeny score.
+description: How a problem we couldn't crack for weeks fell to a greedy algorithm, from our paper on manipulating the Kemeny score.
 tags: social-choice algorithms
 categories: research
 related_posts: false
 ---
 
-This post is about one section of our paper [Bribery's Influence on Ranked Aggregation](https://arxiv.org/abs/2603.28574) (SAGT 2026), written with Pallavi Jain. The paper studies what happens to the Kemeny score under manipulation, bribery, deleting rankings, deleting candidates, and so on. This post is about the piece of it we were stuck on the longest, a problem called **Possible Kemeny Score**, which resisted us for a while and then fell to an algorithm so simple we didn't believe it at first.
+This post is about one section of our paper [Bribery's Influence on Ranked Aggregation](https://arxiv.org/abs/2603.28574), written with Pallavi Jain. The paper studies what happens to the Kemeny score under manipulation, bribery, deleting rankings, deleting candidates, and so on. This post is about the piece of it we were stuck on the longest, a problem called **Possible Kemeny Score**, which resisted us for a while and then fell to an algorithm so simple we didn't believe it at first.
 
 ## Rankings and disagreements
 
@@ -106,4 +106,4 @@ For a long time we were convinced this problem was hard, and the honest reason i
 
 It is a strange table our paper ends up with. For Kemeny *Consensus*, these manipulation questions are coNP-complete or $$\Sigma_2^p$$-complete. For Kemeny *Score*, the decision version, every one of them we studied is polynomial, bribery via a reduction to Knapsack, ranking deletion, swap bribery, and the problem in this post. Same rule, same manipulative actions, a complexity gulf between the optimisation and decision questions.
 
-The paper is on [arXiv](https://arxiv.org/abs/2603.28574), and appears at SAGT 2026. The three-voter Kemeny score, whether it is polynomial or NP-hard, is still open, and so is every Kemeny Winner column of our table, if you want something to be stuck on yourself.
+The paper is on [arXiv](https://arxiv.org/abs/2603.28574). The three-voter Kemeny score, whether it is polynomial or NP-hard, is still open, and so is every Kemeny Winner column of our table, if you want something to be stuck on yourself.
