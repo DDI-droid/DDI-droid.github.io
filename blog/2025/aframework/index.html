@@ -39,7 +39,54 @@
 <span class="nd">@tool_hook</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">register_my_tools</span><span class="p">(</span><span class="n">registry</span><span class="p">):</span>
     <span class="k">await</span> <span class="n">registry</span><span class="p">.</span><span class="nf">register_function</span><span class="p">(</span><span class="sh">"</span><span class="s">my_tool</span><span class="sh">"</span><span class="p">,</span> <span class="n">my_tool_fn</span><span class="p">,</span> <span class="sh">"</span><span class="s">Description</span><span class="sh">"</span><span class="p">,</span> <span class="p">{})</span>
-</code></pre></div></div> <p>Model backends and verifiers carry the same <code class="language-plaintext highlighter-rouge">@model_backend</code> and <code class="language-plaintext highlighter-rouge">@verifier</code> decorators. Everything in the system is a plugin sitting behind a name, which is what lets a task spec be nothing but plain dicts naming the pieces it wants.</p> <p>AFramework is open source on <a href="https://github.com/Curiosity-Oneiroi/AFramework" rel="external nofollow noopener" target="_blank">GitHub</a>.</p> </div> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Anshul Thakur. </div> </footer> <script>
+</code></pre></div></div> <p>Model backends and verifiers carry the same <code class="language-plaintext highlighter-rouge">@model_backend</code> and <code class="language-plaintext highlighter-rouge">@verifier</code> decorators. Everything in the system is a plugin sitting behind a name, which is what lets a task spec be nothing but plain dicts naming the pieces it wants.</p> <h2 id="a-small-example">A small example</h2> <p>Here is the shape a real app takes: an agent that can factor numbers, because a model is bad at arithmetic and a tool is exact. The tool is an ordinary Python function.</p> <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># tools.py
+</span><span class="k">def</span> <span class="nf">factorize</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="sh">"""</span><span class="s">Return the prime factors of n.</span><span class="sh">"""</span>
+    <span class="n">factors</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="p">[],</span> <span class="mi">2</span>
+    <span class="k">while</span> <span class="n">d</span> <span class="o">*</span> <span class="n">d</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">:</span>
+        <span class="k">while</span> <span class="n">n</span> <span class="o">%</span> <span class="n">d</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">factors</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+            <span class="n">n</span> <span class="o">//=</span> <span class="n">d</span>
+        <span class="n">d</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">factors</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">factors</span>
+</code></pre></div></div> <p>The app wires a backend, a verifier, and that tool onto a client, then asks a question and waits for the answer.</p> <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">from</span> <span class="n">AFramework.agent_core</span> <span class="kn">import</span> <span class="n">BaseAgentCoreClient</span>
+
+<span class="n">model_backend</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sh">"</span><span class="s">model_backend_class_name</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">OpenAIBackend</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">gpt-4o</span><span class="sh">"</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="nc">BaseAgentCoreClient</span><span class="p">(</span><span class="n">agent_id</span><span class="o">=</span><span class="sh">"</span><span class="s">factorizer</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">client</span><span class="p">.</span><span class="nf">register_model_backend</span><span class="p">(</span><span class="o">**</span><span class="n">model_backend</span><span class="p">)</span>
+    <span class="n">client</span><span class="p">.</span><span class="nf">register_verifier</span><span class="p">(</span>
+        <span class="n">verifier_class_name</span><span class="o">=</span><span class="sh">"</span><span class="s">BaseVerifier</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">model_backend</span><span class="o">=</span><span class="n">model_backend</span><span class="p">,</span>
+        <span class="n">max_verification_steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">client</span><span class="p">.</span><span class="nf">register_tool_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">factorize</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">import_module</span><span class="o">=</span><span class="sh">"</span><span class="s">tools</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">attr</span><span class="o">=</span><span class="sh">"</span><span class="s">factorize</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="sh">"</span><span class="s">Return the prime factors of an integer n.</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">parameters</span><span class="o">=</span><span class="p">{</span>
+            <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">n</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">integer</span><span class="sh">"</span><span class="p">}},</span>
+            <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">n</span><span class="sh">"</span><span class="p">],</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="nf">execute</span><span class="p">(</span>
+        <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">What are the prime factors of 1001? Use the tool.</span><span class="sh">"</span><span class="p">}],</span>
+    <span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="sh">"</span><span class="s">task_result</span><span class="sh">"</span><span class="p">])</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div> <p>Nothing here starts a server or manages a process. The daemon comes up on the first call, the worker registers the tool from its import path, the agent calls it, the verifier watches the loop, and the answer comes back. The application only ever described what it wanted.</p> <p>AFramework is open source on <a href="https://github.com/Curiosity-Oneiroi/AFramework" rel="external nofollow noopener" target="_blank">GitHub</a>.</p> </div> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Anshul Thakur. </div> </footer> <script>
   window.alFolio = {
     compatBootstrap: false
   };
