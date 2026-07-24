@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Forecasting"
-date: 2026-07-24 12:00:00
+date: 2026-01-16 12:00:00
 description: The competitions we entered at Kairosity, the agents we built for them, and what live leaderboards taught us about reliability, calibration, and consistency.
 tags: forecasting agents
 categories: research
