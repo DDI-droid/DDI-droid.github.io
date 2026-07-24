@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "AFramework: separating the app from the inference"
+title: AFramework
 date: 2025-11-16 12:00:00
 description: Why I built an agent framework that separates applications from LLM inference, and a tour of how it works.
 tags: systems llm agents
@@ -16,7 +16,7 @@ AFramework is an agent framework, that is what the A stands for. I built it at K
 
 ## Why
 
-Picture one machine's worth of CPU and RAM, and many applications that all want LLM-driven work done on it. The GPU side of this separation already has its answer: vLLM sits between the model and everyone who wants a forward pass, and schedules those passes well. But an agentic workload is not a forward pass. A ReAct-style task is long stretches of I/O, tool calls, API waits, retrieval, braided with bursts of CPU work, and the model call is only one piece of it. For that side of inference there is no shared substrate, so every application builds its own orchestration, its own rate limiting, its own retries, around the same recurring needs.
+Picture one machine's worth of CPU and RAM, and many applications that all want LLM-driven work done on it. The GPU side of this separation already has its answer: engines like vLLM and SGLang sit between the model and everyone who wants a forward pass, and schedule those passes well. But an agentic workload is not a forward pass. A ReAct-style task is long stretches of I/O, tool calls, API waits, retrieval, braided with bursts of CPU work, and the model call is only one piece of it. For that side of inference there is no shared substrate, so every application builds its own orchestration, its own rate limiting, its own retries, around the same recurring needs.
 
 AFramework is that substrate. An application submits a task over a socket and stops caring. A shared daemon runs it, next to every other application's tasks, and optimizes the whole load on whatever the box has.
 
@@ -29,6 +29,8 @@ You do not start AFramework. The first client call that needs it starts the daem
 Work runs in isolated worker processes, real parallelism rather than one event loop pretending. A supervisor health-checks the workers, respawns the dead ones, and drains them on shutdown.
 
 Behavior lives in agent cores. The default core runs a reasoning loop with a model backend and a verifier attached, and custom cores define their own contract with the worker. Everything is specified as plain dicts naming a class, backends are swappable, vLLM, OpenAI, Anthropic, and MCP servers are first class.
+
+The verifier is worth a word, because the name undersells it. Think of it as a monitor that runs over the reasoning each round. It can be an agent in its own right, an LLM that reads the trajectory so far and decides whether the loop should keep going, or it can be a plain condition that fires at a set point: summarize the context once it crosses a token threshold, stop when a criterion is met, structure the final answer before it leaves. It is the hook for watching a reasoning loop while it runs, not only reading what it produced.
 
 Results are durable. A client can submit a task, die, and a different client can later ask for the result and get the same answer, or the same error. Errors are fail-fast and typed: a failing task marks itself failed with a structured error payload, its coroutine dies alone, and the worker keeps serving everything else.
 
@@ -44,7 +46,7 @@ The part I like most: task costs are not configured anywhere. They are learned o
 
 ## The C++ underneath
 
-The hot path is C++ where it matters, the dispatch queues between router and workers, the scheduler, and the logger's wire service, each with a Python fallback so the framework still runs unbuilt, just slower. The reasoning is boring and firm: dispatch overhead is paid by every task that moves, so the dispatch path is the one place that must never be the bottleneck.
+The hot path is C++ where it matters, the dispatch queues between router and workers (single-producer, multi-consumer), the scheduler and its worker topology, and the logger's wire service, each with a Python fallback so the framework still runs unbuilt, just slower. The reasoning is boring and firm: dispatch overhead is paid by every task that moves, so the dispatch path is the one place that must never be the bottleneck.
 
 ## Using it
 
@@ -76,6 +78,31 @@ if __name__ == "__main__":
 ```
 
 That is the whole ceremony. No daemon management, no service files, the framework comes up behind the first call and the task runs in a worker with routing, rate limits, and durability underneath it.
+
+## Extending it
+
+The default core is one implementation of a contract, not the only one. Your own agent core is a class behind a decorator:
+
+```python
+from AFramework import agent_core, BaseAgentCore
+
+@agent_core
+class MyAgentCore(BaseAgentCore):
+    # implement register_task / execute_task; define your own loop
+    ...
+```
+
+The decorator registers the class by its name, and workers load it lazily when a task asks for it. Tools register the same way, a function behind a hook:
+
+```python
+from AFramework import tool_hook
+
+@tool_hook
+async def register_my_tools(registry):
+    await registry.register_function("my_tool", my_tool_fn, "Description", {})
+```
+
+Model backends and verifiers carry the same `@model_backend` and `@verifier` decorators. Everything in the system is a plugin sitting behind a name, which is what lets a task spec be nothing but plain dicts naming the pieces it wants.
 
 ## What is not here
 
