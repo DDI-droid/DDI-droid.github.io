@@ -56,7 +56,7 @@ We could not find an approach.
 
 ## The first insight
 
-The first crack was proving that the guess is actually forced. In any optimal completion, the inserted candidates appear among themselves in exactly $$X$$'s order.
+The first insight was that the natural guess turns out to be right. In any optimal completion, the inserted candidates appear among themselves in exactly $$X$$'s order.
 
 **Lemma 1.** *Let $$\hat{R}$$ be an optimal extension of $$R$$. Then $$\hat{R}$$ and $$X$$ agree over the inserted candidates.*
 
