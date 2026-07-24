@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Table bounding boxes with RL
+title: Fixing Table Bounding Boxes with RL
 date: 2025-08-17 12:00:00
 description: Teaching a neural network to repair a table detector's bounding boxes, with geometric rewards in the open version and a vision model as the judge in the applied one.
 tags: rl ocr systems
