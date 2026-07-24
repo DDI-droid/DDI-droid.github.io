@@ -20,6 +20,9 @@ pagination:
   .header-bar h1 {
     color: var(--global-text-color) !important;
     font-family: "Brush Script MT", "Segoe Script", cursive;
+    font-size: 5.5rem;
+    line-height: 1.4;
+    padding-bottom: 0.15em;
   }
 </style>
 
