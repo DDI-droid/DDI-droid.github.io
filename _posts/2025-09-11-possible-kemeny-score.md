@@ -28,7 +28,7 @@ If you draw the two rankings side by side and connect each candidate to itself, 
 
 The distance from one ranking $$X$$ to a whole set of rankings $$\mathcal{R}$$ is the sum, $$\mathtt{KT}(X,\mathcal{R}) = \sum_{R\in\mathcal{R}}\mathtt{KT}(X,R)$$.
 
-## The problem
+## The problem (intuitively)
 
 Real ballots are incomplete. A reviewer ranks the five papers they actually read. A user ranks the movies they have seen. So suppose the rankings you are given are partial, and suppose someone hands you a target ranking $$X$$ over all the candidates and a number $$k$$, and asks:
 
