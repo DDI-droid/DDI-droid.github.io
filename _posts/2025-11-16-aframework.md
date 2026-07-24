@@ -22,8 +22,6 @@ AFramework is that substrate. An application submits a task over a socket and st
 
 There is also a blunter reason. The popular frameworks in this space break often, LangChain most famously, and the design goal here was the opposite of a framework that does everything: a small daemon with a narrow contract that stays up.
 
-<!-- ARCHITECTURE DIAGRAM goes here: client apps on the left, arrows into a Unix socket, the daemon box (router + supervisor inside), N worker process boxes, arrows out to backends (vLLM, OpenAI, Anthropic), Redis attached to the daemon/workers. Same SVG style as the Kemeny post figures. -->
-
 ## The shape of the system
 
 You do not start AFramework. The first client call that needs it starts the daemon on a Unix socket if one is not already answering, and plugin modules load lazily, only the ones your spec names. For a long-lived deployment you can run the daemon yourself, but nothing requires it.
