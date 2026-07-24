@@ -24,6 +24,34 @@ pagination:
     line-height: 1.4;
     padding-bottom: 0.15em;
   }
+
+  /* Featured (highlighted) post in the list */
+  .post-list li.featured-post {
+    position: relative;
+    background: rgba(212, 175, 55, 0.09);
+    border: 1px solid rgba(212, 175, 55, 0.55);
+    border-radius: 10px;
+    padding: 1.1rem 1.35rem 0.9rem;
+    margin: 0.5rem 0 1.75rem;
+    box-shadow: 0 1px 10px rgba(212, 175, 55, 0.12);
+  }
+  .post-list li.featured-post h3 .post-title::before {
+    content: "\2605"; /* ★ */
+    color: #d4af37;
+    margin-right: 0.45rem;
+  }
+  .post-list li.featured-post::after {
+    content: "\2605 Featured";
+    position: absolute;
+    top: 0.9rem;
+    right: 1.2rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #b8860b;
+    font-weight: 600;
+  }
+  :root[data-theme="dark"] .post-list li.featured-post::after { color: #e6c34d; }
 </style>
 
 <div class="post">
@@ -130,7 +158,7 @@ pagination:
     {% assign tags = post.tags | join: "" %}
     {% assign categories = post.categories | join: "" %}
 
-    <li>
+    <li class="{% if post.highlight %}featured-post{% endif %}">
 
 {% if post.thumbnail %}
 

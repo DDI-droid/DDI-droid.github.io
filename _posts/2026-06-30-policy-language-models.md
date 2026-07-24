@@ -6,6 +6,7 @@ description: A complementary axis of inference-time scaling that biases the LLM 
 tags: llm meta-reasoning
 categories: research
 related_posts: false
+highlight: true
 ---
 
 This post introduces what I'm working on right now, Policy Language Models. The paper is linked at the end.
