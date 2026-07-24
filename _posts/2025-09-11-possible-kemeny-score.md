@@ -106,8 +106,8 @@ Ballots do not interact, the total distance is a sum, so running the procedure o
 
 ## In hindsight
 
-For a long time we were convinced this problem was hard, and the honest reason is that we had not found the two lemmas. Without the agreement lemma there is no order to insert in, and without the free-ride inequality no placement is safe to commit to. Both freedoms looked like they demanded search. The two symmetries remove them one at a time, and what is left standing is a greedy that never needs to take anything back.
+For a long time we were convinced this problem was hard, and the honest reason is that we had not found the two lemmas. Without the agreement lemma there is no order to insert in, and without the free-ride inequality no placement is safe to commit to. Both freedoms looked like they demanded search. The two symmetries we discovered are what make a greedy algorithm the solution.
 
 It is a strange table our paper ends up with. For Kemeny *Consensus*, these manipulation questions are coNP-complete or $$\Sigma_2^p$$-complete. For Kemeny *Score*, the decision version, every one of them we studied is polynomial, bribery via a reduction to Knapsack, ranking deletion, swap bribery, and the problem in this post. Same rule, same manipulative actions, a complexity gulf between the optimisation and decision questions.
 
-The paper is on [arXiv](https://arxiv.org/abs/2603.28574). The three-voter Kemeny score, whether it is polynomial or NP-hard, is still open, and so is every Kemeny Winner column of our table, if you want something to be stuck on yourself.
+The paper is on [arXiv](https://arxiv.org/abs/2603.28574). The three-voter Kemeny score, whether it is polynomial or NP-hard, is still open, and so is every Kemeny Winner column of our table.
