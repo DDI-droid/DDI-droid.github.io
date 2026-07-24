@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="640" height="220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="220" fill="white"/>
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#dc2626" opacity="0.8"/>
+    </marker>
+  </defs>
+
+  <!-- target ranking -->
+  <text x="320" y="22" font-family="Georgia, 'Times New Roman', serif" font-size="14"
+    text-anchor="middle" dominant-baseline="central" fill="#374151">
+    <tspan font-style="italic">X</tspan>
+    <tspan dx="4">:</tspan>
+    <tspan dx="6" font-style="italic">a</tspan>
+    <tspan dx="4">&#x227B;</tspan>
+    <tspan dx="4" font-style="italic">b</tspan>
+    <tspan dx="4">&#x227B;</tspan>
+    <tspan dx="4" font-style="italic">c</tspan>
+    <tspan dx="4">&#x227B;</tspan>
+    <tspan dx="4" font-style="italic">d</tspan>
+    <tspan dx="4">&#x227B;</tspan>
+    <tspan dx="4" font-style="italic">e</tspan>
+  </text>
+
+  <!-- track -->
+  <line x1="70" y1="155" x2="580" y2="155"
+    stroke="#94a3b8" stroke-width="2"/>
+  <line x1="130" y1="149" x2="130" y2="161" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="230" y1="149" x2="230" y2="161" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="415" y1="149" x2="415" y2="161" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="510" y1="149" x2="510" y2="161" stroke="#cbd5e1" stroke-width="1.5"/>
+
+  <!-- dashed arrows from unranked squares -->
+  <line x1="240" y1="87" x2="240" y2="127"
+      stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.75"
+      marker-end="url(#arr)"/>
+  <line x1="395" y1="87" x2="395" y2="127"
+      stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.75"
+      marker-end="url(#arr)"/>
+
+  <!-- ranked candidates (circles) -->
+  <circle cx="175" cy="155" r="18"
+    fill="#DBEAFE" stroke="#2563EB" stroke-width="2"/>
+  <text x="175" y="155" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-style="italic"
+    text-anchor="middle" dominant-baseline="central" fill="#1D4ED8">c</text>
+  <circle cx="320" cy="155" r="18"
+    fill="#DBEAFE" stroke="#2563EB" stroke-width="2"/>
+  <text x="320" y="155" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-style="italic"
+    text-anchor="middle" dominant-baseline="central" fill="#1D4ED8">a</text>
+  <circle cx="465" cy="155" r="18"
+    fill="#DBEAFE" stroke="#2563EB" stroke-width="2"/>
+  <text x="465" y="155" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-style="italic"
+    text-anchor="middle" dominant-baseline="central" fill="#1D4ED8">e</text>
+
+  <!-- unranked candidates (squares) -->
+  <rect x="224" y="52" width="32" height="32"
+    fill="#FEE2E2" stroke="#DC2626" stroke-width="2" rx="2"/>
+  <text x="240" y="68" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-style="italic"
+    text-anchor="middle" dominant-baseline="central" fill="#B91C1C">b</text>
+  <rect x="379" y="52" width="32" height="32"
+    fill="#FEE2E2" stroke="#DC2626" stroke-width="2" rx="2"/>
+  <text x="395" y="68" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-style="italic"
+    text-anchor="middle" dominant-baseline="central" fill="#B91C1C">d</text>
+
+  <text x="325" y="188"
+    font-family="Georgia, 'Times New Roman', serif" font-size="12" text-anchor="middle" fill="#94a3b8"
+    font-style="italic">partial ballot</text>
+</svg>

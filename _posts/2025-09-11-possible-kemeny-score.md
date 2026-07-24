@@ -22,7 +22,9 @@ $$
 
 If you draw the two rankings side by side and connect each candidate to itself, the distance is just the number of crossings.
 
-<!-- VISUAL 1 goes here: two rankings side by side, lines connecting each candidate's positions, crossings highlighted. Caption: "Kendall tau distance = number of crossings." -->
+<div class="text-center">
+  <img src="/assets/img/posts/kemeny-crossings.svg" alt="Two rankings with connecting lines; crossings marked" style="max-width: 100%;">
+</div>
 
 The distance from one ranking $$X$$ to a whole set of rankings $$\mathcal{R}$$ is the sum, $$\mathtt{KT}(X,\mathcal{R}) = \sum_{R\in\mathcal{R}}\mathtt{KT}(X,R)$$.
 
@@ -34,7 +36,9 @@ Real ballots are incomplete. A reviewer ranks the five papers they actually read
 
 Completing a ranking means inserting the missing candidates anywhere you like, without touching the relative order of the candidates already ranked.
 
-<!-- VISUAL 2 goes here: one partial ballot as a horizontal track of circles (already-ranked candidates), a floating pool of squares (missing candidates) above it, and the target ranking X drawn along the top. -->
+<div class="text-center">
+  <img src="/assets/img/posts/kemeny-problem.svg" alt="A partial ballot with missing candidates waiting to be inserted" style="max-width: 100%;">
+</div>
 
 In other words, is there a completion of the evidence under which $$X$$ scores at most $$k$$? It is the optimist's question, and it is also the auditor's question. Given incomplete preference data, what is the best score this target could possibly have?
 
@@ -58,7 +62,9 @@ The first crack was proving that the guess is actually forced. In any optimal co
 
 The proof is an exchange argument. Suppose two inserted candidates $$c, c'$$ sit in the wrong order, $$c \prec_X c'$$ but $$c' \prec_{\hat{R}} c$$. Swap them. The pair $$\{c,c'\}$$ itself now agrees with $$X$$, so that is one disagreement gone. For any candidate $$w$$ caught between them, check the three places $$w$$ can sit in $$X$$: before both, between them, after both. Walking the cases, every disagreement the swap creates is matched by one it removes, and the between case removes two. The distance never goes up, and the pair itself strictly improves. So an out-of-order pair can never survive in an optimal completion.
 
-<!-- VISUAL 4 goes here: two squares out of order on the track with swap arrows, crossing count shown before and after. -->
+<div class="text-center">
+  <img src="/assets/img/posts/kemeny-swap.svg" alt="Swapping an out-of-order pair reduces disagreements from 4 to 1" style="max-width: 100%;">
+</div>
 
 This kills the first level of freedom completely. The internal order of the insertions is not a choice, it is $$X$$'s order. What remains is only the question of positions.
 

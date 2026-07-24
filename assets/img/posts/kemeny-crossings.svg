@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="620" height="215" xmlns="http://www.w3.org/2000/svg">
+  <rect width="620" height="215" fill="white"/>
+
+  <!-- connecting lines (behind dots) -->
+  <line x1="100" y1="80" x2="300" y2="155" stroke="#555" stroke-width="1.8"/>
+  <line x1="200" y1="80" x2="100" y2="155" stroke="#555" stroke-width="1.8"/>
+  <line x1="300" y1="80" x2="200" y2="155" stroke="#555" stroke-width="1.8"/>
+  <line x1="400" y1="80" x2="400" y2="155" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="500" y1="80" x2="500" y2="155" stroke="#bbb" stroke-width="1.4"/>
+
+  <!-- crossing highlights -->
+  <circle cx="166.7" cy="105.0" r="8"
+    fill="rgba(220,38,38,0.18)" stroke="#dc2626" stroke-width="2"/>
+  <circle cx="233.3" cy="130.0" r="8"
+    fill="rgba(220,38,38,0.18)" stroke="#dc2626" stroke-width="2"/>
+
+  <!-- top dots -->
+  <circle cx="100" cy="80" r="16" fill="white" stroke="#333" stroke-width="1.5"/>
+  <text x="100" y="80" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-style="italic"
+    text-anchor="middle" dominant-baseline="central" fill="#222">a</text>
+  <circle cx="200" cy="80" r="16" fill="white" stroke="#333" stroke-width="1.5"/>
+  <text x="200" y="80" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-style="italic"
+    text-anchor="middle" dominant-baseline="central" fill="#222">b</text>
+  <circle cx="300" cy="80" r="16" fill="white" stroke="#333" stroke-width="1.5"/>
+  <text x="300" y="80" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-style="italic"
+    text-anchor="middle" dominant-baseline="central" fill="#222">c</text>
+  <circle cx="400" cy="80" r="16" fill="white" stroke="#333" stroke-width="1.5"/>
+  <text x="400" y="80" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-style="italic"
+    text-anchor="middle" dominant-baseline="central" fill="#222">d</text>
+  <circle cx="500" cy="80" r="16" fill="white" stroke="#333" stroke-width="1.5"/>
+  <text x="500" y="80" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-style="italic"
+    text-anchor="middle" dominant-baseline="central" fill="#222">e</text>
+
+  <!-- bottom dots -->
+  <circle cx="100" cy="155" r="16" fill="white" stroke="#333" stroke-width="1.5"/>
+  <text x="100" y="155" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-style="italic"
+    text-anchor="middle" dominant-baseline="central" fill="#222">b</text>
+  <circle cx="200" cy="155" r="16" fill="white" stroke="#333" stroke-width="1.5"/>
+  <text x="200" y="155" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-style="italic"
+    text-anchor="middle" dominant-baseline="central" fill="#222">c</text>
+  <circle cx="300" cy="155" r="16" fill="white" stroke="#333" stroke-width="1.5"/>
+  <text x="300" y="155" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-style="italic"
+    text-anchor="middle" dominant-baseline="central" fill="#222">a</text>
+  <circle cx="400" cy="155" r="16" fill="white" stroke="#333" stroke-width="1.5"/>
+  <text x="400" y="155" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-style="italic"
+    text-anchor="middle" dominant-baseline="central" fill="#222">d</text>
+  <circle cx="500" cy="155" r="16" fill="white" stroke="#333" stroke-width="1.5"/>
+  <text x="500" y="155" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-style="italic"
+    text-anchor="middle" dominant-baseline="central" fill="#222">e</text>
+
+  <!-- row labels -->
+  <text x="40" y="80" font-family="Georgia, 'Times New Roman', serif" font-size="15" text-anchor="middle"
+    dominant-baseline="central" fill="#444">
+    <tspan font-style="italic">X</tspan> :
+  </text>
+  <text x="40" y="155" font-family="Georgia, 'Times New Roman', serif" font-size="15" text-anchor="middle"
+    dominant-baseline="central" fill="#444">
+    <tspan font-style="italic">R</tspan> :
+  </text>
+
+  <!-- caption -->
+  <text x="310" y="203" font-family="Georgia, 'Times New Roman', serif" font-size="13"
+    text-anchor="middle" dominant-baseline="auto" fill="#555" font-style="italic">
+    two crossings, so KT distance&#x202F;=&#x202F;2
+  </text>
+</svg>
