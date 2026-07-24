@@ -8,7 +8,7 @@ categories: research
 related_posts: false
 ---
 
-This post is about a result of my paper [Bribery's Influence on Ranked Aggregation](https://arxiv.org/abs/2603.28574). The paper studies what happens to the Kemeny score under manipulation, bribery, deleting rankings, deleting candidates, and so on. This post is about the piece of it we were stuck on the longest, a problem called **Possible Kemeny Score**, which resisted us for a while and then fell to an algorithm so simple we didn't believe it at first.
+This post is about one section of our paper, [Bribery's Influence on Ranked Aggregation](https://arxiv.org/abs/2603.28574). The paper studies what happens to the Kemeny score under manipulation, bribery, deleting rankings, deleting candidates, and so on. This post is about a problem we were stuck on the longest, a problem called **Possible Kemeny Score**, which resisted us for a while and then fell to an algorithm so simple we didn't believe it at first.
 
 ## Rankings and disagreements
 
