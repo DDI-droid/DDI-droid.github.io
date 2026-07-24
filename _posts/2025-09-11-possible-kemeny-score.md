@@ -88,13 +88,13 @@ For $$b$$, the four available slots cost $$1, 2, 1, 2$$ disagreements against th
 
 Two facts carry the proof.
 
-The first is a monotonicity that we did not expect. Suppose a placed candidate $$\Pi(i)$$ would do better further right, at some position $$t_f$$. Then you can push it there, dragging along every later insertion sitting in between, and never pay for it. The engine is a pointwise inequality. When $$\Pi(i)$$ moves one step right past a fixed candidate, the change in its disagreements is $$+1$$ or $$-1$$. And for every later insertion $$\Pi(\ell)$$, with $$\ell > i$$,
+The first is a monotonicity that we did not expect. Suppose a placed candidate $$\Pi(i)$$ does at least as well further right, at some position $$t_f$$ that minimizes its disagreements among the positions after it. Then you can push it there, dragging along every later insertion sitting in between, and never pay for it. The engine is a pointwise inequality. When $$\Pi(i)$$ moves one step right past a fixed candidate, the change in its disagreements with the fixed candidates is $$+1$$ or $$-1$$. And for every later insertion $$\Pi(\ell)$$, with $$\ell > i$$,
 
 $$
 \Delta\,\Pi(\ell) \;\leq\; \Delta\,\Pi(i).
 $$
 
-The reason is the agreement from Lemma 1. If the step saves a disagreement for $$\Pi(i)$$, the fixed candidate it passes comes before $$\Pi(i)$$ in $$X$$, and since $$\Pi(i) \prec_X \Pi(\ell)$$, it also comes before $$\Pi(\ell)$$, so the same step saves one for $$\Pi(\ell)$$ too. The candidates behind you ride for free. Summed over the whole journey to $$t_f$$, nobody's total goes up.
+The reason is the agreement from Lemma 1. If the step saves a disagreement for $$\Pi(i)$$, the fixed candidate it passes comes before $$\Pi(i)$$ in $$X$$, and since $$\Pi(i) \prec_X \Pi(\ell)$$, it also comes before $$\Pi(\ell)$$, so the same step saves one for $$\Pi(\ell)$$ too. The later candidates ride along for free. Summed over the whole journey to $$t_f$$, nobody's total goes up.
 
 <div class="text-center">
   <img src="/assets/img/posts/pks-figure1.jpg" alt="Figure 1 from the paper: moving Pi(i) from t_i to t_f" style="max-width: 100%;">
@@ -102,7 +102,7 @@ The reason is the agreement from Lemma 1. If the step saves a disagreement for $
 
 The second fact is the induction that turns this into optimality. At every step of the algorithm there exists an optimal completion that agrees with everything placed so far. If the optimal completion has the current candidate further left than the algorithm put it, move it right using the free-ride lemma. If it has it further right, moving it left to the algorithm's position costs nothing, because the algorithm's position was a minimizer. Either way there is an optimal completion matching the algorithm's prefix, and at the end, matching its entire output.
 
-Ballots do not interact, the total distance is a sum, so running the procedure on each ballot independently is optimal overall. The whole thing runs in $$\mathcal{O}(n \cdot m^3)$$.
+Ballots do not interact, the total distance is a sum, so running the procedure on each ballot independently is optimal overall. The whole thing runs in $$\mathcal{O}(n \cdot m^3)$$, for $$n$$ ballots over $$m$$ candidates.
 
 ## In hindsight
 
