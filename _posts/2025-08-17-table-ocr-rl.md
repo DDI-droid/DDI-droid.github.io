@@ -8,7 +8,7 @@ categories: research
 related_posts: false
 ---
 
-At Decimal Point Analytics I work with financial documents, and financial documents are tables. Bills especially carry a lot of them. This problem was plaguing us: our docket pipeline at the time genuinely struggled with tables. Detection comes first, a model draws bounding boxes around rows and cells, and everything downstream trusts those boxes. The boxes drift, rows merge, phantom rows appear, and long tables make it worse, by the bottom of one it gets hard to make sense of anything. Every bad box becomes a corrupted record two stages later.
+At Decimal Point Analytics I work with financial documents, and financial documents contain a lot of tables. This problem was plaguing us: our docket pipeline at the time genuinely struggled with tables. Detection comes first, a model draws bounding boxes around rows and cells, and everything downstream trusts those boxes. The boxes drift, rows merge, phantom rows appear, and long tables make it worse, by the bottom of one it gets hard to make sense of anything. Every bad box becomes a corrupted record two stages later.
 
 The usual fix is to fine-tune the detector with more labeled pages, and labeling table geometry is miserable work. So we tried a different route: keep the detector, and train a second model to repair its output. It did not start from scratch. The starting point was the prediction from Surya OCR, a very powerful OCR at the time, and the neural network learned to correct the mistakes in those bounding boxes.
 
