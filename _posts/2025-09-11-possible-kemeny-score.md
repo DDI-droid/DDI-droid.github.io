@@ -60,7 +60,7 @@ The first insight was that the natural guess turns out to be right. In any optim
 
 **Lemma 1.** *Let $$\hat{R}$$ be an optimal extension of $$R$$. Then $$\hat{R}$$ and $$X$$ agree over the inserted candidates.*
 
-The proof is an exchange argument. Suppose two inserted candidates $$c, c'$$ sit in the wrong order, $$c \prec_X c'$$ but $$c' \prec_{\hat{R}} c$$. Swap them. The pair $$\{c,c'\}$$ itself now agrees with $$X$$, so that is one disagreement gone. For any candidate $$w$$ caught between them, check the three places $$w$$ can sit in $$X$$: before both, between them, after both. Walking the cases, every disagreement the swap creates is matched by one it removes, and the between case removes two. The distance never goes up, and the pair itself strictly improves. So an out-of-order pair can never survive in an optimal completion.
+The proof is an exchange argument. Suppose two inserted candidates $$c, c'$$ sit in the wrong order, $$c \prec_X c'$$ but $$c' \prec_{\hat{R}} c$$. Swap them. The pair $$\{c,c'\}$$ itself now agrees with $$X$$, so that is one disagreement gone. For any candidate $$w$$ caught between them, check the three places $$w$$ can sit in $$X$$: before both, between them, after both. Walking the cases, every disagreement the swap creates is matched by one it removes, and the between case removes two. The distance never goes up, and the pair itself strictly improves. So an out-of-order pair can never be in an optimal completion.
 
 <div class="text-center">
   <img src="/assets/img/posts/kemeny-swap.svg" alt="Swapping an out-of-order pair reduces disagreements from 4 to 1" style="max-width: 100%;">
