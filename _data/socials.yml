@@ -1,0 +1,11 @@
+# this file contains the social media links and usernames of the author
+# the socials will be displayed in the order they are defined here
+# for more information, please refer to the documentation of jekyll-socials plugin: https://github.com/george-gca/jekyll-socials
+email: thakur.17@iitj.ac.in # your email address
+github_username: DDI-droid # your GitHub username
+# TODO: fill these in — ask Anshul for handles
+# scholar_userid: # your Google Scholar ID
+# linkedin_username: # your LinkedIn username
+# x_username: # your X handle
+# cv_pdf: /assets/pdf/cv.pdf # path to your CV PDF file, once one exists
+rss_icon: true # comment this line to hide the RSS icon
