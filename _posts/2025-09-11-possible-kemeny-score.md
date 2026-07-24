@@ -110,4 +110,8 @@ For a long time we were convinced this problem was hard, and the honest reason i
 
 It is a strange table our paper ends up with. For Kemeny *Consensus*, these manipulation questions sit at coNP-complete and $$\Sigma_2^p$$-complete where their status is known at all. For Kemeny *Score*, the decision version, all of these turn out polynomial, bribery via a reduction to Knapsack, ranking deletion, swap bribery, and the problem in this post. Same rule, same manipulative actions, a complexity gulf between the optimisation and decision questions.
 
-The paper is on [arXiv](https://arxiv.org/abs/2603.28574). The three-voter Kemeny score, whether it is polynomial or NP-hard, is still open, and so is every Kemeny Winner column of our table.
+The three-voter Kemeny score, whether it is polynomial or NP-hard, is still open, and so is every Kemeny Winner column of our table.
+
+---
+
+*Read the full paper on [arXiv](https://arxiv.org/abs/2603.28574).*
