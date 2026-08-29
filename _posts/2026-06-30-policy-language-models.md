@@ -41,8 +41,6 @@ Meta-reasoning requires the main trajectory to have control over all the work th
 
 Zhang proposed training models to decompose. We pose a different question: can an LLM be trained to author the neuro-symbolic program that solves the task? Decomposition is one type of neuro-symbolic program among many. The difference is that a decomposer must estimate what is in-distribution for its sub-calls, while the PLM must estimate the behavior of each of its LLM primitives and build programs around that behavior. A policy succeeds when it behaves as the PLM estimated it would, its code and its LLM primitives alike. In the same spirit, what Zhang asks of decompositions, we ask of neuro-symbolic programs at large.
 
-The trajectory itself is responsible for abstract reasoning. There the PLM is meant to reason over the goal and author the policies that set its plans in motion: policies to test its hypotheses, policies to process inputs, policies to write and output code. A PLM's job is not to run systems but to reason; it engineers its instruments with an understanding of the goal, sees the work they did, and reasons onward. This is the behavior we theorize and train toward. And since reading an input is itself computation, the RLM capability comes along as a special case, a long input can sit in the environment and be worked through with policies.
-
 <div class="text-center">
   <img src="/assets/img/posts/plm-evolab.png" alt="A PLM authoring an evolutionary policy" style="max-width: 100%;">
 </div>
