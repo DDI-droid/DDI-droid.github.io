@@ -27,6 +27,8 @@ nav_order: 3
 
 ## Kairosity
 
+- **[Boltzmann](https://platform.kairosity.ai/boltzmann/#home)** — a synthetic consumer panel for testing product concepts on Indian consumers. Upload a brief and an agent stack extracts the concepts, researches competitors and cultural priors, samples ~100 synthetic personas per concept, surveys them, clusters the responses by belief, and writes the report.
+
 - **Risk Terminal** — an AI risk intelligence platform combining causal discovery, multi-agent probabilistic forecasting, Monte Carlo simulation, and real-time monitoring, so you learn what drives a risk, not just its number.
 
 ## Early
