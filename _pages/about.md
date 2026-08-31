@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: Independent Researcher · Data Scientist, Decimal Point Analytics · IIT Jodhpur alum
+subtitle: Researcher, Kairosity · Independent Researcher · Data Scientist, Decimal Point Analytics · IIT Jodhpur alum
 
 profile:
   align: right
@@ -26,7 +26,7 @@ latest_posts:
 
 <!-- TODO: real bio to be written with Anshul — placeholder below marks the shape, not the words. -->
 
-I am a data scientist at Decimal Point Analytics and an alum of IIT Jodhpur, working independently on how large language models reason.
+I am a researcher at Kairosity, a data scientist at Decimal Point Analytics, and an alum of IIT Jodhpur, working independently on how large language models reason.
 
 My current work is **Policy Language Models (PLMs)**: a meta-reasoning inference paradigm in which an LLM reasons about the goal on its trajectory and expresses its computation as policies in a persistent programming environment, instead of grinding every step inline the ReAct way.
 
