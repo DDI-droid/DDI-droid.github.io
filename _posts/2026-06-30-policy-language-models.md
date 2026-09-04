@@ -11,7 +11,7 @@ highlight: true
 
 This post introduces what I'm working on right now, Policy Language Models. The paper is linked at the end.
 
-*Updated August 2026, with the definitions stated in full, the experimental program, and its results.*
+*Updated September 2026, with the definitions stated in full, the experimental program, and its results.*
 
 ## The trajectory
 
