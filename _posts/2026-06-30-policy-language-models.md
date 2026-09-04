@@ -7,6 +7,7 @@ tags: llm meta-reasoning
 categories: research
 related_posts: false
 highlight: true
+og_image: /assets/img/posts/plm-banner.png
 ---
 
 This post introduces what I'm working on right now, Policy Language Models. The paper is linked at the end.
