@@ -2,7 +2,7 @@
 layout: post
 title: Policy Language Models
 date: 2026-06-30 12:00:00
-description: A complementary axis of inference-time scaling that biases the LLM toward abstract computational reasoning. What an RLM does for its input, a PLM does for all its computation.
+description: A complementary axis of inference-time scaling that biases the LLM toward abstract computational reasoning. The model authors its computation as policies and keeps its trajectory sufficient and minimal.
 tags: llm meta-reasoning
 categories: research
 related_posts: false
