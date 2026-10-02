@@ -1,0 +1,54 @@
+/* LessWrong-inspired editorial typography across the site. */
+:root {
+  --editorial-serif: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  --editorial-ui: system-ui, sans-serif;
+}
+
+body [role="main"] :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--global-text-color);
+  font-family: var(--editorial-serif);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+body [role="main"] :is(p, li, blockquote) {
+  font-family: var(--editorial-serif);
+  line-height: 1.62;
+}
+
+body [role="main"] :is(p, li, blockquote) a {
+  text-decoration-thickness: 0.055em;
+  text-underline-offset: 0.16em;
+}
+
+body [role="main"] blockquote {
+  border-left: 2px solid var(--global-divider-color);
+  background: transparent;
+}
+
+body [role="main"] :is(.post-meta, .post-tags, .toc, .toc *, .pagination, .btn, .badge, .form-control) {
+  font-family: var(--editorial-ui);
+}
+
+body [role="main"] .post-header {
+  border-bottom: 1px solid var(--global-divider-color);
+}
+
+body [role="main"] hr {
+  border-color: var(--global-divider-color);
+  opacity: 0.75;
+}
+
+body [role="main"] img,
+body [role="main"] video {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body [role="main"] a {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms !important;
+  }
+}
