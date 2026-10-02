@@ -2,13 +2,401 @@
   :root {
     --max-content-width: 930px;
   }
-</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%A7%A0&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=f0b101217084a90093badfe99ff9a7d1"> <link rel="canonical" href="https://ddi-droid.github.io/blog/2025/table-ocr-rl/"> <script src="/assets/js/theme.js?v=7af685e2ba20b37fef545c97b8064050"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.36.4/dist/tocbot.css" integrity="sha256-zTN0r+0OKaIv2xqeNNIYxNk0pWJ6+IqPGc1iDgVzWF0=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%A7%A0&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=f0b101217084a90093badfe99ff9a7d1"> <link rel="canonical" href="https://ddi-droid.github.io/blog/2025/table-ocr-rl/"> <script src="/assets/js/theme.js?v=7af685e2ba20b37fef545c97b8064050"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
     initTheme();
-  </script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> <span class="font-weight-bold">Anshul</span> Thakur </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">projects </a> </li> <li class="nav-item "> <a class="nav-link" href="/academics/">academics </a> </li> <li class="nav-item "> <a class="nav-link" href="/news/">news </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">Fixing Table Bounding Boxes with RL</h1> <p class="post-meta"> Created on August 17, 2025 </p> <p class="post-tags"> <a href="/blog/2025"> <i class="fa-solid fa-calendar fa-sm"></i> 2025 </a>   ·   <a href="/blog/tag/rl"> <i class="fa-solid fa-hashtag fa-sm"></i> rl</a>   <a href="/blog/tag/ocr"> <i class="fa-solid fa-hashtag fa-sm"></i> ocr</a>   <a href="/blog/tag/systems"> <i class="fa-solid fa-hashtag fa-sm"></i> systems</a>   ·   <a href="/blog/category/research"> <i class="fa-solid fa-tag fa-sm"></i> research</a> </p> </header> <article class="post-content"> <div id="markdown-content"> <p>At Decimal Point Analytics I work with financial documents, and financial documents contain a lot of tables. This problem was plaguing us: our docket pipeline at the time genuinely struggled with tables. Detection comes first, a model draws bounding boxes around rows and cells, and everything downstream trusts those boxes. The boxes drift, rows merge, phantom rows appear, and long tables make it worse, by the bottom of one it gets hard to make sense of anything. Every bad box becomes a corrupted record two stages later.</p> <p>The usual fix is to fine-tune the detector with more labeled pages, and labeling table geometry is miserable work. So we tried a different route: keep the detector, and train a second model to repair its output. It did not start from scratch. The starting point was the prediction from Surya OCR, a very powerful OCR at the time, and the neural network learned to correct the mistakes in those bounding boxes.</p> <h2 id="the-idea">The idea</h2> <p>The environment is a page. The state is the detector’s boxes laid over the words it found. The network’s actions are small edits, nudge a box edge, delete a row box, halt when done. An episode starts from what Surya produced and ends with what the network left behind, and the reward measures whether the boxes ended up agreeing with the words on the page.</p> <p>That reward came in two designs. The first is geometric, computed from the page itself: how cleanly the row boxes cut between word clusters, how many words end up owned by exactly one row, whether a deleted row was one the words never needed. That version is implemented in the open code. The second design replaces geometry with judgment, an OpenAI vision model looks at the boxed page and scores it. The applied version went that way, and the honest note from the code’s own header is that it works even when the judge is somewhat jank.</p> <p>It worked a lot better than we expected, the repaired boxes showed real gains over the detector’s own, and a version of this went into use internally at DPA. The environments are C, built as PufferLib Ocean environments and trained with PufferLib’s PPO, which is what made iterating on a page-sized state cheap enough to try ideas like this at all.</p> </div> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Anshul Thakur. </div> </footer> <script>
+  </script> <link rel="stylesheet" href="/assets/css/lesswrong-editorial.css?v=8e8cca5841f615eec9cb926953780356"> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> <span class="font-weight-bold">Anshul</span> Thakur </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">projects </a> </li> <li class="nav-item "> <a class="nav-link" href="/academics/">academics </a> </li> <li class="nav-item "> <a class="nav-link" href="/news/">news </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> </header> <div class="container mt-5" role="main"> <div class="row"> <div class="col-sm-3"> <nav id="toc-sidebar" class="sticky-top toc toc-sidebar" aria-label="Table of contents" data-toc-collapse="expanded" data-toc-collapse-depth=""></nav> </div> <div class="col-sm-9"> <style>
+  body:has(#toc-sidebar) .container[role='main'] {
+    width: 100%;
+    max-width: none;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 2.2vw, 2.5rem);
+  }
+
+  body:has(#toc-sidebar) .container[role='main'] > .row {
+    display: grid;
+    grid-template-columns: minmax(180px, 21vw) minmax(0, min(54vw, 850px)) minmax(0, 1fr);
+    gap: clamp(1.25rem, 2.2vw, 2.75rem);
+    align-items: start;
+    margin-inline: 0;
+  }
+
+  body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-3,
+  body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-9 {
+    width: auto;
+    max-width: none;
+    min-width: 0;
+    padding: 0;
+    flex: none;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar {
+    position: fixed;
+    z-index: 20;
+    top: 57px;
+    left: 0;
+    display: flex;
+    width: min(21vw, 400px);
+    height: calc(100vh - 57px);
+    max-height: calc(100vh - 57px);
+    flex-direction: column;
+    overflow: visible;
+    padding: 22px 0 20px 33px;
+    border: 0;
+    color: var(--global-text-color-light);
+    font:
+      500 0.88rem/1.45 system-ui,
+      sans-serif;
+    transition:
+      opacity 0.25s ease-in-out 0.5s,
+      transform 0.5s ease-in-out 0.5s,
+      height 0.4s ease-in-out,
+      max-height 0.4s ease-in-out;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar::before {
+    position: absolute;
+    left: 20px;
+    pointer-events: none;
+    content: '';
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar::before {
+    top: 48px;
+    bottom: 20px;
+    width: 1px;
+    background: var(--global-divider-color);
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .post-toc-intro {
+    position: relative;
+    z-index: 1;
+    margin: 0 0 0.8rem;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .post-toc-intro__title {
+    margin: 0 0 0.45rem;
+    color: var(--global-text-color-light);
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: 1.12rem;
+    font-variant: small-caps;
+    line-height: 1.3;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .post-toc-intro__time {
+    margin: 0;
+    color: var(--global-text-color-light);
+    font:
+      400 0.78rem/1.4 system-ui,
+      sans-serif;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar > .toc-list {
+    display: flex;
+    min-height: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-list-item {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-link {
+    display: block;
+    padding: 0.1rem 0;
+    color: var(--global-text-color-light);
+    font: inherit;
+    line-height: 1.4;
+    text-decoration: none;
+    opacity: 0;
+    transition:
+      color 0.25s ease,
+      opacity 0.25s ease;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-link::before {
+    display: none !important;
+    background-color: transparent !important;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-link.is-active-link {
+    color: var(--global-text-color-light);
+    font-weight: 500;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-list-item.is-collapsible {
+    padding-left: 0.8rem;
+    font-size: 0.92em;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-list-item::before {
+    position: absolute;
+    top: 0.64em;
+    left: -0.8rem;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--global-text-color-light);
+    content: '';
+    opacity: 0.75;
+    transition:
+      background-color 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar:hover .post-toc-intro,
+  body:has(#toc-sidebar) #toc-sidebar:focus-within .post-toc-intro,
+  body:has(#toc-sidebar) #toc-sidebar:hover .toc-link,
+  body:has(#toc-sidebar) #toc-sidebar:focus-within .toc-link {
+    opacity: 1;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-link:hover,
+  body:has(#toc-sidebar) #toc-sidebar .toc-link:focus-visible {
+    color: var(--global-text-color);
+  }
+
+  body:has(#toc-sidebar) .post {
+    width: 100%;
+    max-width: 850px;
+    margin: 0;
+  }
+
+  body:has(#toc-sidebar) .post-header {
+    max-width: 850px;
+    margin: 0 0 2.35rem;
+    padding: 0 0 1.5rem;
+    border-bottom: 1px solid var(--global-divider-color);
+  }
+
+  body:has(#toc-sidebar) .post-title {
+    margin: 0 0 1rem;
+    color: var(--global-text-color);
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(2.25rem, 3.2vw, 3.45rem);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 1.08;
+  }
+
+  body:has(#toc-sidebar) .post-meta,
+  body:has(#toc-sidebar) .post-tags {
+    color: var(--global-text-color-light);
+    font-family: system-ui, sans-serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.01em;
+  }
+
+  body:has(#toc-sidebar) .post-tags {
+    padding-top: 0.35rem;
+    padding-bottom: 0;
+  }
+
+  body:has(#toc-sidebar) .post-content {
+    max-width: 850px;
+  }
+
+  body:has(#toc-sidebar) #markdown-content {
+    color: var(--global-text-color);
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.12rem, 1.02rem + 0.24vw, 1.28rem);
+    font-weight: 400;
+    letter-spacing: 0.003em;
+    line-height: 1.62;
+  }
+
+  body:has(#toc-sidebar) #markdown-content p {
+    margin: 0 0 1.3em;
+    line-height: inherit;
+  }
+
+  body:has(#toc-sidebar) #markdown-content h2,
+  body:has(#toc-sidebar) #markdown-content h3,
+  body:has(#toc-sidebar) #markdown-content h4 {
+    color: var(--global-text-color);
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+
+  body:has(#toc-sidebar) #markdown-content h2 {
+    margin: 2.55em 0 0.7em;
+    font-size: clamp(1.7rem, 2.1vw, 2.15rem);
+  }
+
+  body:has(#toc-sidebar) #markdown-content h3 {
+    margin: 1.9em 0 0.65em;
+    font-size: clamp(1.35rem, 1.55vw, 1.6rem);
+  }
+
+  body:has(#toc-sidebar) #markdown-content h4 {
+    margin: 1.6em 0 0.55em;
+    font-size: 1.2rem;
+  }
+
+  body:has(#toc-sidebar) #markdown-content a {
+    text-decoration-thickness: 0.055em;
+    text-underline-offset: 0.16em;
+  }
+
+  body:has(#toc-sidebar) #markdown-content blockquote {
+    margin: 1.8em 0;
+    padding: 0.2em 0 0.2em 1.1em;
+    border-left: 2px solid var(--global-divider-color);
+    background: transparent;
+    font-size: 1.04em;
+  }
+
+  body:has(#toc-sidebar) #markdown-content blockquote p:last-child {
+    margin-bottom: 0;
+  }
+
+  body:has(#toc-sidebar) #markdown-content pre,
+  body:has(#toc-sidebar) #markdown-content code {
+    font-size: 0.86em;
+  }
+
+  body:has(#toc-sidebar) #markdown-content img,
+  body:has(#toc-sidebar) #markdown-content video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  body:has(#toc-sidebar) #markdown-content table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  body:has(#toc-sidebar) #markdown-content .footnotes {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--global-divider-color);
+    color: var(--global-text-color-light);
+    font-size: 0.88em;
+  }
+
+  body:has(#toc-sidebar) .post .post-content > hr {
+    margin: 2.5rem 0;
+    border-color: var(--global-divider-color);
+    opacity: 0.75;
+  }
+
+  @media (max-width: 1050px) {
+    body:has(#toc-sidebar) .container[role='main'] {
+      max-width: 860px;
+      padding-inline: 1.25rem;
+    }
+
+    body:has(#toc-sidebar) .container[role='main'] > .row {
+      display: block;
+    }
+
+    body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-3,
+    body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-9 {
+      width: 100%;
+    }
+
+    body:has(#toc-sidebar) #toc-sidebar {
+      position: static;
+      width: 100%;
+      height: auto;
+      max-height: none;
+      margin: 0 0 2rem;
+      padding: 1rem 1.1rem;
+      overflow: visible;
+      border: 1px solid var(--global-divider-color);
+      border-radius: 0.35rem;
+    }
+
+    body:has(#toc-sidebar) #toc-sidebar::before {
+      display: none;
+    }
+
+    body:has(#toc-sidebar) #toc-sidebar .post-toc-intro,
+    body:has(#toc-sidebar) #toc-sidebar .toc-link {
+      opacity: 1;
+    }
+
+    body:has(#toc-sidebar) #toc-sidebar > .toc-list {
+      display: block;
+    }
+
+    body:has(#toc-sidebar) #toc-sidebar .toc-list-item {
+      margin-bottom: 0.35rem;
+    }
+
+    body:has(#toc-sidebar) #toc-sidebar .toc-list-item::before {
+      left: -0.98rem;
+    }
+
+    body:has(#toc-sidebar) .post,
+    body:has(#toc-sidebar) .post-header,
+    body:has(#toc-sidebar) .post-content {
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    body:has(#toc-sidebar) .container[role='main'] {
+      padding-inline: 1rem;
+    }
+
+    body:has(#toc-sidebar) .post-title {
+      font-size: clamp(2rem, 9vw, 2.65rem);
+    }
+
+    body:has(#toc-sidebar) #markdown-content {
+      font-size: 1.1rem;
+      line-height: 1.62;
+    }
+  }
+</style> <div class="post"> <header class="post-header"> <h1 class="post-title">Fixing Table Bounding Boxes with RL</h1> <p class="post-meta"> Created on August 17, 2025 </p> <p class="post-tags"> <a href="/blog/2025"> <i class="fa-solid fa-calendar fa-sm"></i> 2025 </a>   ·   <a href="/blog/tag/rl"> <i class="fa-solid fa-hashtag fa-sm"></i> rl</a>   <a href="/blog/tag/ocr"> <i class="fa-solid fa-hashtag fa-sm"></i> ocr</a>   <a href="/blog/tag/systems"> <i class="fa-solid fa-hashtag fa-sm"></i> systems</a>   ·   <a href="/blog/category/research"> <i class="fa-solid fa-tag fa-sm"></i> research</a> </p> </header> <article class="post-content"> <div id="markdown-content"> <p>At Decimal Point Analytics I work with financial documents, and financial documents contain a lot of tables. This problem was plaguing us: our docket pipeline at the time genuinely struggled with tables. Detection comes first, a model draws bounding boxes around rows and cells, and everything downstream trusts those boxes. The boxes drift, rows merge, phantom rows appear, and long tables make it worse, by the bottom of one it gets hard to make sense of anything. Every bad box becomes a corrupted record two stages later.</p> <p>The usual fix is to fine-tune the detector with more labeled pages, and labeling table geometry is miserable work. So we tried a different route: keep the detector, and train a second model to repair its output. It did not start from scratch. The starting point was the prediction from Surya OCR, a very powerful OCR at the time, and the neural network learned to correct the mistakes in those bounding boxes.</p> <h2 id="the-idea">The idea</h2> <p>The environment is a page. The state is the detector’s boxes laid over the words it found. The network’s actions are small edits, nudge a box edge, delete a row box, halt when done. An episode starts from what Surya produced and ends with what the network left behind, and the reward measures whether the boxes ended up agreeing with the words on the page.</p> <p>That reward came in two designs. The first is geometric, computed from the page itself: how cleanly the row boxes cut between word clusters, how many words end up owned by exactly one row, whether a deleted row was one the words never needed. That version is implemented in the open code. The second design replaces geometry with judgment, an OpenAI vision model looks at the boxed page and scores it. The applied version went that way, and the honest note from the code’s own header is that it works even when the judge is somewhat jank.</p> <p>It worked a lot better than we expected, the repaired boxes showed real gains over the detector’s own, and a version of this went into use internally at DPA. The environments are C, built as PufferLib Ocean environments and trained with PufferLib’s PPO, which is what made iterating on a page-sized state cheap enough to try ideas like this at all.</p> </div> </article> </div> <script>
+  (() => {
+    const addReadingGuide = () => {
+      const rail = document.getElementById('toc-sidebar');
+      const title = document.querySelector('.post-title')?.textContent?.trim();
+      const article = document.querySelector('#markdown-content');
+      if (!rail || !title || !article || rail.querySelector('.post-toc-intro')) return;
+
+      const wordCount = (article.innerText || '').trim().split(/\s+/).filter(Boolean).length;
+      const minutes = Math.max(1, Math.ceil(wordCount / 220));
+      const intro = document.createElement('div');
+      intro.className = 'post-toc-intro';
+
+      const heading = document.createElement('p');
+      heading.className = 'post-toc-intro__title';
+      heading.textContent = title;
+
+      const time = document.createElement('p');
+      time.className = 'post-toc-intro__time';
+      time.textContent = `${minutes} min read`;
+
+      intro.append(heading, time);
+      rail.prepend(intro);
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', addReadingGuide, { once: true });
+    } else {
+      addReadingGuide();
+    }
+  })();
+</script> </div> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Anshul Thakur. </div> </footer> <script>
   window.alFolio = {
     compatBootstrap: false
   };
-</script> <script src="/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/al_math/js/mathjax-setup.js"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script src="/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script> <script src="/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script> <script defer src="/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/al_img_tools/js/zoom.js"></script> <script defer src="/assets/js/progress-bar.js?v=499464c5c63ced6cf7ad62509f1e2610" type="text/javascript"></script> <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script> <script>
+</script> <script src="/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/al_math/js/mathjax-setup.js"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script src="/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script> <script defer src="https://cdn.jsdelivr.net/npm/tocbot@4.36.4/dist/tocbot.min.js" integrity="sha256-lo/r+jQ81wWrxdIiiiEEd538z4+dTJTt+leOuAS7GCw=" crossorigin="anonymous"></script> <script src="/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script> <script defer src="/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/al_img_tools/js/zoom.js"></script> <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script> <script>
     addBackToTop();
   </script> <script type="module" src="/assets/al_search/js/search/ninja-keys.min.js"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/al_search/js/search-setup.js"></script> <script>
 // get the ninja-keys element

@@ -2,13 +2,401 @@
   :root {
     --max-content-width: 930px;
   }
-</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%A7%A0&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=f0b101217084a90093badfe99ff9a7d1"> <link rel="canonical" href="https://ddi-droid.github.io/blog/2025/possible-kemeny-score/"> <script src="/assets/js/theme.js?v=7af685e2ba20b37fef545c97b8064050"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.36.4/dist/tocbot.css" integrity="sha256-zTN0r+0OKaIv2xqeNNIYxNk0pWJ6+IqPGc1iDgVzWF0=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%A7%A0&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=f0b101217084a90093badfe99ff9a7d1"> <link rel="canonical" href="https://ddi-droid.github.io/blog/2025/possible-kemeny-score/"> <script src="/assets/js/theme.js?v=7af685e2ba20b37fef545c97b8064050"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
     initTheme();
-  </script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> <span class="font-weight-bold">Anshul</span> Thakur </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">projects </a> </li> <li class="nav-item "> <a class="nav-link" href="/academics/">academics </a> </li> <li class="nav-item "> <a class="nav-link" href="/news/">news </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">PKS: We thought this was hard</h1> <p class="post-meta"> Created on September 11, 2025 </p> <p class="post-tags"> <a href="/blog/2025"> <i class="fa-solid fa-calendar fa-sm"></i> 2025 </a>   ·   <a href="/blog/tag/social-choice"> <i class="fa-solid fa-hashtag fa-sm"></i> social-choice</a>   <a href="/blog/tag/algorithms"> <i class="fa-solid fa-hashtag fa-sm"></i> algorithms</a>   ·   <a href="/blog/category/research"> <i class="fa-solid fa-tag fa-sm"></i> research</a> </p> </header> <article class="post-content"> <div id="markdown-content"> <p>This post is about one section of our paper, <a href="https://arxiv.org/abs/2603.28574" rel="external nofollow noopener" target="_blank">Bribery’s Influence on Ranked Aggregation</a>. The paper studies what happens to the Kemeny score under manipulation, bribery, deleting rankings, deleting candidates, and so on. This post is about a problem we were stuck on the longest, a problem called <strong>Possible Kemeny Score</strong>, which resisted us for a while and then fell to an algorithm so simple we didn’t believe it at first.</p> <h2 id="rankings-and-disagreements">Rankings and disagreements</h2> <p>Rank aggregation shows up everywhere. Search engines merge ranked result lists, recommendation systems merge preference orders, panels of judges merge scorecards. The classical way to merge rankings is <strong>Kemeny’s rule</strong>, from 1959. Given a set of rankings, find the single ranking that disagrees with them the least. It has a nice statistical story too. If voters are noisy observers of one true ranking, the Kemeny ranking is the maximum likelihood estimate of that truth.</p> <p>“Disagrees the least” is measured by the <strong>Kendall tau distance</strong>. For two rankings \(\pi\) and \(\pi'\) over the same candidates, it counts the pairs ordered differently:</p> \[\mathtt{KT}(\pi,\pi') = \big|\{\,\{x,y\} : x \prec_{\pi} y \ \wedge\ y \prec_{\pi'} x \,\}\big|\] <p>If you draw the two rankings side by side and connect each candidate to itself, the distance is just the number of crossings.</p> <div class="text-center"> <img src="/assets/img/posts/kemeny-crossings.svg" alt="Two rankings with connecting lines; crossings marked" style="max-width: 100%;"> </div> <p>The distance from one ranking \(X\) to a whole set of rankings \(\mathcal{R}\) is the sum, \(\mathtt{KT}(X,\mathcal{R}) = \sum_{R\in\mathcal{R}}\mathtt{KT}(X,R)\).</p> <h2 id="the-problem-intuitively">The problem (intuitively)</h2> <p>Real ballots are incomplete. A reviewer ranks the five papers they actually read. A user ranks the movies they have seen. So suppose the rankings you are given are partial, and suppose someone hands you a target ranking \(X\) over all the candidates and a number \(k\), and asks:</p> <p><strong>Possible Kemeny Score.</strong> Given a candidate set \(\mathcal{C}\), a set of partial rankings \(\mathcal{R}\), a full ranking \(X\), and an integer \(k\), can the partial rankings be completed so that the total Kendall tau distance of \(X\) from the completed rankings is at most \(k\)?</p> <p>Completing a ranking means inserting the missing candidates anywhere you like, without touching the relative order of the candidates already ranked.</p> <div class="text-center"> <img src="/assets/img/posts/kemeny-problem.svg" alt="A partial ballot with missing candidates waiting to be inserted" style="max-width: 100%;"> </div> <p>In other words, is there a completion of the evidence under which \(X\) scores at most \(k\)? It is the optimist’s question, and it is also the auditor’s question. Given incomplete preference data, what is the best score this target could possibly have?</p> <h2 id="why-we-thought-it-was-hard">Why we thought it was hard</h2> <p>Everything in this problem’s neighborhood is hard. Computing the Kemeny score is NP-complete (Bartholdi, Tovey &amp; Trick, 1989). It is NP-hard already for four rankings, and the case of three rankings has been open for years (Dwork, Kumar, Naor &amp; Sivakumar, 2001; Biedl, Brandenburg &amp; Deng, 2009). The corresponding manipulation questions for Kemeny <em>Consensus</em> are coNP-complete and \(\Sigma_2^p\)-complete (Fitzsimmons &amp; Hemaspaandra, 2021). And the most widely studied problem of this shape, the Possible Winner problem, where partial votes are completed to make a favorite candidate win, is NP-hard for most common voting rules (Xia &amp; Conitzer, 2011). All of this pointed at the same thing: the problem is hard. Or so we thought.</p> <p>But our stuckness was more concrete than that. Try to solve it. You have to insert the missing candidates into a ballot, and there are two levels of freedom, and both looked unmanageable.</p> <p>First level. In what relative order do the missing candidates go in? You might guess “in the order \(X\) ranks them,” but we had no reason to believe that. The candidates already sitting in the ballot do not agree with \(X\), they are in whatever order the voter put them. So maybe following \(X\)’s order among the new candidates generates extra disagreements against those already-placed candidates, and some other order does better. We could not rule that out, and without it we had nothing to hold on to.</p> <p>Second level. Even if you somehow knew the right relative order, where do the candidates actually go? Place the first one at some position. Nothing guarantees that position is consistent with any optimal completion. It felt like every placement decision could poison the ones after it, which is exactly the situation where you expect to need search, and search over interleavings is exponential.</p> <p>We could not find an approach.</p> <h2 id="the-first-insight">The first insight</h2> <p>The first insight was that the natural guess turns out to be right. In any optimal completion, the inserted candidates appear in \(X\)’s order relative to each other.</p> <p><strong>Lemma 1.</strong> <em>Let \(\hat{R}\) be an optimal extension of \(R\). Then \(\hat{R}\) and \(X\) agree over the inserted candidates.</em></p> <p>The proof is an exchange argument. Suppose two inserted candidates \(c, c'\) sit in the wrong order, \(c \prec_X c'\) but \(c' \prec_{\hat{R}} c\). Swap them. The pair \(\{c,c'\}\) itself now agrees with \(X\), so that is one disagreement gone. For any candidate \(w\) caught between them, check the three places \(w\) can sit in \(X\): before both, between them, after both. Walking the cases, every disagreement the swap creates is matched by one it removes, and the between case removes two. The distance never goes up, and the pair itself strictly improves. So an out-of-order pair can never be in an optimal completion.</p> <div class="text-center"> <img src="/assets/img/posts/kemeny-swap.svg" alt="Swapping an out-of-order pair reduces disagreements from 4 to 1" style="max-width: 100%;"> </div> <p>This kills the first level of freedom completely. The internal order of the insertions is not a choice, it is \(X\)’s order. What remains is only the question of positions.</p> <h2 id="the-second-insight-and-the-algorithm">The second insight, and the algorithm</h2> <p>The position problem was still standing. Insert the candidates in \(X\)’s order, fine, but put the first one somewhere and you still have no guarantee that any optimal completion has it there.</p> <p>The algorithm that resolves it looks like this.</p> <div class="text-center"> <img src="/assets/img/posts/pks-algorithm.png" alt="Algorithm 1: Possible-Kemeny-Score" style="max-width: 100%;"> </div> <p>Take the missing candidates in \(X\)’s order. Insert each one at the <strong>leftmost</strong> position that minimizes its disagreements with the already-ranked candidates. And after you place a candidate, never look to the left of it again, the pointer \(l\) only moves right.</p> <p>A small example. Let \(X = a \prec b \prec c \prec d \prec e\) and let the ballot be \(R = c \prec a \prec e\), so \(b\) and \(d\) are missing and get inserted in that order.</p> <p>For \(b\), the four available slots cost \(1, 2, 1, 2\) disagreements against the fixed candidates. Positions \(0\) and \(2\) tie, so the leftmost wins and \(b\) goes first: \(b \prec c \prec a \prec e\). For \(d\), the slots from the pointer onward cost \(2, 1, 0, 1\), so \(d\) goes after \(a\): \(b \prec c \prec a \prec d \prec e\). Total distance to \(X\): the ballot’s own inversion \((c,a)\), plus \(1\) for \(b\), plus \(0\) for \(d\). You can check by brute force that no completion of \(R\) does better.</p> <h2 id="why-it-works">Why it works</h2> <p>Two facts carry the proof.</p> <p>The first is a monotonicity that we did not expect. Suppose a placed candidate \(\Pi(i)\) does at least as well further right, at some position \(t_f\) that minimizes its disagreements among the positions after it. Then you can push it there, dragging along every later insertion sitting in between, and never pay for it. The engine is a pointwise inequality. When \(\Pi(i)\) moves one step right past a fixed candidate, the change in its disagreements with the fixed candidates is \(+1\) or \(-1\). And for every later insertion \(\Pi(\ell)\), with \(\ell &gt; i\),</p> \[\Delta\,\Pi(\ell) \;\leq\; \Delta\,\Pi(i).\] <p>The reason is the agreement from Lemma 1. If the step saves a disagreement for \(\Pi(i)\), the fixed candidate it passes comes before \(\Pi(i)\) in \(X\), and since \(\Pi(i) \prec_X \Pi(\ell)\), it also comes before \(\Pi(\ell)\), so the same step saves one for \(\Pi(\ell)\) too. The later candidates ride along for free. Summed over the whole journey to \(t_f\), nobody’s total goes up.</p> <div class="text-center"> <img src="/assets/img/posts/pks-figure1.jpg" alt="Figure 1 from the paper: moving Pi(i) from t_i to t_f" style="max-width: 100%;"> </div> <p>The second fact is the induction that turns this into optimality. At every step of the algorithm there exists an optimal completion that agrees with everything placed so far. If the optimal completion has the current candidate further left than the algorithm put it, move it right using the free-ride lemma. If it has it further right, moving it left to the algorithm’s position costs nothing, because the algorithm’s position was a minimizer. Either way there is an optimal completion matching the algorithm’s prefix, and at the end, matching its entire output.</p> <p>Ballots do not interact, the total distance is a sum, so running the procedure on each ballot independently is optimal overall. The whole thing runs in \(\mathcal{O}(n \cdot m^3)\), for \(n\) ballots over \(m\) candidates.</p> <h2 id="in-hindsight">In hindsight</h2> <p>For a long time we were convinced this problem was hard, and the honest reason is that we had not found the two lemmas. Without the agreement lemma there is no order to insert in, and without the free-ride inequality no placement is safe to commit to. Both freedoms looked like they demanded search. The two symmetries we discovered are what make a greedy algorithm the solution.</p> <p>It is a strange table our paper ends up with. For Kemeny <em>Consensus</em>, these manipulation questions sit at coNP-complete and \(\Sigma_2^p\)-complete where their status is known at all. For Kemeny <em>Score</em>, the decision version, all of these turn out polynomial, bribery via a reduction to Knapsack, ranking deletion, swap bribery, and the problem in this post. Same rule, same manipulative actions, a complexity gulf between the optimisation and decision questions.</p> <p>The three-voter Kemeny score, whether it is polynomial or NP-hard, is still open, and so is every Kemeny Winner column of our table.</p> <hr> <p><em>Read the full paper on <a href="https://arxiv.org/abs/2603.28574" rel="external nofollow noopener" target="_blank">arXiv</a>.</em></p> </div> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Anshul Thakur. </div> </footer> <script>
+  </script> <link rel="stylesheet" href="/assets/css/lesswrong-editorial.css?v=8e8cca5841f615eec9cb926953780356"> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> <span class="font-weight-bold">Anshul</span> Thakur </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">projects </a> </li> <li class="nav-item "> <a class="nav-link" href="/academics/">academics </a> </li> <li class="nav-item "> <a class="nav-link" href="/news/">news </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> </header> <div class="container mt-5" role="main"> <div class="row"> <div class="col-sm-3"> <nav id="toc-sidebar" class="sticky-top toc toc-sidebar" aria-label="Table of contents" data-toc-collapse="expanded" data-toc-collapse-depth=""></nav> </div> <div class="col-sm-9"> <style>
+  body:has(#toc-sidebar) .container[role='main'] {
+    width: 100%;
+    max-width: none;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 2.2vw, 2.5rem);
+  }
+
+  body:has(#toc-sidebar) .container[role='main'] > .row {
+    display: grid;
+    grid-template-columns: minmax(180px, 21vw) minmax(0, min(54vw, 850px)) minmax(0, 1fr);
+    gap: clamp(1.25rem, 2.2vw, 2.75rem);
+    align-items: start;
+    margin-inline: 0;
+  }
+
+  body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-3,
+  body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-9 {
+    width: auto;
+    max-width: none;
+    min-width: 0;
+    padding: 0;
+    flex: none;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar {
+    position: fixed;
+    z-index: 20;
+    top: 57px;
+    left: 0;
+    display: flex;
+    width: min(21vw, 400px);
+    height: calc(100vh - 57px);
+    max-height: calc(100vh - 57px);
+    flex-direction: column;
+    overflow: visible;
+    padding: 22px 0 20px 33px;
+    border: 0;
+    color: var(--global-text-color-light);
+    font:
+      500 0.88rem/1.45 system-ui,
+      sans-serif;
+    transition:
+      opacity 0.25s ease-in-out 0.5s,
+      transform 0.5s ease-in-out 0.5s,
+      height 0.4s ease-in-out,
+      max-height 0.4s ease-in-out;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar::before {
+    position: absolute;
+    left: 20px;
+    pointer-events: none;
+    content: '';
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar::before {
+    top: 48px;
+    bottom: 20px;
+    width: 1px;
+    background: var(--global-divider-color);
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .post-toc-intro {
+    position: relative;
+    z-index: 1;
+    margin: 0 0 0.8rem;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .post-toc-intro__title {
+    margin: 0 0 0.45rem;
+    color: var(--global-text-color-light);
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: 1.12rem;
+    font-variant: small-caps;
+    line-height: 1.3;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .post-toc-intro__time {
+    margin: 0;
+    color: var(--global-text-color-light);
+    font:
+      400 0.78rem/1.4 system-ui,
+      sans-serif;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar > .toc-list {
+    display: flex;
+    min-height: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-list-item {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-link {
+    display: block;
+    padding: 0.1rem 0;
+    color: var(--global-text-color-light);
+    font: inherit;
+    line-height: 1.4;
+    text-decoration: none;
+    opacity: 0;
+    transition:
+      color 0.25s ease,
+      opacity 0.25s ease;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-link::before {
+    display: none !important;
+    background-color: transparent !important;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-link.is-active-link {
+    color: var(--global-text-color-light);
+    font-weight: 500;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-list-item.is-collapsible {
+    padding-left: 0.8rem;
+    font-size: 0.92em;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-list-item::before {
+    position: absolute;
+    top: 0.64em;
+    left: -0.8rem;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--global-text-color-light);
+    content: '';
+    opacity: 0.75;
+    transition:
+      background-color 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar:hover .post-toc-intro,
+  body:has(#toc-sidebar) #toc-sidebar:focus-within .post-toc-intro,
+  body:has(#toc-sidebar) #toc-sidebar:hover .toc-link,
+  body:has(#toc-sidebar) #toc-sidebar:focus-within .toc-link {
+    opacity: 1;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-link:hover,
+  body:has(#toc-sidebar) #toc-sidebar .toc-link:focus-visible {
+    color: var(--global-text-color);
+  }
+
+  body:has(#toc-sidebar) .post {
+    width: 100%;
+    max-width: 850px;
+    margin: 0;
+  }
+
+  body:has(#toc-sidebar) .post-header {
+    max-width: 850px;
+    margin: 0 0 2.35rem;
+    padding: 0 0 1.5rem;
+    border-bottom: 1px solid var(--global-divider-color);
+  }
+
+  body:has(#toc-sidebar) .post-title {
+    margin: 0 0 1rem;
+    color: var(--global-text-color);
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(2.25rem, 3.2vw, 3.45rem);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 1.08;
+  }
+
+  body:has(#toc-sidebar) .post-meta,
+  body:has(#toc-sidebar) .post-tags {
+    color: var(--global-text-color-light);
+    font-family: system-ui, sans-serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.01em;
+  }
+
+  body:has(#toc-sidebar) .post-tags {
+    padding-top: 0.35rem;
+    padding-bottom: 0;
+  }
+
+  body:has(#toc-sidebar) .post-content {
+    max-width: 850px;
+  }
+
+  body:has(#toc-sidebar) #markdown-content {
+    color: var(--global-text-color);
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.12rem, 1.02rem + 0.24vw, 1.28rem);
+    font-weight: 400;
+    letter-spacing: 0.003em;
+    line-height: 1.62;
+  }
+
+  body:has(#toc-sidebar) #markdown-content p {
+    margin: 0 0 1.3em;
+    line-height: inherit;
+  }
+
+  body:has(#toc-sidebar) #markdown-content h2,
+  body:has(#toc-sidebar) #markdown-content h3,
+  body:has(#toc-sidebar) #markdown-content h4 {
+    color: var(--global-text-color);
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+
+  body:has(#toc-sidebar) #markdown-content h2 {
+    margin: 2.55em 0 0.7em;
+    font-size: clamp(1.7rem, 2.1vw, 2.15rem);
+  }
+
+  body:has(#toc-sidebar) #markdown-content h3 {
+    margin: 1.9em 0 0.65em;
+    font-size: clamp(1.35rem, 1.55vw, 1.6rem);
+  }
+
+  body:has(#toc-sidebar) #markdown-content h4 {
+    margin: 1.6em 0 0.55em;
+    font-size: 1.2rem;
+  }
+
+  body:has(#toc-sidebar) #markdown-content a {
+    text-decoration-thickness: 0.055em;
+    text-underline-offset: 0.16em;
+  }
+
+  body:has(#toc-sidebar) #markdown-content blockquote {
+    margin: 1.8em 0;
+    padding: 0.2em 0 0.2em 1.1em;
+    border-left: 2px solid var(--global-divider-color);
+    background: transparent;
+    font-size: 1.04em;
+  }
+
+  body:has(#toc-sidebar) #markdown-content blockquote p:last-child {
+    margin-bottom: 0;
+  }
+
+  body:has(#toc-sidebar) #markdown-content pre,
+  body:has(#toc-sidebar) #markdown-content code {
+    font-size: 0.86em;
+  }
+
+  body:has(#toc-sidebar) #markdown-content img,
+  body:has(#toc-sidebar) #markdown-content video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  body:has(#toc-sidebar) #markdown-content table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  body:has(#toc-sidebar) #markdown-content .footnotes {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--global-divider-color);
+    color: var(--global-text-color-light);
+    font-size: 0.88em;
+  }
+
+  body:has(#toc-sidebar) .post .post-content > hr {
+    margin: 2.5rem 0;
+    border-color: var(--global-divider-color);
+    opacity: 0.75;
+  }
+
+  @media (max-width: 1050px) {
+    body:has(#toc-sidebar) .container[role='main'] {
+      max-width: 860px;
+      padding-inline: 1.25rem;
+    }
+
+    body:has(#toc-sidebar) .container[role='main'] > .row {
+      display: block;
+    }
+
+    body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-3,
+    body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-9 {
+      width: 100%;
+    }
+
+    body:has(#toc-sidebar) #toc-sidebar {
+      position: static;
+      width: 100%;
+      height: auto;
+      max-height: none;
+      margin: 0 0 2rem;
+      padding: 1rem 1.1rem;
+      overflow: visible;
+      border: 1px solid var(--global-divider-color);
+      border-radius: 0.35rem;
+    }
+
+    body:has(#toc-sidebar) #toc-sidebar::before {
+      display: none;
+    }
+
+    body:has(#toc-sidebar) #toc-sidebar .post-toc-intro,
+    body:has(#toc-sidebar) #toc-sidebar .toc-link {
+      opacity: 1;
+    }
+
+    body:has(#toc-sidebar) #toc-sidebar > .toc-list {
+      display: block;
+    }
+
+    body:has(#toc-sidebar) #toc-sidebar .toc-list-item {
+      margin-bottom: 0.35rem;
+    }
+
+    body:has(#toc-sidebar) #toc-sidebar .toc-list-item::before {
+      left: -0.98rem;
+    }
+
+    body:has(#toc-sidebar) .post,
+    body:has(#toc-sidebar) .post-header,
+    body:has(#toc-sidebar) .post-content {
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    body:has(#toc-sidebar) .container[role='main'] {
+      padding-inline: 1rem;
+    }
+
+    body:has(#toc-sidebar) .post-title {
+      font-size: clamp(2rem, 9vw, 2.65rem);
+    }
+
+    body:has(#toc-sidebar) #markdown-content {
+      font-size: 1.1rem;
+      line-height: 1.62;
+    }
+  }
+</style> <div class="post"> <header class="post-header"> <h1 class="post-title">PKS: We thought this was hard</h1> <p class="post-meta"> Created on September 11, 2025 </p> <p class="post-tags"> <a href="/blog/2025"> <i class="fa-solid fa-calendar fa-sm"></i> 2025 </a>   ·   <a href="/blog/tag/social-choice"> <i class="fa-solid fa-hashtag fa-sm"></i> social-choice</a>   <a href="/blog/tag/algorithms"> <i class="fa-solid fa-hashtag fa-sm"></i> algorithms</a>   ·   <a href="/blog/category/research"> <i class="fa-solid fa-tag fa-sm"></i> research</a> </p> </header> <article class="post-content"> <div id="markdown-content"> <p>This post is about one section of our paper, <a href="https://arxiv.org/abs/2603.28574" rel="external nofollow noopener" target="_blank">Bribery’s Influence on Ranked Aggregation</a>. The paper studies what happens to the Kemeny score under manipulation, bribery, deleting rankings, deleting candidates, and so on. This post is about a problem we were stuck on the longest, a problem called <strong>Possible Kemeny Score</strong>, which resisted us for a while and then fell to an algorithm so simple we didn’t believe it at first.</p> <h2 id="rankings-and-disagreements">Rankings and disagreements</h2> <p>Rank aggregation shows up everywhere. Search engines merge ranked result lists, recommendation systems merge preference orders, panels of judges merge scorecards. The classical way to merge rankings is <strong>Kemeny’s rule</strong>, from 1959. Given a set of rankings, find the single ranking that disagrees with them the least. It has a nice statistical story too. If voters are noisy observers of one true ranking, the Kemeny ranking is the maximum likelihood estimate of that truth.</p> <p>“Disagrees the least” is measured by the <strong>Kendall tau distance</strong>. For two rankings \(\pi\) and \(\pi'\) over the same candidates, it counts the pairs ordered differently:</p> \[\mathtt{KT}(\pi,\pi') = \big|\{\,\{x,y\} : x \prec_{\pi} y \ \wedge\ y \prec_{\pi'} x \,\}\big|\] <p>If you draw the two rankings side by side and connect each candidate to itself, the distance is just the number of crossings.</p> <div class="text-center"> <img src="/assets/img/posts/kemeny-crossings.svg" alt="Two rankings with connecting lines; crossings marked" style="max-width: 100%;"> </div> <p>The distance from one ranking \(X\) to a whole set of rankings \(\mathcal{R}\) is the sum, \(\mathtt{KT}(X,\mathcal{R}) = \sum_{R\in\mathcal{R}}\mathtt{KT}(X,R)\).</p> <h2 id="the-problem-intuitively">The problem (intuitively)</h2> <p>Real ballots are incomplete. A reviewer ranks the five papers they actually read. A user ranks the movies they have seen. So suppose the rankings you are given are partial, and suppose someone hands you a target ranking \(X\) over all the candidates and a number \(k\), and asks:</p> <p><strong>Possible Kemeny Score.</strong> Given a candidate set \(\mathcal{C}\), a set of partial rankings \(\mathcal{R}\), a full ranking \(X\), and an integer \(k\), can the partial rankings be completed so that the total Kendall tau distance of \(X\) from the completed rankings is at most \(k\)?</p> <p>Completing a ranking means inserting the missing candidates anywhere you like, without touching the relative order of the candidates already ranked.</p> <div class="text-center"> <img src="/assets/img/posts/kemeny-problem.svg" alt="A partial ballot with missing candidates waiting to be inserted" style="max-width: 100%;"> </div> <p>In other words, is there a completion of the evidence under which \(X\) scores at most \(k\)? It is the optimist’s question, and it is also the auditor’s question. Given incomplete preference data, what is the best score this target could possibly have?</p> <h2 id="why-we-thought-it-was-hard">Why we thought it was hard</h2> <p>Everything in this problem’s neighborhood is hard. Computing the Kemeny score is NP-complete (Bartholdi, Tovey &amp; Trick, 1989). It is NP-hard already for four rankings, and the case of three rankings has been open for years (Dwork, Kumar, Naor &amp; Sivakumar, 2001; Biedl, Brandenburg &amp; Deng, 2009). The corresponding manipulation questions for Kemeny <em>Consensus</em> are coNP-complete and \(\Sigma_2^p\)-complete (Fitzsimmons &amp; Hemaspaandra, 2021). And the most widely studied problem of this shape, the Possible Winner problem, where partial votes are completed to make a favorite candidate win, is NP-hard for most common voting rules (Xia &amp; Conitzer, 2011). All of this pointed at the same thing: the problem is hard. Or so we thought.</p> <p>But our stuckness was more concrete than that. Try to solve it. You have to insert the missing candidates into a ballot, and there are two levels of freedom, and both looked unmanageable.</p> <p>First level. In what relative order do the missing candidates go in? You might guess “in the order \(X\) ranks them,” but we had no reason to believe that. The candidates already sitting in the ballot do not agree with \(X\), they are in whatever order the voter put them. So maybe following \(X\)’s order among the new candidates generates extra disagreements against those already-placed candidates, and some other order does better. We could not rule that out, and without it we had nothing to hold on to.</p> <p>Second level. Even if you somehow knew the right relative order, where do the candidates actually go? Place the first one at some position. Nothing guarantees that position is consistent with any optimal completion. It felt like every placement decision could poison the ones after it, which is exactly the situation where you expect to need search, and search over interleavings is exponential.</p> <p>We could not find an approach.</p> <h2 id="the-first-insight">The first insight</h2> <p>The first insight was that the natural guess turns out to be right. In any optimal completion, the inserted candidates appear in \(X\)’s order relative to each other.</p> <p><strong>Lemma 1.</strong> <em>Let \(\hat{R}\) be an optimal extension of \(R\). Then \(\hat{R}\) and \(X\) agree over the inserted candidates.</em></p> <p>The proof is an exchange argument. Suppose two inserted candidates \(c, c'\) sit in the wrong order, \(c \prec_X c'\) but \(c' \prec_{\hat{R}} c\). Swap them. The pair \(\{c,c'\}\) itself now agrees with \(X\), so that is one disagreement gone. For any candidate \(w\) caught between them, check the three places \(w\) can sit in \(X\): before both, between them, after both. Walking the cases, every disagreement the swap creates is matched by one it removes, and the between case removes two. The distance never goes up, and the pair itself strictly improves. So an out-of-order pair can never be in an optimal completion.</p> <div class="text-center"> <img src="/assets/img/posts/kemeny-swap.svg" alt="Swapping an out-of-order pair reduces disagreements from 4 to 1" style="max-width: 100%;"> </div> <p>This kills the first level of freedom completely. The internal order of the insertions is not a choice, it is \(X\)’s order. What remains is only the question of positions.</p> <h2 id="the-second-insight-and-the-algorithm">The second insight, and the algorithm</h2> <p>The position problem was still standing. Insert the candidates in \(X\)’s order, fine, but put the first one somewhere and you still have no guarantee that any optimal completion has it there.</p> <p>The algorithm that resolves it looks like this.</p> <div class="text-center"> <img src="/assets/img/posts/pks-algorithm.png" alt="Algorithm 1: Possible-Kemeny-Score" style="max-width: 100%;"> </div> <p>Take the missing candidates in \(X\)’s order. Insert each one at the <strong>leftmost</strong> position that minimizes its disagreements with the already-ranked candidates. And after you place a candidate, never look to the left of it again, the pointer \(l\) only moves right.</p> <p>A small example. Let \(X = a \prec b \prec c \prec d \prec e\) and let the ballot be \(R = c \prec a \prec e\), so \(b\) and \(d\) are missing and get inserted in that order.</p> <p>For \(b\), the four available slots cost \(1, 2, 1, 2\) disagreements against the fixed candidates. Positions \(0\) and \(2\) tie, so the leftmost wins and \(b\) goes first: \(b \prec c \prec a \prec e\). For \(d\), the slots from the pointer onward cost \(2, 1, 0, 1\), so \(d\) goes after \(a\): \(b \prec c \prec a \prec d \prec e\). Total distance to \(X\): the ballot’s own inversion \((c,a)\), plus \(1\) for \(b\), plus \(0\) for \(d\). You can check by brute force that no completion of \(R\) does better.</p> <h2 id="why-it-works">Why it works</h2> <p>Two facts carry the proof.</p> <p>The first is a monotonicity that we did not expect. Suppose a placed candidate \(\Pi(i)\) does at least as well further right, at some position \(t_f\) that minimizes its disagreements among the positions after it. Then you can push it there, dragging along every later insertion sitting in between, and never pay for it. The engine is a pointwise inequality. When \(\Pi(i)\) moves one step right past a fixed candidate, the change in its disagreements with the fixed candidates is \(+1\) or \(-1\). And for every later insertion \(\Pi(\ell)\), with \(\ell &gt; i\),</p> \[\Delta\,\Pi(\ell) \;\leq\; \Delta\,\Pi(i).\] <p>The reason is the agreement from Lemma 1. If the step saves a disagreement for \(\Pi(i)\), the fixed candidate it passes comes before \(\Pi(i)\) in \(X\), and since \(\Pi(i) \prec_X \Pi(\ell)\), it also comes before \(\Pi(\ell)\), so the same step saves one for \(\Pi(\ell)\) too. The later candidates ride along for free. Summed over the whole journey to \(t_f\), nobody’s total goes up.</p> <div class="text-center"> <img src="/assets/img/posts/pks-figure1.jpg" alt="Figure 1 from the paper: moving Pi(i) from t_i to t_f" style="max-width: 100%;"> </div> <p>The second fact is the induction that turns this into optimality. At every step of the algorithm there exists an optimal completion that agrees with everything placed so far. If the optimal completion has the current candidate further left than the algorithm put it, move it right using the free-ride lemma. If it has it further right, moving it left to the algorithm’s position costs nothing, because the algorithm’s position was a minimizer. Either way there is an optimal completion matching the algorithm’s prefix, and at the end, matching its entire output.</p> <p>Ballots do not interact, the total distance is a sum, so running the procedure on each ballot independently is optimal overall. The whole thing runs in \(\mathcal{O}(n \cdot m^3)\), for \(n\) ballots over \(m\) candidates.</p> <h2 id="in-hindsight">In hindsight</h2> <p>For a long time we were convinced this problem was hard, and the honest reason is that we had not found the two lemmas. Without the agreement lemma there is no order to insert in, and without the free-ride inequality no placement is safe to commit to. Both freedoms looked like they demanded search. The two symmetries we discovered are what make a greedy algorithm the solution.</p> <p>It is a strange table our paper ends up with. For Kemeny <em>Consensus</em>, these manipulation questions sit at coNP-complete and \(\Sigma_2^p\)-complete where their status is known at all. For Kemeny <em>Score</em>, the decision version, all of these turn out polynomial, bribery via a reduction to Knapsack, ranking deletion, swap bribery, and the problem in this post. Same rule, same manipulative actions, a complexity gulf between the optimisation and decision questions.</p> <p>The three-voter Kemeny score, whether it is polynomial or NP-hard, is still open, and so is every Kemeny Winner column of our table.</p> <hr> <p><em>Read the full paper on <a href="https://arxiv.org/abs/2603.28574" rel="external nofollow noopener" target="_blank">arXiv</a>.</em></p> </div> </article> </div> <script>
+  (() => {
+    const addReadingGuide = () => {
+      const rail = document.getElementById('toc-sidebar');
+      const title = document.querySelector('.post-title')?.textContent?.trim();
+      const article = document.querySelector('#markdown-content');
+      if (!rail || !title || !article || rail.querySelector('.post-toc-intro')) return;
+
+      const wordCount = (article.innerText || '').trim().split(/\s+/).filter(Boolean).length;
+      const minutes = Math.max(1, Math.ceil(wordCount / 220));
+      const intro = document.createElement('div');
+      intro.className = 'post-toc-intro';
+
+      const heading = document.createElement('p');
+      heading.className = 'post-toc-intro__title';
+      heading.textContent = title;
+
+      const time = document.createElement('p');
+      time.className = 'post-toc-intro__time';
+      time.textContent = `${minutes} min read`;
+
+      intro.append(heading, time);
+      rail.prepend(intro);
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', addReadingGuide, { once: true });
+    } else {
+      addReadingGuide();
+    }
+  })();
+</script> </div> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Anshul Thakur. </div> </footer> <script>
   window.alFolio = {
     compatBootstrap: false
   };
-</script> <script src="/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/al_math/js/mathjax-setup.js"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script src="/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script> <script src="/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script> <script defer src="/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/al_img_tools/js/zoom.js"></script> <script defer src="/assets/js/progress-bar.js?v=499464c5c63ced6cf7ad62509f1e2610" type="text/javascript"></script> <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script> <script>
+</script> <script src="/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/al_math/js/mathjax-setup.js"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script src="/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script> <script defer src="https://cdn.jsdelivr.net/npm/tocbot@4.36.4/dist/tocbot.min.js" integrity="sha256-lo/r+jQ81wWrxdIiiiEEd538z4+dTJTt+leOuAS7GCw=" crossorigin="anonymous"></script> <script src="/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script> <script defer src="/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/al_img_tools/js/zoom.js"></script> <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script> <script>
     addBackToTop();
   </script> <script type="module" src="/assets/al_search/js/search/ninja-keys.min.js"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/al_search/js/search-setup.js"></script> <script>
 // get the ninja-keys element

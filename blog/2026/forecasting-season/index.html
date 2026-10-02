@@ -2,13 +2,401 @@
   :root {
     --max-content-width: 930px;
   }
-</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%A7%A0&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=f0b101217084a90093badfe99ff9a7d1"> <link rel="canonical" href="https://ddi-droid.github.io/blog/2026/forecasting-season/"> <script src="/assets/js/theme.js?v=7af685e2ba20b37fef545c97b8064050"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.36.4/dist/tocbot.css" integrity="sha256-zTN0r+0OKaIv2xqeNNIYxNk0pWJ6+IqPGc1iDgVzWF0=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%A7%A0&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=f0b101217084a90093badfe99ff9a7d1"> <link rel="canonical" href="https://ddi-droid.github.io/blog/2026/forecasting-season/"> <script src="/assets/js/theme.js?v=7af685e2ba20b37fef545c97b8064050"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
     initTheme();
-  </script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> <span class="font-weight-bold">Anshul</span> Thakur </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">projects </a> </li> <li class="nav-item "> <a class="nav-link" href="/academics/">academics </a> </li> <li class="nav-item "> <a class="nav-link" href="/news/">news </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">Forecasting</h1> <p class="post-meta"> Created on January 16, 2026 </p> <p class="post-tags"> <a href="/blog/2026"> <i class="fa-solid fa-calendar fa-sm"></i> 2026 </a>   ·   <a href="/blog/tag/forecasting"> <i class="fa-solid fa-hashtag fa-sm"></i> forecasting</a>   <a href="/blog/tag/agents"> <i class="fa-solid fa-hashtag fa-sm"></i> agents</a>   ·   <a href="/blog/category/research"> <i class="fa-solid fa-tag fa-sm"></i> research</a> </p> </header> <article class="post-content"> <div id="markdown-content"> <p>For the first half of 2026, a good part of our work at Kairosity went into competitive forecasting. It is one of the few tasks where the world itself grades your reasoning, on a schedule, with no partial credit, and frontier models have been closing the gap to human superforecasters fast enough that the competitions got interesting. We entered four. This post is about what we built for each and what the season taught us.</p> <h2 id="the-arenas">The arenas</h2> <p><strong>The Metaculus AI Benchmark, Spring 2026.</strong> A bot-only tournament, a few hundred questions over the season, log-scored against how the world resolves, with the bots benchmarked against the Metaculus community’s own predictions. Alongside it runs MiniBench, back-to-back two-week sprints of about sixty auto-resolving questions, which we used as a fast feedback loop.</p> <p><strong>ProphetHacks.</strong> A 32-hour hackathon out of UChicago in May, run by Sigma Lab, Fleet AI, and Kalshi. You ship an agent that predicts on live Kalshi prediction-market events, and the leaderboard ranks agents by live PnL over a two-week evaluation window. Nothing concentrates the mind like a leaderboard that re-ranks every fifteen seconds.</p> <p><strong>Prophet Arena.</strong> The live benchmark from the LLM-as-a-Prophet group, which continuously evaluates forecasters on real prediction-market events, Brier-scored, across multiple horizons. After the hackathon we kept an agent standing there.</p> <p><strong>The Upstart Macro Index competition.</strong> The quiet one. Monthly forecasts of a macroeconomic index, judged over months rather than minutes.</p> <h2 id="metaculus-or-the-committee-that-writes-code">Metaculus, or the committee that writes code</h2> <p>Our Metaculus bot is a committee of three researchers with one editor, and the rule that defines it is that the researchers are not allowed to hand-wave. Each question first goes through iterative research. A search agent pulls from news and web sources through a single gateway, an analyst critiques what came back, and a supervisor either declares the evidence sufficient or emits targeted sub-queries for another round.</p> <p>Then three researchers attack the question in parallel, each deliberately running on a different model, so their mistakes decorrelate. Each researcher must anchor on prediction-market and community priors where they exist, and downweight thin ones. Each must state a base rate before updating on news. And each must express its final model as Python. Real scipy distributions, Monte Carlo with at least ten thousand samples, no magic numbers, every constant tagged as researched or assumed. The code actually runs. If <code class="language-plaintext highlighter-rouge">predict()</code> fails or returns the wrong outcome keys, the error goes back to the researcher and it tries again.</p> <p>A consensus agent then reads all three, scores each on analysis quality and model soundness, assigns weights, is allowed to throw a researcher out entirely, fixes unit mistakes (a researcher who says “75” when the question wants 75,000,000 gets corrected, not trusted), and takes the weighted average. Before anything is submitted, there is one last discipline, an overconfidence tax applied exactly once:</p> \[X = \min(10 - c,\ 0.2\,p)\] <p>where \(c\) is the researcher’s own certainty out of ten and \(p\) is the leaning-side estimate in percent, and the estimate gets shaved by \(X\) toward the middle. The rule comes with a clause we consider load-bearing: you are not allowed to tune \(c\) to keep the number you already wanted.</p> <p>The other half of the Metaculus story is operations. The bot runs every twenty minutes, first from CI, then from a server with cron, tmux, and a lockfile so runs never overlap. Every external API sits behind a dispatcher that enforces per-service rate limits with adaptive backoff, because Metaculus wants one request every four seconds and news APIs want less than that. And we have the war story that justifies all of it. One night the dispatcher process died at 03:20 UTC. Cron kept firing every twenty minutes, each run hit connection refused, and by 04:40 the question had closed without our forecast. The forecasting was fine. The plumbing lost the points. In live tournaments, reliability is not an engineering nicety, it is a scoring term.</p> <h2 id="prophethacks-or-32-hours-and-a-bot-called-greeniebot">ProphetHacks, or 32 hours and a bot called GreenieBot</h2> <p>Before writing any code for the hackathon, we studied the field. Metaculus bots post their reasoning publicly, and we had been reading the traces of a strong one called GreenieBot. We pulled its public traces, distilled them into two lists, behaviors to copy and behaviors to avoid, and baked both into our prompts as few-shot examples. Some of those lessons are still in our prompt files verbatim, like the reminder that models systematically underprice questions where a benchmark score is already near the threshold, and the line we quote at each other: overweighting formal caution can be as damaging as overconfidence.</p> <p>The hackathon agent itself is small and paranoid. One HTTP endpoint. Retrieval is bounded Exa search planned by a cheap model, two rounds, a handful of queries per round, at most ten sources, under a hard 420-second wall clock. Forecasting is two independent forecaster-verifier branches running in parallel, the verifier hunting resolver mistakes, prior misuse, and overconfidence, and a synthesizer that merges the branches without ever smearing to uniform. And if anything anywhere throws, the agent returns a uniform fallback rather than nothing, because completion rate is scored and a missed submission is worse than an honest coin flip. The line from our submission notes: a beautiful forecast that misses the schema is still a failed forecast.</p> <p>One Kalshi-specific detail cost us real thought. Listed outcomes on a market do not have to sum to one, the resolver semantics are per-label, so the agent preserves calibrated per-label probabilities and refuses to normalize unless the resolver says the outcomes are exhaustive and exclusive. It is exactly the kind of detail that silently costs points if your pipeline helpfully normalizes behind your back.</p> <p>On the live PnL leaderboard we sat first for a moment. We ended third.</p> <h2 id="prophet-arena-or-staying-live">Prophet Arena, or staying live</h2> <p>After the hackathon we took the same core, scrubbed it into a clean deployment, and kept it standing on Prophet Arena, where events keep arriving from real markets and the grading never stops. The engineering brief changes when there is no closing ceremony. Under load testing, three parallel requests complete in about 39 seconds each with both forecast branches running, and the whole pipeline stays comfortably under the ten-minute budget per question. Same philosophy as the hackathon, calibration over confidence, schema over beauty, always answer.</p> <h2 id="upstart-or-knowing-when-not-to-send-an-agent">Upstart, or knowing when not to send an agent</h2> <p>The Upstart Macro Index competition asked for monthly index forecasts with uncertainty bands. We tracked the index’s regime, fit AR(1) models on the recent window, and bootstrapped the intervals. The index peaked around 1.67 in late 2023 and read 1.39 in December 2025, with California diverging well below the national line, and our submissions came down to reading monetary policy and sector layoffs correctly, then letting a two-parameter model from a statistics textbook do the arithmetic. Knowing when the right forecaster is not an agent is also a forecasting skill.</p> <h2 id="what-carried-over">What carried over</h2> <p>Across four arenas, the same three lessons kept re-proving themselves.</p> <p>Reliability is a scoring term. Fallbacks, rate limits, lockfiles, timeouts, completion rate. Nearly every point we lost all season was lost by plumbing, not by reasoning.</p> <p>Calibration wants machinery, not vibes. The explicit shrink formula, verifiers whose job is to attack overconfidence, market priors as anchors, unit-checking before aggregation. Every one of these exists because we watched a raw model be confidently wrong in a specific, repeatable way.</p> <p>And the one that became a research question. Ask a strong model the same question in different clothes, a binary here, the same thing as a multiple choice there, and the numbers stop agreeing with each other. Accuracy kept improving all season. Consistency did not. That observation turned into our working paper, <a href="https://openreview.net/forum?id=Z51qVtmHAv" rel="external nofollow noopener" target="_blank">Brittle Prophets</a>, where we test whether a causal world model can actually fix this.</p> </div> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Anshul Thakur. </div> </footer> <script>
+  </script> <link rel="stylesheet" href="/assets/css/lesswrong-editorial.css?v=8e8cca5841f615eec9cb926953780356"> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> <span class="font-weight-bold">Anshul</span> Thakur </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">projects </a> </li> <li class="nav-item "> <a class="nav-link" href="/academics/">academics </a> </li> <li class="nav-item "> <a class="nav-link" href="/news/">news </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> </header> <div class="container mt-5" role="main"> <div class="row"> <div class="col-sm-3"> <nav id="toc-sidebar" class="sticky-top toc toc-sidebar" aria-label="Table of contents" data-toc-collapse="expanded" data-toc-collapse-depth=""></nav> </div> <div class="col-sm-9"> <style>
+  body:has(#toc-sidebar) .container[role='main'] {
+    width: 100%;
+    max-width: none;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 2.2vw, 2.5rem);
+  }
+
+  body:has(#toc-sidebar) .container[role='main'] > .row {
+    display: grid;
+    grid-template-columns: minmax(180px, 21vw) minmax(0, min(54vw, 850px)) minmax(0, 1fr);
+    gap: clamp(1.25rem, 2.2vw, 2.75rem);
+    align-items: start;
+    margin-inline: 0;
+  }
+
+  body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-3,
+  body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-9 {
+    width: auto;
+    max-width: none;
+    min-width: 0;
+    padding: 0;
+    flex: none;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar {
+    position: fixed;
+    z-index: 20;
+    top: 57px;
+    left: 0;
+    display: flex;
+    width: min(21vw, 400px);
+    height: calc(100vh - 57px);
+    max-height: calc(100vh - 57px);
+    flex-direction: column;
+    overflow: visible;
+    padding: 22px 0 20px 33px;
+    border: 0;
+    color: var(--global-text-color-light);
+    font:
+      500 0.88rem/1.45 system-ui,
+      sans-serif;
+    transition:
+      opacity 0.25s ease-in-out 0.5s,
+      transform 0.5s ease-in-out 0.5s,
+      height 0.4s ease-in-out,
+      max-height 0.4s ease-in-out;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar::before {
+    position: absolute;
+    left: 20px;
+    pointer-events: none;
+    content: '';
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar::before {
+    top: 48px;
+    bottom: 20px;
+    width: 1px;
+    background: var(--global-divider-color);
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .post-toc-intro {
+    position: relative;
+    z-index: 1;
+    margin: 0 0 0.8rem;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .post-toc-intro__title {
+    margin: 0 0 0.45rem;
+    color: var(--global-text-color-light);
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: 1.12rem;
+    font-variant: small-caps;
+    line-height: 1.3;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .post-toc-intro__time {
+    margin: 0;
+    color: var(--global-text-color-light);
+    font:
+      400 0.78rem/1.4 system-ui,
+      sans-serif;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar > .toc-list {
+    display: flex;
+    min-height: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-list-item {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-link {
+    display: block;
+    padding: 0.1rem 0;
+    color: var(--global-text-color-light);
+    font: inherit;
+    line-height: 1.4;
+    text-decoration: none;
+    opacity: 0;
+    transition:
+      color 0.25s ease,
+      opacity 0.25s ease;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-link::before {
+    display: none !important;
+    background-color: transparent !important;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-link.is-active-link {
+    color: var(--global-text-color-light);
+    font-weight: 500;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-list-item.is-collapsible {
+    padding-left: 0.8rem;
+    font-size: 0.92em;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-list-item::before {
+    position: absolute;
+    top: 0.64em;
+    left: -0.8rem;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--global-text-color-light);
+    content: '';
+    opacity: 0.75;
+    transition:
+      background-color 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar:hover .post-toc-intro,
+  body:has(#toc-sidebar) #toc-sidebar:focus-within .post-toc-intro,
+  body:has(#toc-sidebar) #toc-sidebar:hover .toc-link,
+  body:has(#toc-sidebar) #toc-sidebar:focus-within .toc-link {
+    opacity: 1;
+  }
+
+  body:has(#toc-sidebar) #toc-sidebar .toc-link:hover,
+  body:has(#toc-sidebar) #toc-sidebar .toc-link:focus-visible {
+    color: var(--global-text-color);
+  }
+
+  body:has(#toc-sidebar) .post {
+    width: 100%;
+    max-width: 850px;
+    margin: 0;
+  }
+
+  body:has(#toc-sidebar) .post-header {
+    max-width: 850px;
+    margin: 0 0 2.35rem;
+    padding: 0 0 1.5rem;
+    border-bottom: 1px solid var(--global-divider-color);
+  }
+
+  body:has(#toc-sidebar) .post-title {
+    margin: 0 0 1rem;
+    color: var(--global-text-color);
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(2.25rem, 3.2vw, 3.45rem);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 1.08;
+  }
+
+  body:has(#toc-sidebar) .post-meta,
+  body:has(#toc-sidebar) .post-tags {
+    color: var(--global-text-color-light);
+    font-family: system-ui, sans-serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.01em;
+  }
+
+  body:has(#toc-sidebar) .post-tags {
+    padding-top: 0.35rem;
+    padding-bottom: 0;
+  }
+
+  body:has(#toc-sidebar) .post-content {
+    max-width: 850px;
+  }
+
+  body:has(#toc-sidebar) #markdown-content {
+    color: var(--global-text-color);
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.12rem, 1.02rem + 0.24vw, 1.28rem);
+    font-weight: 400;
+    letter-spacing: 0.003em;
+    line-height: 1.62;
+  }
+
+  body:has(#toc-sidebar) #markdown-content p {
+    margin: 0 0 1.3em;
+    line-height: inherit;
+  }
+
+  body:has(#toc-sidebar) #markdown-content h2,
+  body:has(#toc-sidebar) #markdown-content h3,
+  body:has(#toc-sidebar) #markdown-content h4 {
+    color: var(--global-text-color);
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+
+  body:has(#toc-sidebar) #markdown-content h2 {
+    margin: 2.55em 0 0.7em;
+    font-size: clamp(1.7rem, 2.1vw, 2.15rem);
+  }
+
+  body:has(#toc-sidebar) #markdown-content h3 {
+    margin: 1.9em 0 0.65em;
+    font-size: clamp(1.35rem, 1.55vw, 1.6rem);
+  }
+
+  body:has(#toc-sidebar) #markdown-content h4 {
+    margin: 1.6em 0 0.55em;
+    font-size: 1.2rem;
+  }
+
+  body:has(#toc-sidebar) #markdown-content a {
+    text-decoration-thickness: 0.055em;
+    text-underline-offset: 0.16em;
+  }
+
+  body:has(#toc-sidebar) #markdown-content blockquote {
+    margin: 1.8em 0;
+    padding: 0.2em 0 0.2em 1.1em;
+    border-left: 2px solid var(--global-divider-color);
+    background: transparent;
+    font-size: 1.04em;
+  }
+
+  body:has(#toc-sidebar) #markdown-content blockquote p:last-child {
+    margin-bottom: 0;
+  }
+
+  body:has(#toc-sidebar) #markdown-content pre,
+  body:has(#toc-sidebar) #markdown-content code {
+    font-size: 0.86em;
+  }
+
+  body:has(#toc-sidebar) #markdown-content img,
+  body:has(#toc-sidebar) #markdown-content video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  body:has(#toc-sidebar) #markdown-content table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  body:has(#toc-sidebar) #markdown-content .footnotes {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--global-divider-color);
+    color: var(--global-text-color-light);
+    font-size: 0.88em;
+  }
+
+  body:has(#toc-sidebar) .post .post-content > hr {
+    margin: 2.5rem 0;
+    border-color: var(--global-divider-color);
+    opacity: 0.75;
+  }
+
+  @media (max-width: 1050px) {
+    body:has(#toc-sidebar) .container[role='main'] {
+      max-width: 860px;
+      padding-inline: 1.25rem;
+    }
+
+    body:has(#toc-sidebar) .container[role='main'] > .row {
+      display: block;
+    }
+
+    body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-3,
+    body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-9 {
+      width: 100%;
+    }
+
+    body:has(#toc-sidebar) #toc-sidebar {
+      position: static;
+      width: 100%;
+      height: auto;
+      max-height: none;
+      margin: 0 0 2rem;
+      padding: 1rem 1.1rem;
+      overflow: visible;
+      border: 1px solid var(--global-divider-color);
+      border-radius: 0.35rem;
+    }
+
+    body:has(#toc-sidebar) #toc-sidebar::before {
+      display: none;
+    }
+
+    body:has(#toc-sidebar) #toc-sidebar .post-toc-intro,
+    body:has(#toc-sidebar) #toc-sidebar .toc-link {
+      opacity: 1;
+    }
+
+    body:has(#toc-sidebar) #toc-sidebar > .toc-list {
+      display: block;
+    }
+
+    body:has(#toc-sidebar) #toc-sidebar .toc-list-item {
+      margin-bottom: 0.35rem;
+    }
+
+    body:has(#toc-sidebar) #toc-sidebar .toc-list-item::before {
+      left: -0.98rem;
+    }
+
+    body:has(#toc-sidebar) .post,
+    body:has(#toc-sidebar) .post-header,
+    body:has(#toc-sidebar) .post-content {
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    body:has(#toc-sidebar) .container[role='main'] {
+      padding-inline: 1rem;
+    }
+
+    body:has(#toc-sidebar) .post-title {
+      font-size: clamp(2rem, 9vw, 2.65rem);
+    }
+
+    body:has(#toc-sidebar) #markdown-content {
+      font-size: 1.1rem;
+      line-height: 1.62;
+    }
+  }
+</style> <div class="post"> <header class="post-header"> <h1 class="post-title">Forecasting</h1> <p class="post-meta"> Created on January 16, 2026 </p> <p class="post-tags"> <a href="/blog/2026"> <i class="fa-solid fa-calendar fa-sm"></i> 2026 </a>   ·   <a href="/blog/tag/forecasting"> <i class="fa-solid fa-hashtag fa-sm"></i> forecasting</a>   <a href="/blog/tag/agents"> <i class="fa-solid fa-hashtag fa-sm"></i> agents</a>   ·   <a href="/blog/category/research"> <i class="fa-solid fa-tag fa-sm"></i> research</a> </p> </header> <article class="post-content"> <div id="markdown-content"> <p>For the first half of 2026, a good part of our work at Kairosity went into competitive forecasting. It is one of the few tasks where the world itself grades your reasoning, on a schedule, with no partial credit, and frontier models have been closing the gap to human superforecasters fast enough that the competitions got interesting. We entered four. This post is about what we built for each and what the season taught us.</p> <h2 id="the-arenas">The arenas</h2> <p><strong>The Metaculus AI Benchmark, Spring 2026.</strong> A bot-only tournament, a few hundred questions over the season, log-scored against how the world resolves, with the bots benchmarked against the Metaculus community’s own predictions. Alongside it runs MiniBench, back-to-back two-week sprints of about sixty auto-resolving questions, which we used as a fast feedback loop.</p> <p><strong>ProphetHacks.</strong> A 32-hour hackathon out of UChicago in May, run by Sigma Lab, Fleet AI, and Kalshi. You ship an agent that predicts on live Kalshi prediction-market events, and the leaderboard ranks agents by live PnL over a two-week evaluation window. Nothing concentrates the mind like a leaderboard that re-ranks every fifteen seconds.</p> <p><strong>Prophet Arena.</strong> The live benchmark from the LLM-as-a-Prophet group, which continuously evaluates forecasters on real prediction-market events, Brier-scored, across multiple horizons. After the hackathon we kept an agent standing there.</p> <p><strong>The Upstart Macro Index competition.</strong> The quiet one. Monthly forecasts of a macroeconomic index, judged over months rather than minutes.</p> <h2 id="metaculus-or-the-committee-that-writes-code">Metaculus, or the committee that writes code</h2> <p>Our Metaculus bot is a committee of three researchers with one editor, and the rule that defines it is that the researchers are not allowed to hand-wave. Each question first goes through iterative research. A search agent pulls from news and web sources through a single gateway, an analyst critiques what came back, and a supervisor either declares the evidence sufficient or emits targeted sub-queries for another round.</p> <p>Then three researchers attack the question in parallel, each deliberately running on a different model, so their mistakes decorrelate. Each researcher must anchor on prediction-market and community priors where they exist, and downweight thin ones. Each must state a base rate before updating on news. And each must express its final model as Python. Real scipy distributions, Monte Carlo with at least ten thousand samples, no magic numbers, every constant tagged as researched or assumed. The code actually runs. If <code class="language-plaintext highlighter-rouge">predict()</code> fails or returns the wrong outcome keys, the error goes back to the researcher and it tries again.</p> <p>A consensus agent then reads all three, scores each on analysis quality and model soundness, assigns weights, is allowed to throw a researcher out entirely, fixes unit mistakes (a researcher who says “75” when the question wants 75,000,000 gets corrected, not trusted), and takes the weighted average. Before anything is submitted, there is one last discipline, an overconfidence tax applied exactly once:</p> \[X = \min(10 - c,\ 0.2\,p)\] <p>where \(c\) is the researcher’s own certainty out of ten and \(p\) is the leaning-side estimate in percent, and the estimate gets shaved by \(X\) toward the middle. The rule comes with a clause we consider load-bearing: you are not allowed to tune \(c\) to keep the number you already wanted.</p> <p>The other half of the Metaculus story is operations. The bot runs every twenty minutes, first from CI, then from a server with cron, tmux, and a lockfile so runs never overlap. Every external API sits behind a dispatcher that enforces per-service rate limits with adaptive backoff, because Metaculus wants one request every four seconds and news APIs want less than that. And we have the war story that justifies all of it. One night the dispatcher process died at 03:20 UTC. Cron kept firing every twenty minutes, each run hit connection refused, and by 04:40 the question had closed without our forecast. The forecasting was fine. The plumbing lost the points. In live tournaments, reliability is not an engineering nicety, it is a scoring term.</p> <h2 id="prophethacks-or-32-hours-and-a-bot-called-greeniebot">ProphetHacks, or 32 hours and a bot called GreenieBot</h2> <p>Before writing any code for the hackathon, we studied the field. Metaculus bots post their reasoning publicly, and we had been reading the traces of a strong one called GreenieBot. We pulled its public traces, distilled them into two lists, behaviors to copy and behaviors to avoid, and baked both into our prompts as few-shot examples. Some of those lessons are still in our prompt files verbatim, like the reminder that models systematically underprice questions where a benchmark score is already near the threshold, and the line we quote at each other: overweighting formal caution can be as damaging as overconfidence.</p> <p>The hackathon agent itself is small and paranoid. One HTTP endpoint. Retrieval is bounded Exa search planned by a cheap model, two rounds, a handful of queries per round, at most ten sources, under a hard 420-second wall clock. Forecasting is two independent forecaster-verifier branches running in parallel, the verifier hunting resolver mistakes, prior misuse, and overconfidence, and a synthesizer that merges the branches without ever smearing to uniform. And if anything anywhere throws, the agent returns a uniform fallback rather than nothing, because completion rate is scored and a missed submission is worse than an honest coin flip. The line from our submission notes: a beautiful forecast that misses the schema is still a failed forecast.</p> <p>One Kalshi-specific detail cost us real thought. Listed outcomes on a market do not have to sum to one, the resolver semantics are per-label, so the agent preserves calibrated per-label probabilities and refuses to normalize unless the resolver says the outcomes are exhaustive and exclusive. It is exactly the kind of detail that silently costs points if your pipeline helpfully normalizes behind your back.</p> <p>On the live PnL leaderboard we sat first for a moment. We ended third.</p> <h2 id="prophet-arena-or-staying-live">Prophet Arena, or staying live</h2> <p>After the hackathon we took the same core, scrubbed it into a clean deployment, and kept it standing on Prophet Arena, where events keep arriving from real markets and the grading never stops. The engineering brief changes when there is no closing ceremony. Under load testing, three parallel requests complete in about 39 seconds each with both forecast branches running, and the whole pipeline stays comfortably under the ten-minute budget per question. Same philosophy as the hackathon, calibration over confidence, schema over beauty, always answer.</p> <h2 id="upstart-or-knowing-when-not-to-send-an-agent">Upstart, or knowing when not to send an agent</h2> <p>The Upstart Macro Index competition asked for monthly index forecasts with uncertainty bands. We tracked the index’s regime, fit AR(1) models on the recent window, and bootstrapped the intervals. The index peaked around 1.67 in late 2023 and read 1.39 in December 2025, with California diverging well below the national line, and our submissions came down to reading monetary policy and sector layoffs correctly, then letting a two-parameter model from a statistics textbook do the arithmetic. Knowing when the right forecaster is not an agent is also a forecasting skill.</p> <h2 id="what-carried-over">What carried over</h2> <p>Across four arenas, the same three lessons kept re-proving themselves.</p> <p>Reliability is a scoring term. Fallbacks, rate limits, lockfiles, timeouts, completion rate. Nearly every point we lost all season was lost by plumbing, not by reasoning.</p> <p>Calibration wants machinery, not vibes. The explicit shrink formula, verifiers whose job is to attack overconfidence, market priors as anchors, unit-checking before aggregation. Every one of these exists because we watched a raw model be confidently wrong in a specific, repeatable way.</p> <p>And the one that became a research question. Ask a strong model the same question in different clothes, a binary here, the same thing as a multiple choice there, and the numbers stop agreeing with each other. Accuracy kept improving all season. Consistency did not. That observation turned into our working paper, <a href="https://openreview.net/forum?id=Z51qVtmHAv" rel="external nofollow noopener" target="_blank">Brittle Prophets</a>, where we test whether a causal world model can actually fix this.</p> </div> </article> </div> <script>
+  (() => {
+    const addReadingGuide = () => {
+      const rail = document.getElementById('toc-sidebar');
+      const title = document.querySelector('.post-title')?.textContent?.trim();
+      const article = document.querySelector('#markdown-content');
+      if (!rail || !title || !article || rail.querySelector('.post-toc-intro')) return;
+
+      const wordCount = (article.innerText || '').trim().split(/\s+/).filter(Boolean).length;
+      const minutes = Math.max(1, Math.ceil(wordCount / 220));
+      const intro = document.createElement('div');
+      intro.className = 'post-toc-intro';
+
+      const heading = document.createElement('p');
+      heading.className = 'post-toc-intro__title';
+      heading.textContent = title;
+
+      const time = document.createElement('p');
+      time.className = 'post-toc-intro__time';
+      time.textContent = `${minutes} min read`;
+
+      intro.append(heading, time);
+      rail.prepend(intro);
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', addReadingGuide, { once: true });
+    } else {
+      addReadingGuide();
+    }
+  })();
+</script> </div> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Anshul Thakur. </div> </footer> <script>
   window.alFolio = {
     compatBootstrap: false
   };
-</script> <script src="/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/al_math/js/mathjax-setup.js"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script src="/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script> <script src="/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script> <script defer src="/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/al_img_tools/js/zoom.js"></script> <script defer src="/assets/js/progress-bar.js?v=499464c5c63ced6cf7ad62509f1e2610" type="text/javascript"></script> <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script> <script>
+</script> <script src="/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/al_math/js/mathjax-setup.js"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script src="/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script> <script defer src="https://cdn.jsdelivr.net/npm/tocbot@4.36.4/dist/tocbot.min.js" integrity="sha256-lo/r+jQ81wWrxdIiiiEEd538z4+dTJTt+leOuAS7GCw=" crossorigin="anonymous"></script> <script src="/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script> <script defer src="/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/al_img_tools/js/zoom.js"></script> <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script> <script>
     addBackToTop();
   </script> <script type="module" src="/assets/al_search/js/search/ninja-keys.min.js"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/al_search/js/search-setup.js"></script> <script>
 // get the ninja-keys element
