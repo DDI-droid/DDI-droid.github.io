@@ -23,7 +23,7 @@ layout: default
 
   body:has(#toc-sidebar) .container[role='main'] > .row {
     display: grid;
-    grid-template-columns: minmax(180px, 21vw) minmax(0, min(54vw, 850px)) minmax(0, 1fr);
+    grid-template-columns: minmax(min(15.5vw, 290px), 1fr) minmax(0, 1110px) minmax(0, 1fr);
     gap: clamp(1.25rem, 2.2vw, 2.75rem);
     align-items: start;
     margin-inline: 0;
@@ -41,19 +41,19 @@ layout: default
   body:has(#toc-sidebar) #toc-sidebar {
     position: fixed;
     z-index: 20;
-    top: 57px;
+    top: var(--navbar-h, 57px);
     left: 0;
     display: flex;
-    width: min(21vw, 400px);
-    height: calc(100vh - 57px);
-    max-height: calc(100vh - 57px);
+    width: min(15.5vw, 290px);
+    height: calc(100vh - var(--navbar-h, 57px));
+    max-height: calc(100vh - var(--navbar-h, 57px));
     flex-direction: column;
     overflow: visible;
     padding: 22px 0 20px 33px;
     border: 0;
     color: var(--global-text-color-light);
     font:
-      500 0.88rem/1.45 system-ui,
+      500 15.5px/1.45 system-ui,
       sans-serif;
     transition:
       opacity 0.25s ease-in-out 0.5s,
@@ -88,7 +88,7 @@ layout: default
     margin: 0 0 0.45rem;
     color: var(--global-text-color-light);
     font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
-    font-size: 1.12rem;
+    font-size: 19px;
     font-variant: small-caps;
     line-height: 1.3;
   }
@@ -97,7 +97,7 @@ layout: default
     margin: 0;
     color: var(--global-text-color-light);
     font:
-      400 0.78rem/1.4 system-ui,
+      400 13.5px/1.4 system-ui,
       sans-serif;
   }
 
@@ -176,12 +176,12 @@ layout: default
 
   body:has(#toc-sidebar) .post {
     width: 100%;
-    max-width: 850px;
+    max-width: 1110px;
     margin: 0;
   }
 
   body:has(#toc-sidebar) .post-header {
-    max-width: 850px;
+    max-width: 1110px;
     margin: 0 0 2.35rem;
     padding: 0 0 1.5rem;
     border-bottom: 1px solid var(--global-divider-color);
@@ -191,7 +191,7 @@ layout: default
     margin: 0 0 1rem;
     color: var(--global-text-color);
     font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
-    font-size: clamp(2.25rem, 3.2vw, 3.45rem);
+    font-size: clamp(36px, 3vw, 56px);
     font-weight: 500;
     letter-spacing: -0.035em;
     line-height: 1.08;
@@ -211,13 +211,13 @@ layout: default
   }
 
   body:has(#toc-sidebar) .post-content {
-    max-width: 850px;
+    max-width: 1110px;
   }
 
   body:has(#toc-sidebar) #markdown-content {
     color: var(--global-text-color);
     font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
-    font-size: clamp(1.12rem, 1.02rem + 0.24vw, 1.28rem);
+    font-size: clamp(18px, 16.5px + 0.27vw, 22px);
     font-weight: 400;
     letter-spacing: 0.003em;
     line-height: 1.62;
@@ -240,17 +240,17 @@ layout: default
 
   body:has(#toc-sidebar) #markdown-content h2 {
     margin: 2.55em 0 0.7em;
-    font-size: clamp(1.7rem, 2.1vw, 2.15rem);
+    font-size: clamp(27px, 1.95vw, 37px);
   }
 
   body:has(#toc-sidebar) #markdown-content h3 {
     margin: 1.9em 0 0.65em;
-    font-size: clamp(1.35rem, 1.55vw, 1.6rem);
+    font-size: clamp(21.5px, 1.4vw, 27px);
   }
 
   body:has(#toc-sidebar) #markdown-content h4 {
     margin: 1.6em 0 0.55em;
-    font-size: 1.2rem;
+    font-size: 1.05em;
   }
 
   body:has(#toc-sidebar) #markdown-content a {

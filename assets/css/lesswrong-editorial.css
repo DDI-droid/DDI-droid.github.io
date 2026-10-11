@@ -52,3 +52,32 @@ body [role="main"] video {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Size: on desktop, read the site at the scale alexzhang13.github.io is read at.
+   al-folio is sized in rem, so a 125% root scales the navbar, headings and text
+   together; containers widen by the same factor. Phones and tablets keep 100%. */
+:root {
+  --navbar-h: 57px;
+}
+
+@media (min-width: 1200px) {
+  html {
+    font-size: 125%;
+  }
+
+  :root {
+    --navbar-h: 71px;
+  }
+
+  .container {
+    max-width: 1160px;
+  }
+}
+
+body.fixed-top-nav {
+  padding-top: var(--navbar-h);
+}
+
+body :is(h1, h2, h3, h4, h5, h6) {
+  scroll-margin-top: calc(var(--navbar-h) + 12px);
+}
