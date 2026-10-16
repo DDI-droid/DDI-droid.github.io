@@ -1,569 +1,126 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> Announcement_2 | Anshul Thakur </title> <meta name="author" content="Anshul Thakur"> <meta name="description" content="Anshul Thakur — researcher working on Policy Language Models, meta-reasoning, and LLM inference-time scaling. "> <meta name="keywords" content="Anshul Thakur, policy language models, meta-reasoning, LLM, machine learning research"> <meta property="og:site_name" content="Anshul Thakur"> <meta property="og:type" content="website"> <meta property="og:title" content="Anshul Thakur | Announcement_2"> <meta property="og:url" content="https://ddi-droid.github.io/news/announcement_2/"> <meta property="og:description" content="Anshul Thakur — researcher working on Policy Language Models, meta-reasoning, and LLM inference-time scaling. "> <meta property="og:locale" content="en"> <meta name="twitter:card" content="summary"> <meta name="twitter:title" content="Announcement_2"> <meta name="twitter:description" content="Anshul Thakur — researcher working on Policy Language Models, meta-reasoning, and LLM inference-time scaling. "> <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;"> <style>
-  :root {
-    --max-content-width: 930px;
-  }
-</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%A7%A0&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=f0b101217084a90093badfe99ff9a7d1"> <link rel="canonical" href="https://ddi-droid.github.io/news/announcement_2/"> <script src="/assets/js/theme.js?v=7af685e2ba20b37fef545c97b8064050"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
-    initTheme();
-  </script> <link rel="stylesheet" href="/assets/css/lesswrong-editorial.css?v=de2050510b86166370e9dbc234ae951a"> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> <span class="font-weight-bold">Anshul</span> Thakur </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item "> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">projects </a> </li> <li class="nav-item "> <a class="nav-link" href="/academics/">academics </a> </li> <li class="nav-item active"> <a class="nav-link" href="/news/">news <span class="sr-only">(current)</span> </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> </header> <div class="container mt-5" role="main"> <style>
-  body:has(#toc-sidebar) .container[role='main'] {
-    width: 100%;
-    max-width: none;
-    margin-inline: auto;
-    padding-inline: clamp(1rem, 2.2vw, 2.5rem);
-  }
-
-  body:has(#toc-sidebar) .container[role='main'] > .row {
-    display: grid;
-    grid-template-columns: minmax(min(15.5vw, 290px), 1fr) minmax(0, 1110px) minmax(0, 1fr);
-    gap: clamp(1.25rem, 2.2vw, 2.75rem);
-    align-items: start;
-    margin-inline: 0;
-  }
-
-  body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-3,
-  body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-9 {
-    width: auto;
-    max-width: none;
-    min-width: 0;
-    padding: 0;
-    flex: none;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar {
-    position: fixed;
-    z-index: 20;
-    top: var(--navbar-h, 57px);
-    left: 0;
-    display: flex;
-    width: min(15.5vw, 290px);
-    height: calc(100vh - var(--navbar-h, 57px));
-    max-height: calc(100vh - var(--navbar-h, 57px));
-    flex-direction: column;
-    overflow: visible;
-    padding: 22px 0 20px 33px;
-    border: 0;
-    color: var(--global-text-color-light);
-    font:
-      500 15.5px/1.45 system-ui,
-      sans-serif;
-    transition:
-      opacity 0.25s ease-in-out 0.5s,
-      transform 0.5s ease-in-out 0.5s,
-      height 0.4s ease-in-out,
-      max-height 0.4s ease-in-out;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar::before {
-    position: absolute;
-    left: 20px;
-    pointer-events: none;
-    content: '';
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar::before {
-    top: 48px;
-    bottom: 20px;
-    width: 1px;
-    background: var(--global-divider-color);
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .post-toc-intro {
-    position: relative;
-    z-index: 1;
-    margin: 0 0 0.8rem;
-    opacity: 0;
-    transition: opacity 0.25s ease;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .post-toc-intro__title {
-    margin: 0 0 0.45rem;
-    color: var(--global-text-color-light);
-    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
-    font-size: 19px;
-    font-variant: small-caps;
-    line-height: 1.3;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .post-toc-intro__time {
-    margin: 0;
-    color: var(--global-text-color-light);
-    font:
-      400 13.5px/1.4 system-ui,
-      sans-serif;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar > .toc-list {
-    display: flex;
-    min-height: 0;
-    flex: 1 1 auto;
-    flex-direction: column;
-    justify-content: space-evenly;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .toc-list-item {
-    position: relative;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .toc-link {
-    display: block;
-    padding: 0.1rem 0;
-    color: var(--global-text-color-light);
-    font: inherit;
-    line-height: 1.4;
-    text-decoration: none;
-    opacity: 0;
-    transition:
-      color 0.25s ease,
-      opacity 0.25s ease;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .toc-link::before {
-    display: none !important;
-    background-color: transparent !important;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .toc-link.is-active-link {
-    color: var(--global-text-color-light);
-    font-weight: 500;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .toc-list-item.is-collapsible {
-    padding-left: 0.8rem;
-    font-size: 0.92em;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .toc-list-item::before {
-    position: absolute;
-    top: 0.64em;
-    left: -0.8rem;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--global-text-color-light);
-    content: '';
-    opacity: 0.75;
-    transition:
-      background-color 0.25s ease,
-      transform 0.25s ease;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar:hover .post-toc-intro,
-  body:has(#toc-sidebar) #toc-sidebar:focus-within .post-toc-intro,
-  body:has(#toc-sidebar) #toc-sidebar:hover .toc-link,
-  body:has(#toc-sidebar) #toc-sidebar:focus-within .toc-link {
-    opacity: 1;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .toc-link:hover,
-  body:has(#toc-sidebar) #toc-sidebar .toc-link:focus-visible {
-    color: var(--global-text-color);
-  }
-
-  body:has(#toc-sidebar) .post {
-    width: 100%;
-    max-width: 1110px;
-    margin: 0;
-  }
-
-  body:has(#toc-sidebar) .post-header {
-    max-width: 1110px;
-    margin: 0 0 2.35rem;
-    padding: 0 0 1.5rem;
-    border-bottom: 1px solid var(--global-divider-color);
-  }
-
-  body:has(#toc-sidebar) .post-title {
-    margin: 0 0 1rem;
-    color: var(--global-text-color);
-    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
-    font-size: clamp(36px, 3vw, 56px);
-    font-weight: 500;
-    letter-spacing: -0.035em;
-    line-height: 1.08;
-  }
-
-  body:has(#toc-sidebar) .post-meta,
-  body:has(#toc-sidebar) .post-tags {
-    color: var(--global-text-color-light);
-    font-family: system-ui, sans-serif;
-    font-size: 0.82rem;
-    letter-spacing: 0.01em;
-  }
-
-  body:has(#toc-sidebar) .post-tags {
-    padding-top: 0.35rem;
-    padding-bottom: 0;
-  }
-
-  body:has(#toc-sidebar) .post-content {
-    max-width: 1110px;
-  }
-
-  body:has(#toc-sidebar) #markdown-content {
-    color: var(--global-text-color);
-    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
-    font-size: clamp(18px, 16.5px + 0.27vw, 22px);
-    font-weight: 400;
-    letter-spacing: 0.003em;
-    line-height: 1.62;
-  }
-
-  body:has(#toc-sidebar) #markdown-content p {
-    margin: 0 0 1.3em;
-    line-height: inherit;
-  }
-
-  body:has(#toc-sidebar) #markdown-content h2,
-  body:has(#toc-sidebar) #markdown-content h3,
-  body:has(#toc-sidebar) #markdown-content h4 {
-    color: var(--global-text-color);
-    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
-    font-weight: 500;
-    letter-spacing: -0.025em;
-    line-height: 1.2;
-  }
-
-  body:has(#toc-sidebar) #markdown-content h2 {
-    margin: 2.55em 0 0.7em;
-    font-size: clamp(27px, 1.95vw, 37px);
-  }
-
-  body:has(#toc-sidebar) #markdown-content h3 {
-    margin: 1.9em 0 0.65em;
-    font-size: clamp(21.5px, 1.4vw, 27px);
-  }
-
-  body:has(#toc-sidebar) #markdown-content h4 {
-    margin: 1.6em 0 0.55em;
-    font-size: 1.05em;
-  }
-
-  body:has(#toc-sidebar) #markdown-content a {
-    text-decoration-thickness: 0.055em;
-    text-underline-offset: 0.16em;
-  }
-
-  body:has(#toc-sidebar) #markdown-content blockquote {
-    margin: 1.8em 0;
-    padding: 0.2em 0 0.2em 1.1em;
-    border-left: 2px solid var(--global-divider-color);
-    background: transparent;
-    font-size: 1.04em;
-  }
-
-  body:has(#toc-sidebar) #markdown-content blockquote p:last-child {
-    margin-bottom: 0;
-  }
-
-  body:has(#toc-sidebar) #markdown-content pre,
-  body:has(#toc-sidebar) #markdown-content code {
-    font-size: 0.86em;
-  }
-
-  body:has(#toc-sidebar) #markdown-content img,
-  body:has(#toc-sidebar) #markdown-content video {
-    max-width: 100%;
-    height: auto;
-  }
-
-  body:has(#toc-sidebar) #markdown-content table {
-    display: block;
-    max-width: 100%;
-    overflow-x: auto;
-  }
-
-  body:has(#toc-sidebar) #markdown-content .footnotes {
-    margin-top: 3rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--global-divider-color);
-    color: var(--global-text-color-light);
-    font-size: 0.88em;
-  }
-
-  body:has(#toc-sidebar) .post .post-content > hr {
-    margin: 2.5rem 0;
-    border-color: var(--global-divider-color);
-    opacity: 0.75;
-  }
-
-  @media (max-width: 1050px) {
-    body:has(#toc-sidebar) .container[role='main'] {
-      max-width: 860px;
-      padding-inline: 1.25rem;
-    }
-
-    body:has(#toc-sidebar) .container[role='main'] > .row {
-      display: block;
-    }
-
-    body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-3,
-    body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-9 {
-      width: 100%;
-    }
-
-    body:has(#toc-sidebar) #toc-sidebar {
-      position: static;
-      width: 100%;
-      height: auto;
-      max-height: none;
-      margin: 0 0 2rem;
-      padding: 1rem 1.1rem;
-      overflow: visible;
-      border: 1px solid var(--global-divider-color);
-      border-radius: 0.35rem;
-    }
-
-    body:has(#toc-sidebar) #toc-sidebar::before {
-      display: none;
-    }
-
-    body:has(#toc-sidebar) #toc-sidebar .post-toc-intro,
-    body:has(#toc-sidebar) #toc-sidebar .toc-link {
-      opacity: 1;
-    }
-
-    body:has(#toc-sidebar) #toc-sidebar > .toc-list {
-      display: block;
-    }
-
-    body:has(#toc-sidebar) #toc-sidebar .toc-list-item {
-      margin-bottom: 0.35rem;
-    }
-
-    body:has(#toc-sidebar) #toc-sidebar .toc-list-item::before {
-      left: -0.98rem;
-    }
-
-    body:has(#toc-sidebar) .post,
-    body:has(#toc-sidebar) .post-header,
-    body:has(#toc-sidebar) .post-content {
-      max-width: none;
-    }
-  }
-
-  @media (max-width: 640px) {
-    body:has(#toc-sidebar) .container[role='main'] {
-      padding-inline: 1rem;
-    }
-
-    body:has(#toc-sidebar) .post-title {
-      font-size: clamp(2rem, 9vw, 2.65rem);
-    }
-
-    body:has(#toc-sidebar) #markdown-content {
-      font-size: 1.1rem;
-      line-height: 1.62;
-    }
-  }
-</style> <div class="post"> <header class="post-header"> <h1 class="post-title">Announcement_2</h1> <p class="post-meta"> Created on May 27, 2026 </p> <p class="post-tags"> <i class="fa-solid fa-calendar fa-sm"></i> 2026 </p> </header> <article class="post-content"> <div id="markdown-content"> <p>Our forecaster reached Top-3 on the <a href="https://www.prophethacks.com/" rel="external nofollow noopener" target="_blank">ProphetHacks</a> live leaderboard, an AI forecasting hackathon hosted at UChicago and sponsored by Sigma Lab, Fleet AI, and Kalshi.</p> </div> </article> </div> <script>
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <title>News | Anshul Thakur</title> <meta name="description" content="Anshul Thakur — researcher working on Policy Language Models, meta-reasoning, and LLM inference-time scaling."> <meta name="author" content="Anshul Thakur"> <meta name="keywords" content="Anshul Thakur, policy language models, meta-reasoning, LLM, machine learning research"> <meta property="og:site_name" content="Anshul Thakur"> <meta property="og:title" content="News"> <meta property="og:description" content="Anshul Thakur — researcher working on Policy Language Models, meta-reasoning, and LLM inference-time scaling."> <meta property="og:type" content="website"> <meta property="og:url" content="https://ddi-droid.github.io/news/announcement_2/"> <link rel="canonical" href="https://ddi-droid.github.io/news/announcement_2/"> <link rel="alternate" type="application/rss+xml" title="Anshul Thakur" href="/feed.xml"> <link rel="icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%A7%A0&lt;/text&gt;&lt;/svg&gt;"> <link rel="preload" href="/assets/fonts/et-book-roman-line-figures.woff" as="font" type="font/woff" crossorigin> <link rel="preload" href="/assets/fonts/texgyrepagella-regular.otf" as="font" type="font/otf" crossorigin> <link rel="stylesheet" href="/assets/css/lesswrong/lesswrong.css"> <link rel="stylesheet" href="/assets/css/lesswrong/lesswrong-site.css"> <script>
+      // Theme before paint, kept as "light", "dark" or "system" in localStorage.theme.
+      (function () {
+        var t = null;
+        try { t = localStorage.getItem('theme'); } catch (e) {}
+        var dark = t === 'dark' || ((t === null || t === 'system') && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme-setting', t || 'system');
+      })();
+    </script> </head> <body class="whiteBackground theme-default"> <script>
+      if (document.documentElement.getAttribute('data-theme') === 'dark') document.body.className = document.body.className.replace('theme-default', 'theme-dark');
+    </script> <div id="wrapper" class="wrapper PageBackgroundWrapper-wrapper"> <div class="Layout-topLevelContainer"> <div class="Layout-pageContent"> <div class="Header-root Header-headerHeight"> <div class="Header-headroom headroom-wrapper"> <div class="headroom headroom--unfixed" id="headroom"> <header class="Header-appBar Header-blackBackgroundAppBar"> <div class="Header-toolbar"> <button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit Header-menuButton Header-hideSmUp" id="menu-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-menu"> <span class="MuiIconButton-label"><svg class="MuiSvgIcon-root" focusable="false" viewbox="0 0 24 24" aria-hidden="true"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></span> </button> <h2 class="Typography-root Typography-title Header-title"> <a class="Header-titleLink" href="/">Anshul Thakur</a> </h2> <div class="Header-rightHeaderItems"> <nav class="Header-navLinks Header-hideXsDown" aria-label="Site"><a class="Header-navLink" href="/">about</a><a class="Header-navLink" href="/blog/">blog</a><a class="Header-navLink" href="/publications/">publications</a><a class="Header-navLink" href="/projects/">projects</a><a class="Header-navLink" href="/academics/">academics</a><a class="Header-navLink" href="/news/">news</a></nav> <button class="Header-themeToggle" id="theme-toggle" type="button" title="Change theme" aria-label="Change colour theme"> <svg width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg> </button> </div> </div> </header> </div> </div> </div> <nav class="site-menu" id="site-menu" aria-label="Site" hidden><a class="Header-navLink" href="/">about</a><a class="Header-navLink" href="/blog/">blog</a><a class="Header-navLink" href="/publications/">publications</a><a class="Header-navLink" href="/projects/">projects</a><a class="Header-navLink" href="/academics/">academics</a><a class="Header-navLink" href="/news/">news</a></nav> <div class="RouteRootClient-main"> <div> <div class="RouteRootClient-centralColumn"> <div class="MultiToCLayout-root"> <div class="MultiToCLayout-tableOfContents" style='grid-template-areas:"... toc0 gap1 content0 gap2 rhs0 ..." "... toc0 gap1 content1 gap2 rhs1 ...";grid-template-rows:min-content 1fr'> <div style="grid-area:toc0" class="MultiToCLayout-toc MultiToCLayout-normalHeaderToc"> <div class="MultiToCLayout-stickyBlockScroller MultiToCLayoutStickyBlockScroller"> <div class="MultiToCLayout-stickyBlock"> <div class="FixedPositionToC-root" id="fixed-toc"> <div class="FixedPositionToC-tocWrapper"> <div class="TableOfContentsRow-root TableOfContentsRow-title FixedPositionToC-headingOpacity"> <div class="FixedPositionToC-tocTitle">News</div> </div> </div> <div class="FixedPositionToC-wrapper"> <div class="FixedPositionToC-progressBarContainer"><div class="FixedPositionToC-progressBar" id="toc-progress"></div></div> <div class="FixedPositionToC-rows" id="toc-rows"></div> </div> </div> </div> </div> </div> <div class="MultiToCLayout-gap1"></div> <div class="MultiToCLayout-content" style="grid-area:content0"> <div id="postBody" class="PostsPage-centralColumn PostsPage-postBody PostsPage-audioPlayerHidden"> <div class="PostsPage-title"> <div class="PostsPage-centralColumn"> <div class="LWPostsPageHeader-root"> <div class="LWPostsPageHeader-titleSection"> <div class="LWPostsPageHeader-title"> <div> <h1 class="Typography-root Typography-display3 PostsPageTitle-root post-title"> <a class="PostsPageTitle-link" href="/news/announcement_2/"><span class="PostsPageTitle-lastWord">News</span></a> </h1> </div> <div class="LWPostsPageHeader-authorAndSecondaryInfo"> <div class="LWPostsPageHeader-date"><span class="PostsPageDate-date"><time datetime="2026-05-27T00:00:00+00:00">27th May 2026</time></span></div> </div> </div> </div> </div> </div> </div> <div class="PostsPage-postContent instapaper_body ContentStyles-base content ContentStyles-postBody"> <div class="commentOnSelection"> <div id="postContent"> <div> <div id="markdown-content"> <p>Our forecaster reached Top-3 on the <a href="https://www.prophethacks.com/" rel="external nofollow noopener" target="_blank">ProphetHacks</a> live leaderboard, an AI forecasting hackathon hosted at UChicago and sponsored by Sigma Lab, Fleet AI, and Kalshi.</p> </div> </div> </div> </div> </div> </div> </div> <div class="MultiToCLayout-rhs" style="grid-area:rhs0"> <div class="PostsPage-reserveSpaceForSidenotes"></div> <div class="SideItems-sidebar"></div> </div> <div class="MultiToCLayout-gap1"></div> <div class="MultiToCLayout-content" style="grid-area:content1"> <div class="PostsPage-centralColumn PostsPage-betweenPostAndComments"> </div> </div> </div> </div> <script>
   (() => {
-    const addReadingGuide = () => {
-      const rail = document.getElementById('toc-sidebar');
-      const title = document.querySelector('.post-title')?.textContent?.trim();
-      const article = document.querySelector('#markdown-content');
-      if (!rail || !title || !article || rail.querySelector('.post-toc-intro')) return;
-
-      const wordCount = (article.innerText || '').trim().split(/\s+/).filter(Boolean).length;
-      const minutes = Math.max(1, Math.ceil(wordCount / 220));
-      const intro = document.createElement('div');
-      intro.className = 'post-toc-intro';
-
-      const heading = document.createElement('p');
-      heading.className = 'post-toc-intro__title';
-      heading.textContent = title;
-
-      const time = document.createElement('p');
-      time.className = 'post-toc-intro__time';
-      time.textContent = `${minutes} min read`;
-
-      intro.append(heading, time);
-      rail.prepend(intro);
+    // Contents rail: one row per heading, each row sized by the length of its section,
+    // a progress bar for the viewport, the current section highlighted, revealed on hover.
+    const article = document.getElementById('markdown-content');
+    const rows = document.getElementById('toc-rows');
+    const toc = document.getElementById('fixed-toc');
+    const bar = document.getElementById('toc-progress');
+    const headings = [...article.querySelectorAll('h2, h3, h4')];
+    if (!headings.length) { toc.hidden = true; return; }
+    headings.forEach((h, i) => { if (!h.id) h.id = 'section-' + i; });
+    const tops = () => headings.map(h => h.getBoundingClientRect().top + window.scrollY);
+    const docEnd = () => article.getBoundingClientRect().bottom + window.scrollY;
+    const entries = headings.map(h => {
+      const level = Number(h.tagName[1]) - 1;
+      const wrap = document.createElement('div');
+      wrap.className = 'FixedPositionToC-rowWrapper';
+      wrap.innerHTML = '<div class="FixedPositionToC-rowDotContainer"><div class="FixedPositionToC-rowDot">•</div>' +
+        '<div class="FixedPositionToC-rowOpacity"><div class="TableOfContentsRow-root TableOfContentsRow-level' + level + '">' +
+        '<a class="TableOfContentsRow-link TableOfContentsRow-highlightDot"></a></div></div></div>';
+      const link = wrap.querySelector('a');
+      link.href = '#' + h.id;
+      link.textContent = h.textContent.trim();
+      rows.append(wrap);
+      return { wrap, row: wrap.querySelector('.TableOfContentsRow-root') };
+    });
+    const sizeRows = () => {
+      const t = tops(), end = docEnd();
+      entries.forEach((e, i) => {
+        const len = Math.max(1, (i + 1 < t.length ? t[i + 1] : end) - t[i]);
+        e.wrap.style.flex = len + ' 1 0px';
+      });
     };
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', addReadingGuide, { once: true });
-    } else {
-      addReadingGuide();
-    }
+    const track = () => {
+      const t = tops(), y = window.scrollY, mark = y + window.innerHeight * 0.3;
+      let current = -1;
+      t.forEach((top, i) => { if (top <= mark) current = i; });
+      entries.forEach((e, i) => e.row.classList.toggle('TableOfContentsRow-highlighted', i === current));
+      const first = t[0] || 0, span = Math.max(1, docEnd() - first);
+      const h = rows.getBoundingClientRect().height;
+      const top = Math.max(0, Math.min(h, (y - first) / span * h));
+      const height = Math.max(0, Math.min(h - top, window.innerHeight / span * h));
+      bar.style.setProperty('--windowTop', top + 'px');
+      bar.style.setProperty('--windowHeight', height + 'px');
+    };
+    toc.addEventListener('mouseenter', () => toc.classList.add('FixedPositionToC-hover'));
+    toc.addEventListener('mouseleave', () => toc.classList.remove('FixedPositionToC-hover'));
+    const refresh = () => { sizeRows(); track(); };
+    window.addEventListener('scroll', track, { passive: true });
+    window.addEventListener('resize', refresh);
+    window.addEventListener('load', refresh);
+    if (document.fonts) document.fonts.ready.then(refresh);
+    refresh();
   })();
-</script> </div> <script>
-  window.alFolio = {
-    compatBootstrap: false
-  };
-</script> <script src="/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/al_math/js/mathjax-setup.js"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script src="/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script> <script src="/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script> <script defer src="/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/al_img_tools/js/zoom.js"></script> <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script> <script>
-    addBackToTop();
-  </script> <script type="module" src="/assets/al_search/js/search/ninja-keys.min.js"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/al_search/js/search-setup.js"></script> <script>
-// get the ninja-keys element
-const ninja = document.querySelector('ninja-keys');
+</script> </div> </div> </div> </div> </div> </div> <script>
+      (() => {
+        // Theme toggle.
+        const root = document.documentElement;
+        const applyTheme = () => {
+          const dark = root.getAttribute('data-theme') === 'dark';
+          document.body.classList.toggle('theme-dark', dark);
+          document.body.classList.toggle('theme-default', !dark);
+        };
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+          const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          root.setAttribute('data-theme', next);
+          root.setAttribute('data-theme-setting', next);
+          try { localStorage.setItem('theme', next); } catch (e) {}
+          applyTheme();
+        });
 
-// add the home and posts menu items
-ninja.data = [{
-    id: "nav-about",
-    title: "about",
-    section: "Navigation",
-    handler: () => {
-      window.location.href = "/";
-    },
-  },{id: "nav-blog",
-          title: "blog",
-          description: "",
-          section: "Navigation",
-          handler: () => {
-            window.location.href = "/blog/";
-          },
-        },{id: "nav-publications",
-          title: "publications",
-          description: "publications by categories in reversed chronological order. generated by jekyll-scholar.",
-          section: "Navigation",
-          handler: () => {
-            window.location.href = "/publications/";
-          },
-        },{id: "nav-projects",
-          title: "projects",
-          description: "Research and things I have built. Blog links where a write-up exists.",
-          section: "Navigation",
-          handler: () => {
-            window.location.href = "/projects/";
-          },
-        },{id: "nav-academics",
-          title: "academics",
-          description: "",
-          section: "Navigation",
-          handler: () => {
-            window.location.href = "/academics/";
-          },
-        },{id: "nav-news",
-          title: "news",
-          description: "",
-          section: "Navigation",
-          handler: () => {
-            window.location.href = "/news/";
-          },
-        },{id: "post-policy-language-models",
-        
-          title: "Policy Language Models",
-        
-        description: "A complementary axis of inference-time scaling that biases the LLM toward abstract computational reasoning. The model authors its computation as policies and keeps its trajectory sufficient and minimal.",
-        section: "Posts",
-        handler: () => {
-          
-            window.location.href = "/blog/2026/policy-language-models/";
-          
-        },
-      },{id: "post-forecasting",
-        
-          title: "Forecasting",
-        
-        description: "The competitions we entered at Kairosity, the agents we built for them, and what live leaderboards taught us about reliability, calibration, and consistency.",
-        section: "Posts",
-        handler: () => {
-          
-            window.location.href = "/blog/2026/forecasting-season/";
-          
-        },
-      },{id: "post-aframework",
-        
-          title: "AFramework",
-        
-        description: "Why I built an agent framework that separates applications from LLM inference, and a tour of how it works.",
-        section: "Posts",
-        handler: () => {
-          
-            window.location.href = "/blog/2025/aframework/";
-          
-        },
-      },{id: "post-pks-we-thought-this-was-hard",
-        
-          title: "PKS: We thought this was hard",
-        
-        description: "How a problem we couldn&#39;t crack for weeks fell to a greedy algorithm, from our paper on manipulating the Kemeny score.",
-        section: "Posts",
-        handler: () => {
-          
-            window.location.href = "/blog/2025/possible-kemeny-score/";
-          
-        },
-      },{id: "post-fixing-table-bounding-boxes-with-rl",
-        
-          title: "Fixing Table Bounding Boxes with RL",
-        
-        description: "Teaching a neural network to repair a table detector&#39;s bounding boxes, with geometric rewards in the open version and a vision model as the judge in the applied one.",
-        section: "Posts",
-        handler: () => {
-          
-            window.location.href = "/blog/2025/table-ocr-rl/";
-          
-        },
-      },{id: "post-polytm-learning-polynomial-time-oracles",
-        
-          title: "PolyTM: learning polynomial-time oracles",
-        
-        description: "An RL environment where a neural network learns to write the computation that solves a problem, instead of guessing the answer.",
-        section: "Posts",
-        handler: () => {
-          
-            window.location.href = "/blog/2025/polytm/";
-          
-        },
-      },{id: "news-samay-our-time-series-foundation-model-at-kairosity-is-top-3-on-the-gift-eval-benchmark-ahead-of-models-from-amazon-ibm-and-google",
-          title: 'Samay, our time-series foundation model at Kairosity, is Top-3 on the GIFT-Eval benchmark,...',
-          description: "",
-          section: "News",},{id: "news-our-forecaster-reached-top-3-on-the-prophethacks-live-leaderboard-an-ai-forecasting-hackathon-hosted-at-uchicago-and-sponsored-by-sigma-lab-fleet-ai-and-kalshi",
-          title: 'Our forecaster reached Top-3 on the ProphetHacks live leaderboard, an AI forecasting hackathon...',
-          description: "",
-          section: "News",},{
-        id: 'social-email',
-        title: 'email',
-        section: 'Socials',
-        handler: () => {
-          window.open("mailto:%74%68%61%6B%75%72.%31%37@%69%69%74%6A.%61%63.%69%6E", "_blank");
-        },
-      },{
-        id: 'social-github',
-        title: 'GitHub',
-        section: 'Socials',
-        handler: () => {
-          window.open("https://github.com/DDI-droid", "_blank");
-        },
-      },{
-        id: 'social-rss',
-        title: 'RSS Feed',
-        section: 'Socials',
-        handler: () => {
-          window.open("/feed.xml", "_blank");
-        },
-      },{
-      id: 'light-theme',
-      title: 'Change theme to light',
-      description: 'Change the theme of the site to Light',
-      section: 'Theme',
-      handler: () => {
-        setThemeSetting("light");
-      },
-    },
-    {
-      id: 'dark-theme',
-      title: 'Change theme to dark',
-      description: 'Change the theme of the site to Dark',
-      section: 'Theme',
-      handler: () => {
-        setThemeSetting("dark");
-      },
-    },
-    {
-      id: 'system-theme',
-      title: 'Use system default theme',
-      description: 'Change the theme of the site to System Default',
-      section: 'Theme',
-      handler: () => {
-        setThemeSetting("system");
-      },
-    },];
+        // Headroom: the bar hides on scroll down and returns on scroll up.
+        const head = document.getElementById('headroom');
+        let lastY = window.scrollY;
+        const headroom = () => {
+          const y = window.scrollY;
+          head.classList.remove('headroom--unfixed', 'headroom--pinned', 'headroom--unpinned', 'headroom--scrolled');
+          if (y <= 0) head.classList.add('headroom--unfixed');
+          else head.classList.add(y < lastY ? 'headroom--pinned' : 'headroom--unpinned', 'headroom--scrolled');
+          lastY = y;
+        };
+        headroom();
+        window.addEventListener('scroll', headroom, { passive: true });
 
-</script> <script src="/assets/al_search/js/shortcut-key.js"></script> </body> </html>
+        // Phone menu.
+        const menuButton = document.getElementById('menu-toggle');
+        const menu = document.getElementById('site-menu');
+        const setMenu = open => {
+          menu.hidden = !open;
+          menuButton.setAttribute('aria-expanded', String(open));
+        };
+        menuButton.addEventListener('click', e => { e.stopPropagation(); setMenu(menu.hidden); });
+        document.addEventListener('click', e => { if (!menu.hidden && !menu.contains(e.target)) setMenu(false); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+
+        // Their "Load More" under long lists.
+        document.querySelectorAll('[data-page-size]').forEach(list => {
+          const size = Number(list.dataset.pageSize);
+          const items = [...list.children];
+          if (items.length <= size) return;
+          let shown = size;
+          const more = document.createElement('a');
+          more.className = 'LoadMore-root LoadMore-afterPostsListMarginTop';
+          more.href = '#';
+          const update = () => {
+            items.forEach((item, i) => { item.hidden = i >= shown; });
+            more.textContent = 'Load More (' + shown + '/' + items.length + ')';
+            if (shown >= items.length) more.remove();
+          };
+          more.addEventListener('click', e => { e.preventDefault(); shown += size; update(); });
+          list.after(more);
+          update();
+        });
+      })();
+    </script> </body> </html>

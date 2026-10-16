@@ -119,14 +119,6 @@ ul#tabs a {
   border: none;
 }
 
-.navbar-nav > li > .dropdown-menu {
-  margin-top: 0px;
-}
-
-.navbar-nav {
-  margin: 0;
-}
-
 @-webkit-keyframes pulsate {
   0% {
     -webkit-transform: scale(1, 1);
@@ -265,14 +257,6 @@ ul#tabs a {
   background-color: #ffccac !important;
   border-color: #ffccac !important;
   transition: 200ms ease !important;
-}
-
-
-.btn-sm {
-  font-size: inherit;
-  font-weight: normal;
-  height: inherit;
-  line-height: inherit;
 }
 
 button.close {
@@ -599,14 +583,6 @@ input.raw_input {
   margin: 0em 0.25em;
   -webkit-box-shadow: none;
   box-shadow: none;
-}
-
-
-video {
-  display: inline;
-  vertical-align: middle;
-  align-content: center;
-  margin-left: 20%;
 }
 
 
