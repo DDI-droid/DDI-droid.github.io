@@ -1,0 +1,18 @@
+---
+layout: profile
+---
+{%- comment -%}
+  The blog index as their profile page: the highlighted post as their top post, then every post in
+  their list under the category tabs, with the sidebar's topics and years.
+{%- endcomment -%}
+{%- assign featured = site.posts | where: 'highlight', true | first -%}
+{%- if featured %}
+{% include lw/top_post.liquid post=featured label='Featured' %}
+{%- endif %}
+<section class="ProfilePageUnshared-allPostsSection">
+  <div class="ProfilePageTabbedSectionUnshared-allPostsLeftColumn">
+    {% include lw/post_tabs.liquid count=site.posts.size %}
+    {% include lw/post_rows.liquid posts=site.posts page_size=10 %}
+  </div>
+  {% include lw/sidebar.liquid topics=true %}
+</section>

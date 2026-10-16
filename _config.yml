@@ -126,7 +126,7 @@ lsi: false # produce an index for related posts
 
 # Pagination
 pagination:
-  enabled: true
+  enabled: false # the blog index lists every post, LessWrong style, with "Load More"
 
 related_blog_posts:
   enabled: true

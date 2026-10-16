@@ -1,0 +1,32 @@
+{%- comment -%}
+  Their profile-page post list: title, summary (the post's description), date and read time.
+  include.posts: the posts, newest first. include.limit: show only that many.
+  include.page_size: show that many, then their "Load More" button reveals the rest.
+{%- endcomment -%}
+{%- assign rows = include.posts | sort: 'date' | reverse -%}
+{%- assign rows_limit = include.limit | default: rows.size -%}
+<div class="ProfilePageAllPostsTabUnshared-postsList TabPanel-tabPanel"{% if include.page_size %} data-page-size="{{ include.page_size }}"{% endif %}>
+  {%- for post in rows limit: rows_limit -%}
+    {%- assign row_read = post.content | number_of_words | divided_by: 220 | plus: 1 -%}
+    {%- if post.redirect contains '://' -%}{%- assign row_href = post.redirect -%}{%- elsif post.redirect -%}{%- assign row_href = post.redirect | relative_url -%}{%- else -%}{%- assign row_href = post.url | relative_url -%}{%- endif -%}
+    <article class="ProfilePageAllPostsTabUnshared-listArticle">
+      <a class="ProfilePage-articleLink" href="{{ row_href }}">
+        <div class="ProfilePageAllPostsTabUnshared-listArticleContent">
+          <div class="ProfilePageAllPostsTabUnshared-listArticleBody ProfilePageAllPostsTabUnshared-listArticleBodyNoImage">
+            <div class="ProfilePageAllPostsTabUnshared-listArticleText ProfilePageAllPostsTabUnshared-listArticleTextNoImage">
+              <h3 class="ProfilePageAllPostsTabUnshared-listArticleTitle"><span class="ProfilePageAllPostsTabUnshared-listArticleTitleText">{{ post.title }}</span></h3>
+              {%- if post.description %}
+              <div class="ProfilePageAllPostsTabUnshared-listArticleSummaryWrapper ProfilePageAllPostsTabUnshared-listArticleSummaryWrapperNoImage"><p class="ProfilePageAllPostsTabUnshared-listArticleSummary ProfilePageAllPostsTabUnshared-listArticleSummaryNoImage">{{ post.description | strip_html }}</p></div>
+              {%- endif %}
+              <div class="ProfilePageAllPostsTabUnshared-listArticleMeta">
+                <span class="ProfilePageAllPostsTabUnshared-listDate"><time datetime="{{ post.date | date_to_xmlschema }}">{% include lw/short_date.liquid date=post.date %}</time></span>
+                <span class="ProfilePageAllPostsTabUnshared-listMetaDivider" aria-hidden="true">•</span>
+                <span class="ProfilePageAllPostsTabUnshared-listKarma">{{ row_read }} min read</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </article>
+  {%- endfor -%}
+</div>

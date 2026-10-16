@@ -1,0 +1,31 @@
+{%- comment -%}
+  News as their profile-page list rows: the item's text (or its title, for items with a page of
+  their own) and the date. include.limit: cap at the page's announcements.limit.
+{%- endcomment -%}
+{%- assign news = site.news | reverse -%}
+{%- assign news_limit = news.size -%}
+{%- if include.limit and page.announcements.limit -%}{%- assign news_limit = page.announcements.limit -%}{%- endif -%}
+{%- if news.size > 0 %}
+<div class="ProfilePageAllPostsTabUnshared-postsList TabPanel-tabPanel">
+  {%- for item in news limit: news_limit %}
+  <article class="ProfilePageAllPostsTabUnshared-listArticle">
+    <div class="ProfilePageAllPostsTabUnshared-listArticleContent">
+      <div class="ProfilePageAllPostsTabUnshared-listArticleBody ProfilePageAllPostsTabUnshared-listArticleBodyNoImage">
+        <div class="ProfilePageAllPostsTabUnshared-listArticleText ProfilePageAllPostsTabUnshared-listArticleTextNoImage">
+          {%- if item.inline %}
+          <div class="ProfilePageAllPostsTabUnshared-listArticleSummaryWrapper ProfilePageAllPostsTabUnshared-listArticleSummaryWrapperNoImage"><p class="ProfilePageAllPostsTabUnshared-listArticleSummary ProfilePageAllPostsTabUnshared-listArticleSummaryNoImage site-newsText">{{ item.content | remove: '<p>' | remove: '</p>' | strip }}</p></div>
+          {%- else %}
+          <h3 class="ProfilePageAllPostsTabUnshared-listArticleTitle"><a class="ProfilePageAllPostsTabUnshared-listArticleTitleText" href="{{ item.url | relative_url }}">{{ item.title }}</a></h3>
+          {%- endif %}
+          <div class="ProfilePageAllPostsTabUnshared-listArticleMeta">
+            <span class="ProfilePageAllPostsTabUnshared-listDate"><time datetime="{{ item.date | date_to_xmlschema }}">{% include lw/short_date.liquid date=item.date %}</time></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+  {%- endfor %}
+</div>
+{%- else %}
+<p>No news so far.</p>
+{%- endif %}

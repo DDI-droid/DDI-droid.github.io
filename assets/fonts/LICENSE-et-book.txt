@@ -1,0 +1,3 @@
+ET Book (et-book-roman-line-figures.woff, et-book-bold-line-figures.woff)
+Designed by Dmitry Krasny, Bonnie Scranton and Edward Tufte; converted by Adam Schwartz.
+Released under the MIT License: https://github.com/edwardtufte/et-book

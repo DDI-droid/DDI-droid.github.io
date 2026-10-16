@@ -1,0 +1,11 @@
+---
+layout: profile
+---
+{%- comment -%} Tag, category and year archives: the blog index's list and sidebar over the archive's posts. {%- endcomment -%}
+<section class="ProfilePageUnshared-allPostsSection">
+  <div class="ProfilePageTabbedSectionUnshared-allPostsLeftColumn">
+    {% include lw/post_tabs.liquid count=page.documents.size %}
+    {% include lw/post_rows.liquid posts=page.documents page_size=10 %}
+  </div>
+  {% include lw/sidebar.liquid topics=true %}
+</section>

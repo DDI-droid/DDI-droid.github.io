@@ -1,68 +1,142 @@
+---
+---
+{%- comment -%}
+  Site shell on lesswrong.com's own markup and stylesheet (assets/css/lesswrong/lesswrong.css,
+  verbatim; additions in lesswrong-site.css). Posts and documents get their white post background,
+  list pages the cream background of their profile page.
+{%- endcomment -%}
+{%- assign author_name = site.first_name | append: ' ' | append: site.last_name -%}
+{%- assign document_page = false -%}
+{%- if page.layout == 'post' or page.layout == 'page' -%}{%- assign document_page = true -%}{%- endif -%}
+{%- capture display_title -%}{% include lw/page_title.liquid %}{%- endcapture -%}
+{%- assign display_title = display_title | strip -%}
+{%- assign description = page.description | default: site.description | strip_html | strip_newlines | strip -%}
+{%- if page.redirect == true -%}
+  {%- assign redirect = '/' | relative_url -%}
+{%- elsif page.redirect contains '://' -%}
+  {%- assign redirect = page.redirect -%}
+{%- elsif page.redirect -%}
+  {%- assign redirect = page.redirect | relative_url -%}
+{%- endif -%}
 <!doctype html>
-<html lang="{{ site.lang }}">
-  <!-- Head -->
+<html lang="{{ site.lang | default: 'en' }}">
   <head>
-    {% if page.redirect %}
-      {% if page.redirect == true %}
-        {% assign redirect = site.baseurl | append: '/' %}
-      {% elsif page.redirect contains '://' %}
-        {% assign redirect = page.redirect %}
-      {% else %}
-        {% assign redirect = page.redirect | relative_url %}
-      {% endif %}
-      <meta http-equiv="refresh" content="3; url={{ redirect }}">
-    {% endif %}
-    {% include head.liquid %}
-    <link rel="stylesheet" href="{{ '/assets/css/lesswrong-editorial.css' | relative_url | bust_file_cache }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if redirect %}<meta http-equiv="refresh" content="3; url={{ redirect }}">{% endif %}
+    <title>{% if page.url == '/' %}{{ author_name }}{% else %}{{ display_title }} | {{ author_name }}{% endif %}</title>
+    <meta name="description" content="{{ description | escape }}">
+    <meta name="author" content="{{ author_name }}">
+    {% if site.keywords %}<meta name="keywords" content="{{ site.keywords }}">{% endif %}
+    <meta property="og:site_name" content="{{ author_name }}">
+    <meta property="og:title" content="{{ display_title | escape }}">
+    <meta property="og:description" content="{{ description | escape }}">
+    <meta property="og:type" content="{% if page.collection == 'posts' %}article{% else %}website{% endif %}">
+    <meta property="og:url" content="{{ page.url | absolute_url }}">
+    {% if page.og_image %}<meta property="og:image" content="{{ page.og_image | absolute_url }}">{% endif %}
+    <link rel="canonical" href="{{ page.url | absolute_url }}">
+    <link rel="alternate" type="application/rss+xml" title="{{ author_name }}" href="{{ '/feed.xml' | relative_url }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>{{ site.icon | default: '🧠' }}</text></svg>">
+    <link rel="preload" href="{{ '/assets/fonts/et-book-roman-line-figures.woff' | relative_url }}" as="font" type="font/woff" crossorigin>
+    <link rel="preload" href="{{ '/assets/fonts/texgyrepagella-regular.otf' | relative_url }}" as="font" type="font/otf" crossorigin>
+    <link rel="stylesheet" href="{{ '/assets/css/lesswrong/lesswrong.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/lesswrong/lesswrong-site.css' | relative_url }}">
+    {% if page._styles %}<style>{{ page._styles }}</style>{% endif %}
+    <script>
+      // Theme before paint, kept as "light", "dark" or "system" in localStorage.theme.
+      (function () {
+        var t = null;
+        try { t = localStorage.getItem('theme'); } catch (e) {}
+        var dark = t === 'dark' || ((t === null || t === 'system') && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme-setting', t || 'system');
+      })();
+    </script>
   </head>
-
-  <!-- Body -->
-  <body class="{% if site.navbar_fixed %}fixed-top-nav{% endif %} {% unless site.footer_fixed %}sticky-bottom-footer{% endunless %}">
-    <!-- Header -->
-    {% include header.liquid %}
-
-    <!-- Content -->
-    <div class="container mt-5" role="main">
-      {% if page.toc and page.toc.sidebar %}
-        {% assign toc_collapse = page.toc.collapse | default: 'expanded' %}
-        {% assign toc_collapse_depth = page.toc.collapse_depth | default: '' %}
-        {% if page.toc.sidebar == 'right' %}
-          <div class="row">
-            <!-- main content area -->
-            <div class="col-sm-9">{{ content }}</div>
-            <!-- sidebar, which will move to the top on a small screen -->
-            <div class="col-sm-3">
-              <nav
-                id="toc-sidebar"
-                class="sticky-top toc toc-sidebar"
-                aria-label="Table of contents"
-                data-toc-collapse="{{ toc_collapse }}"
-                data-toc-collapse-depth="{{ toc_collapse_depth }}"
-              ></nav>
+  <body class="{% if document_page %}whiteBackground{% else %}creamBackground{% endif %} theme-default">
+    <script>
+      if (document.documentElement.getAttribute('data-theme') === 'dark') document.body.className = document.body.className.replace('theme-default', 'theme-dark');
+    </script>
+    <div id="wrapper" class="wrapper PageBackgroundWrapper-wrapper">
+      <div class="Layout-topLevelContainer">
+        <div class="Layout-pageContent">
+          {% include lw/header.liquid white=document_page %}
+          <div class="RouteRootClient-main">
+            <div>
+              <div class="RouteRootClient-centralColumn">
+                {{ content }}
+              </div>
             </div>
           </div>
-        {% else %}
-          <div class="row">
-            <!-- sidebar, which will move to the top on a small screen -->
-            <div class="col-sm-3">
-              <nav
-                id="toc-sidebar"
-                class="sticky-top toc toc-sidebar"
-                aria-label="Table of contents"
-                data-toc-collapse="{{ toc_collapse }}"
-                data-toc-collapse-depth="{{ toc_collapse_depth }}"
-              ></nav>
-            </div>
-            <!-- main content area -->
-            <div class="col-sm-9">{{ content }}</div>
-          </div>
-        {% endif %}
-      {% else %}
-        {{ content }}
-      {% endif %}
+        </div>
+      </div>
     </div>
 
-    <!-- JavaScripts -->
-    {% include scripts.liquid %}
+    <script>
+      (() => {
+        // Theme toggle.
+        const root = document.documentElement;
+        const applyTheme = () => {
+          const dark = root.getAttribute('data-theme') === 'dark';
+          document.body.classList.toggle('theme-dark', dark);
+          document.body.classList.toggle('theme-default', !dark);
+        };
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+          const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          root.setAttribute('data-theme', next);
+          root.setAttribute('data-theme-setting', next);
+          try { localStorage.setItem('theme', next); } catch (e) {}
+          applyTheme();
+        });
+
+        // Headroom: the bar hides on scroll down and returns on scroll up.
+        const head = document.getElementById('headroom');
+        let lastY = window.scrollY;
+        const headroom = () => {
+          const y = window.scrollY;
+          head.classList.remove('headroom--unfixed', 'headroom--pinned', 'headroom--unpinned', 'headroom--scrolled');
+          if (y <= 0) head.classList.add('headroom--unfixed');
+          else head.classList.add(y < lastY ? 'headroom--pinned' : 'headroom--unpinned', 'headroom--scrolled');
+          lastY = y;
+        };
+        headroom();
+        window.addEventListener('scroll', headroom, { passive: true });
+
+        // Phone menu.
+        const menuButton = document.getElementById('menu-toggle');
+        const menu = document.getElementById('site-menu');
+        const setMenu = open => {
+          menu.hidden = !open;
+          menuButton.setAttribute('aria-expanded', String(open));
+        };
+        menuButton.addEventListener('click', e => { e.stopPropagation(); setMenu(menu.hidden); });
+        document.addEventListener('click', e => { if (!menu.hidden && !menu.contains(e.target)) setMenu(false); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+
+        // Their "Load More" under long lists.
+        document.querySelectorAll('[data-page-size]').forEach(list => {
+          const size = Number(list.dataset.pageSize);
+          const items = [...list.children];
+          if (items.length <= size) return;
+          let shown = size;
+          const more = document.createElement('a');
+          more.className = 'LoadMore-root LoadMore-afterPostsListMarginTop';
+          more.href = '#';
+          const update = () => {
+            items.forEach((item, i) => { item.hidden = i >= shown; });
+            more.textContent = 'Load More (' + shown + '/' + items.length + ')';
+            if (shown >= items.length) more.remove();
+          };
+          more.addEventListener('click', e => { e.preventDefault(); shown += size; update(); });
+          list.after(more);
+          update();
+        });
+      })();
+    </script>
+    {%- if site.enable_math and document_page -%}
+      {%- if content contains '\(' or content contains '\[' %}
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+      {%- endif -%}
+    {%- endif %}
   </body>
 </html>

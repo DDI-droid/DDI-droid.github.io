@@ -1,0 +1,16 @@
+{%- comment -%} The display title of any page: posts as written, archives by their tag, category or year, site pages capitalised. {%- endcomment -%}
+{%- if page.url == '/' -%}
+  {{- site.first_name }} {{ site.last_name -}}
+{%- elsif page.type == 'year' -%}
+  {{- page.date | date: '%Y' -}}
+{%- elsif page.type == 'tags' -%}
+  {%- include lw/tag_label.liquid tag=page.title -%}
+{%- elsif page.type == 'categories' -%}
+  {{- page.title | capitalize -}}
+{%- elsif page.collection == 'posts' -%}
+  {{- page.title -}}
+{%- elsif page.collection == 'news' -%}
+  News
+{%- else -%}
+  {{- page.title | capitalize -}}
+{%- endif -%}

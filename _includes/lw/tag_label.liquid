@@ -1,0 +1,7 @@
+{%- case include.tag -%}
+  {%- when 'llm' -%}LLM
+  {%- when 'ocr' -%}OCR
+  {%- when 'rl' -%}RL
+  {%- when 'meta-reasoning' -%}Meta-reasoning
+  {%- else -%}{{ include.tag | replace: '-', ' ' | capitalize }}
+{%- endcase -%}

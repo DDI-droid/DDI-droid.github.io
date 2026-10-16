@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: listing
 title: news
 permalink: /news/
 nav: true

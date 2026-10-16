@@ -1,486 +1,164 @@
 ---
 layout: default
 ---
-{% assign year = page.date | date: '%Y' %}
-{% assign tags = page.tags | join: '' %}
-{% assign categories = page.categories | join: '' %}
-{% assign url_beginning = page.url | slice: 0, 6 %}
-
-{% if page._styles %}
-  <!-- Page/Post style -->
-  <style type="text/css">
-    {{ page._styles }}
-  </style>
-{% endif %}
-
-<style>
-  body:has(#toc-sidebar) .container[role='main'] {
-    width: 100%;
-    max-width: none;
-    margin-inline: auto;
-    padding-inline: clamp(1rem, 2.2vw, 2.5rem);
-  }
-
-  body:has(#toc-sidebar) .container[role='main'] > .row {
-    display: grid;
-    grid-template-columns: minmax(min(15.5vw, 290px), 1fr) minmax(0, 1110px) minmax(0, 1fr);
-    gap: clamp(1.25rem, 2.2vw, 2.75rem);
-    align-items: start;
-    margin-inline: 0;
-  }
-
-  body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-3,
-  body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-9 {
-    width: auto;
-    max-width: none;
-    min-width: 0;
-    padding: 0;
-    flex: none;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar {
-    position: fixed;
-    z-index: 20;
-    top: var(--navbar-h, 57px);
-    left: 0;
-    display: flex;
-    width: min(15.5vw, 290px);
-    height: calc(100vh - var(--navbar-h, 57px));
-    max-height: calc(100vh - var(--navbar-h, 57px));
-    flex-direction: column;
-    overflow: visible;
-    padding: 22px 0 20px 33px;
-    border: 0;
-    color: var(--global-text-color-light);
-    font:
-      500 15.5px/1.45 system-ui,
-      sans-serif;
-    transition:
-      opacity 0.25s ease-in-out 0.5s,
-      transform 0.5s ease-in-out 0.5s,
-      height 0.4s ease-in-out,
-      max-height 0.4s ease-in-out;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar::before {
-    position: absolute;
-    left: 20px;
-    pointer-events: none;
-    content: '';
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar::before {
-    top: 48px;
-    bottom: 20px;
-    width: 1px;
-    background: var(--global-divider-color);
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .post-toc-intro {
-    position: relative;
-    z-index: 1;
-    margin: 0 0 0.8rem;
-    opacity: 0;
-    transition: opacity 0.25s ease;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .post-toc-intro__title {
-    margin: 0 0 0.45rem;
-    color: var(--global-text-color-light);
-    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
-    font-size: 19px;
-    font-variant: small-caps;
-    line-height: 1.3;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .post-toc-intro__time {
-    margin: 0;
-    color: var(--global-text-color-light);
-    font:
-      400 13.5px/1.4 system-ui,
-      sans-serif;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar > .toc-list {
-    display: flex;
-    min-height: 0;
-    flex: 1 1 auto;
-    flex-direction: column;
-    justify-content: space-evenly;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .toc-list-item {
-    position: relative;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .toc-link {
-    display: block;
-    padding: 0.1rem 0;
-    color: var(--global-text-color-light);
-    font: inherit;
-    line-height: 1.4;
-    text-decoration: none;
-    opacity: 0;
-    transition:
-      color 0.25s ease,
-      opacity 0.25s ease;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .toc-link::before {
-    display: none !important;
-    background-color: transparent !important;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .toc-link.is-active-link {
-    color: var(--global-text-color-light);
-    font-weight: 500;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .toc-list-item.is-collapsible {
-    padding-left: 0.8rem;
-    font-size: 0.92em;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .toc-list-item::before {
-    position: absolute;
-    top: 0.64em;
-    left: -0.8rem;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--global-text-color-light);
-    content: '';
-    opacity: 0.75;
-    transition:
-      background-color 0.25s ease,
-      transform 0.25s ease;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar:hover .post-toc-intro,
-  body:has(#toc-sidebar) #toc-sidebar:focus-within .post-toc-intro,
-  body:has(#toc-sidebar) #toc-sidebar:hover .toc-link,
-  body:has(#toc-sidebar) #toc-sidebar:focus-within .toc-link {
-    opacity: 1;
-  }
-
-  body:has(#toc-sidebar) #toc-sidebar .toc-link:hover,
-  body:has(#toc-sidebar) #toc-sidebar .toc-link:focus-visible {
-    color: var(--global-text-color);
-  }
-
-  body:has(#toc-sidebar) .post {
-    width: 100%;
-    max-width: 1110px;
-    margin: 0;
-  }
-
-  body:has(#toc-sidebar) .post-header {
-    max-width: 1110px;
-    margin: 0 0 2.35rem;
-    padding: 0 0 1.5rem;
-    border-bottom: 1px solid var(--global-divider-color);
-  }
-
-  body:has(#toc-sidebar) .post-title {
-    margin: 0 0 1rem;
-    color: var(--global-text-color);
-    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
-    font-size: clamp(36px, 3vw, 56px);
-    font-weight: 500;
-    letter-spacing: -0.035em;
-    line-height: 1.08;
-  }
-
-  body:has(#toc-sidebar) .post-meta,
-  body:has(#toc-sidebar) .post-tags {
-    color: var(--global-text-color-light);
-    font-family: system-ui, sans-serif;
-    font-size: 0.82rem;
-    letter-spacing: 0.01em;
-  }
-
-  body:has(#toc-sidebar) .post-tags {
-    padding-top: 0.35rem;
-    padding-bottom: 0;
-  }
-
-  body:has(#toc-sidebar) .post-content {
-    max-width: 1110px;
-  }
-
-  body:has(#toc-sidebar) #markdown-content {
-    color: var(--global-text-color);
-    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
-    font-size: clamp(18px, 16.5px + 0.27vw, 22px);
-    font-weight: 400;
-    letter-spacing: 0.003em;
-    line-height: 1.62;
-  }
-
-  body:has(#toc-sidebar) #markdown-content p {
-    margin: 0 0 1.3em;
-    line-height: inherit;
-  }
-
-  body:has(#toc-sidebar) #markdown-content h2,
-  body:has(#toc-sidebar) #markdown-content h3,
-  body:has(#toc-sidebar) #markdown-content h4 {
-    color: var(--global-text-color);
-    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
-    font-weight: 500;
-    letter-spacing: -0.025em;
-    line-height: 1.2;
-  }
-
-  body:has(#toc-sidebar) #markdown-content h2 {
-    margin: 2.55em 0 0.7em;
-    font-size: clamp(27px, 1.95vw, 37px);
-  }
-
-  body:has(#toc-sidebar) #markdown-content h3 {
-    margin: 1.9em 0 0.65em;
-    font-size: clamp(21.5px, 1.4vw, 27px);
-  }
-
-  body:has(#toc-sidebar) #markdown-content h4 {
-    margin: 1.6em 0 0.55em;
-    font-size: 1.05em;
-  }
-
-  body:has(#toc-sidebar) #markdown-content a {
-    text-decoration-thickness: 0.055em;
-    text-underline-offset: 0.16em;
-  }
-
-  body:has(#toc-sidebar) #markdown-content blockquote {
-    margin: 1.8em 0;
-    padding: 0.2em 0 0.2em 1.1em;
-    border-left: 2px solid var(--global-divider-color);
-    background: transparent;
-    font-size: 1.04em;
-  }
-
-  body:has(#toc-sidebar) #markdown-content blockquote p:last-child {
-    margin-bottom: 0;
-  }
-
-  body:has(#toc-sidebar) #markdown-content pre,
-  body:has(#toc-sidebar) #markdown-content code {
-    font-size: 0.86em;
-  }
-
-  body:has(#toc-sidebar) #markdown-content img,
-  body:has(#toc-sidebar) #markdown-content video {
-    max-width: 100%;
-    height: auto;
-  }
-
-  body:has(#toc-sidebar) #markdown-content table {
-    display: block;
-    max-width: 100%;
-    overflow-x: auto;
-  }
-
-  body:has(#toc-sidebar) #markdown-content .footnotes {
-    margin-top: 3rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--global-divider-color);
-    color: var(--global-text-color-light);
-    font-size: 0.88em;
-  }
-
-  body:has(#toc-sidebar) .post .post-content > hr {
-    margin: 2.5rem 0;
-    border-color: var(--global-divider-color);
-    opacity: 0.75;
-  }
-
-  @media (max-width: 1050px) {
-    body:has(#toc-sidebar) .container[role='main'] {
-      max-width: 860px;
-      padding-inline: 1.25rem;
-    }
-
-    body:has(#toc-sidebar) .container[role='main'] > .row {
-      display: block;
-    }
-
-    body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-3,
-    body:has(#toc-sidebar) .container[role='main'] > .row > .col-sm-9 {
-      width: 100%;
-    }
-
-    body:has(#toc-sidebar) #toc-sidebar {
-      position: static;
-      width: 100%;
-      height: auto;
-      max-height: none;
-      margin: 0 0 2rem;
-      padding: 1rem 1.1rem;
-      overflow: visible;
-      border: 1px solid var(--global-divider-color);
-      border-radius: 0.35rem;
-    }
-
-    body:has(#toc-sidebar) #toc-sidebar::before {
-      display: none;
-    }
-
-    body:has(#toc-sidebar) #toc-sidebar .post-toc-intro,
-    body:has(#toc-sidebar) #toc-sidebar .toc-link {
-      opacity: 1;
-    }
-
-    body:has(#toc-sidebar) #toc-sidebar > .toc-list {
-      display: block;
-    }
-
-    body:has(#toc-sidebar) #toc-sidebar .toc-list-item {
-      margin-bottom: 0.35rem;
-    }
-
-    body:has(#toc-sidebar) #toc-sidebar .toc-list-item::before {
-      left: -0.98rem;
-    }
-
-    body:has(#toc-sidebar) .post,
-    body:has(#toc-sidebar) .post-header,
-    body:has(#toc-sidebar) .post-content {
-      max-width: none;
-    }
-  }
-
-  @media (max-width: 640px) {
-    body:has(#toc-sidebar) .container[role='main'] {
-      padding-inline: 1rem;
-    }
-
-    body:has(#toc-sidebar) .post-title {
-      font-size: clamp(2rem, 9vw, 2.65rem);
-    }
-
-    body:has(#toc-sidebar) #markdown-content {
-      font-size: 1.1rem;
-      line-height: 1.62;
-    }
-  }
-</style>
-
-<div class="post">
-  <header class="post-header">
-    <h1 class="post-title">{{ page.title }}</h1>
-    <p class="post-meta">
-      Created on {{ page.date | date: '%B %d, %Y' }}
-      {% if page.author %}by {{ page.author }}{% endif %}
-      {% assign last_date = page.last_modified_at | default: page.last_updated %}
-      {% if last_date %}, last updated on {{ last_date | date: '%B %d, %Y' }}{% endif %}
-      {% if page.meta %}• {{ page.meta }}{% endif %}
-    </p>
-    <p class="post-tags">
-      {% if url_beginning == '/blog/' %}
-        <a href="{{ year | prepend: '/blog/' | relative_url }}"> <i class="fa-solid fa-calendar fa-sm"></i> {{ year }} </a>
-      {% else %}
-        <i class="fa-solid fa-calendar fa-sm"></i> {{ year }}
-      {% endif %}
-      {% if tags != '' %}
-        &nbsp; &middot; &nbsp;
-        {% for tag in page.tags %}
-          {% if url_beginning == '/blog/' %}
-            <a href="{{ tag | slugify | prepend: '/blog/tag/' | relative_url }}"> <i class="fa-solid fa-hashtag fa-sm"></i> {{ tag }}</a>
-          {% else %}
-            <i class="fa-solid fa-hashtag fa-sm"></i> {{ tag }}
-          {% endif %}
-          {% unless forloop.last %}
-            &nbsp;
-          {% endunless %}
-        {% endfor %}
-      {% endif %}
-
-      {% if categories != '' %}
-        &nbsp; &middot; &nbsp;
-        {% for category in page.categories %}
-          {% if url_beginning == '/blog/' %}
-            <a href="{{ category | slugify | prepend: '/blog/category/' | relative_url }}"> <i class="fa-solid fa-tag fa-sm"></i> {{ category -}}</a>
-          {% else %}
-            <i class="fa-solid fa-tag fa-sm"></i> {{ category }}
-          {% endif %}
-          {% unless forloop.last %}
-            &nbsp;
-          {% endunless %}
-        {% endfor %}
-      {% endif %}
-    </p>
-  </header>
-
-  <article class="post-content">
-    {% if page.toc and page.toc.beginning %}
-      <div id="table-of-contents">
-        {% toc %}
+{%- comment -%}
+  lesswrong.com's post page, class for class: their MultiToCLayout grid with the contents rail,
+  LWPostsPageHeader, ContentStyles-postBody, and the tag footer. Documents (projects, academics)
+  use it too, with their description in the byline's place and no tags.
+{%- endcomment -%}
+{%- assign is_post = false -%}
+{%- if page.collection == 'posts' -%}{%- assign is_post = true -%}{%- endif -%}
+{%- capture title -%}{% include lw/page_title.liquid %}{%- endcapture -%}
+{%- assign title = title | strip -%}
+{%- assign year = page.date | date: '%Y' -%}
+{%- assign last_date = page.last_modified_at | default: page.last_updated -%}
+{%- assign read_time = content | number_of_words | divided_by: 220 | plus: 1 -%}
+{%- assign author_name = site.first_name | append: ' ' | append: site.last_name -%}
+{%- if page.author -%}{%- assign author_name = page.author -%}{%- endif -%}
+{%- assign title_words = title | split: ' ' -%}
+{%- assign last_word = title_words | last -%}
+{%- assign title_head = title_words | pop | join: ' ' -%}
+<div class="MultiToCLayout-root">
+  <div class="MultiToCLayout-tableOfContents" style="grid-template-areas:&quot;... toc0 gap1 content0 gap2 rhs0 ...&quot; &quot;... toc0 gap1 content1 gap2 rhs1 ...&quot;;grid-template-rows:min-content 1fr">
+    <div style="grid-area:toc0" class="MultiToCLayout-toc MultiToCLayout-normalHeaderToc">
+      <div class="MultiToCLayout-stickyBlockScroller MultiToCLayoutStickyBlockScroller">
+        <div class="MultiToCLayout-stickyBlock">
+          <div class="FixedPositionToC-root" id="fixed-toc">
+            <div class="FixedPositionToC-tocWrapper">
+              <div class="TableOfContentsRow-root TableOfContentsRow-title FixedPositionToC-headingOpacity">
+                <div class="FixedPositionToC-tocTitle">{{ title }}</div>
+                {% if is_post %}<div class="ReadTime-root FixedPositionToC-readTime">{{ read_time }} min read</div>{% endif %}
+              </div>
+            </div>
+            <div class="FixedPositionToC-wrapper">
+              <div class="FixedPositionToC-progressBarContainer"><div class="FixedPositionToC-progressBar" id="toc-progress"></div></div>
+              <div class="FixedPositionToC-rows" id="toc-rows"></div>
+            </div>
+          </div>
+        </div>
       </div>
-      <hr>
-    {% endif %}
-    <div id="markdown-content">
-      {{ content }}
     </div>
-  </article>
-
-  {% if page.citation %}
-    {% include citation.liquid %}
-  {% endif %}
-
-  {% if page.related_publications %}
-    <h2>References</h2>
-    <div class="publications">
-      {% bibliography --group_by none --cited_in_order %}
+    <div class="MultiToCLayout-gap1"></div>
+    <div class="MultiToCLayout-content" style="grid-area:content0">
+      <div id="postBody" class="PostsPage-centralColumn PostsPage-postBody PostsPage-audioPlayerHidden">
+        <div class="PostsPage-title">
+          <div class="PostsPage-centralColumn">
+            <div class="LWPostsPageHeader-root">
+              <div class="LWPostsPageHeader-titleSection">
+                <div class="LWPostsPageHeader-title">
+                  <div>
+                    <h1 class="Typography-root Typography-display3 PostsPageTitle-root post-title">
+                      <a class="PostsPageTitle-link" href="{{ page.url | relative_url }}">{% if title_head != '' %}{{ title_head }} {% endif %}<span class="PostsPageTitle-lastWord">{{ last_word }}</span></a>
+                    </h1>
+                  </div>
+                  <div class="LWPostsPageHeader-authorAndSecondaryInfo">
+                    {%- if page.date %}
+                    {%- if is_post %}
+                    <div class="LWPostsPageHeader-authorInfo"><span class="PostsAuthors-root"><span class="PostsAuthors-authorName UsersNameDisplay-userName">{{ author_name }}</span></span></div>
+                    {%- endif %}
+                    <div class="LWPostsPageHeader-date"><span class="PostsPageDate-date"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date_to_string: 'ordinal' }}</time></span></div>
+                    {%- if is_post %}
+                    <div class="LWPostsPageHeader-readTime"><span class="ReadTime-root post-readtime">{{ read_time }} min read</span></div>
+                    {%- endif %}
+                    {%- if last_date %}<div class="LWPostsPageHeader-updated"><span class="PostsPageDate-date">updated {{ last_date | date_to_string: 'ordinal' }}</span></div>{% endif %}
+                    {%- elsif page.description %}
+                    <div class="site-pageDescription">{{ page.description }}</div>
+                    {%- endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="PostsPage-postContent instapaper_body ContentStyles-base content ContentStyles-postBody">
+          <div class="commentOnSelection">
+            <div id="postContent">
+              <div>
+                <div id="markdown-content">
+                  {{ content }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  {% endif %}
-
-  {% if site.related_blog_posts and site.related_blog_posts.enabled %}
-    {% if page.related_posts == null or page.related_posts %}
-      {% include related_posts.liquid %}
-    {% endif %}
-  {% endif %}
-
-  {% if site.plugins contains 'al_comments' %}
-    {% include plugins/al_comments.liquid %}
-  {% endif %}
+    <div class="MultiToCLayout-rhs" style="grid-area:rhs0"><div class="PostsPage-reserveSpaceForSidenotes"></div><div class="SideItems-sidebar"></div></div>
+    <div class="MultiToCLayout-gap1"></div>
+    <div class="MultiToCLayout-content" style="grid-area:content1">
+      <div class="PostsPage-centralColumn PostsPage-betweenPostAndComments">
+        {%- if is_post %}
+        <div class="PostsPagePostFooter-root">
+          <div class="PostsPagePostFooter-footerTagList post-tags">
+            <div class="FooterTagList-root">
+              {%- for tag in page.tags -%}
+                <a class="FooterTag-root FooterTag-core" href="{{ tag | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ tag }}</a>
+              {%- endfor -%}
+              {%- for category in page.categories -%}
+                <a class="FooterTag-root FooterTag-core" href="{{ category | slugify | prepend: '/blog/category/' | append: '/' | relative_url }}">{{ category }}</a>
+              {%- endfor -%}
+              <a class="FooterTag-root FooterTag-core" href="{{ year | prepend: '/blog/' | append: '/' | relative_url }}">{{ year }}</a>
+            </div>
+          </div>
+        </div>
+        {%- endif %}
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
   (() => {
-    const addReadingGuide = () => {
-      const rail = document.getElementById('toc-sidebar');
-      const title = document.querySelector('.post-title')?.textContent?.trim();
-      const article = document.querySelector('#markdown-content');
-      if (!rail || !title || !article || rail.querySelector('.post-toc-intro')) return;
-
-      const wordCount = (article.innerText || '').trim().split(/\s+/).filter(Boolean).length;
-      const minutes = Math.max(1, Math.ceil(wordCount / 220));
-      const intro = document.createElement('div');
-      intro.className = 'post-toc-intro';
-
-      const heading = document.createElement('p');
-      heading.className = 'post-toc-intro__title';
-      heading.textContent = title;
-
-      const time = document.createElement('p');
-      time.className = 'post-toc-intro__time';
-      time.textContent = `${minutes} min read`;
-
-      intro.append(heading, time);
-      rail.prepend(intro);
+    // Contents rail: one row per heading, each row sized by the length of its section,
+    // a progress bar for the viewport, the current section highlighted, revealed on hover.
+    const article = document.getElementById('markdown-content');
+    const rows = document.getElementById('toc-rows');
+    const toc = document.getElementById('fixed-toc');
+    const bar = document.getElementById('toc-progress');
+    const headings = [...article.querySelectorAll('h2, h3, h4')];
+    if (!headings.length) { toc.hidden = true; return; }
+    headings.forEach((h, i) => { if (!h.id) h.id = 'section-' + i; });
+    const tops = () => headings.map(h => h.getBoundingClientRect().top + window.scrollY);
+    const docEnd = () => article.getBoundingClientRect().bottom + window.scrollY;
+    const entries = headings.map(h => {
+      const level = Number(h.tagName[1]) - 1;
+      const wrap = document.createElement('div');
+      wrap.className = 'FixedPositionToC-rowWrapper';
+      wrap.innerHTML = '<div class="FixedPositionToC-rowDotContainer"><div class="FixedPositionToC-rowDot">•</div>' +
+        '<div class="FixedPositionToC-rowOpacity"><div class="TableOfContentsRow-root TableOfContentsRow-level' + level + '">' +
+        '<a class="TableOfContentsRow-link TableOfContentsRow-highlightDot"></a></div></div></div>';
+      const link = wrap.querySelector('a');
+      link.href = '#' + h.id;
+      link.textContent = h.textContent.trim();
+      rows.append(wrap);
+      return { wrap, row: wrap.querySelector('.TableOfContentsRow-root') };
+    });
+    const sizeRows = () => {
+      const t = tops(), end = docEnd();
+      entries.forEach((e, i) => {
+        const len = Math.max(1, (i + 1 < t.length ? t[i + 1] : end) - t[i]);
+        e.wrap.style.flex = len + ' 1 0px';
+      });
     };
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', addReadingGuide, { once: true });
-    } else {
-      addReadingGuide();
-    }
+    const track = () => {
+      const t = tops(), y = window.scrollY, mark = y + window.innerHeight * 0.3;
+      let current = -1;
+      t.forEach((top, i) => { if (top <= mark) current = i; });
+      entries.forEach((e, i) => e.row.classList.toggle('TableOfContentsRow-highlighted', i === current));
+      const first = t[0] || 0, span = Math.max(1, docEnd() - first);
+      const h = rows.getBoundingClientRect().height;
+      const top = Math.max(0, Math.min(h, (y - first) / span * h));
+      const height = Math.max(0, Math.min(h - top, window.innerHeight / span * h));
+      bar.style.setProperty('--windowTop', top + 'px');
+      bar.style.setProperty('--windowHeight', height + 'px');
+    };
+    toc.addEventListener('mouseenter', () => toc.classList.add('FixedPositionToC-hover'));
+    toc.addEventListener('mouseleave', () => toc.classList.remove('FixedPositionToC-hover'));
+    const refresh = () => { sizeRows(); track(); };
+    window.addEventListener('scroll', track, { passive: true });
+    window.addEventListener('resize', refresh);
+    window.addEventListener('load', refresh);
+    if (document.fonts) document.fonts.ready.then(refresh);
+    refresh();
   })();
 </script>

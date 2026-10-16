@@ -1,0 +1,20 @@
+{%- comment -%}
+  Their profile page's top post: label, large title, summary, meta bar, and an image when the post
+  names one in `thumbnail`. include.post, include.label.
+{%- endcomment -%}
+{%- assign tp = include.post -%}
+{%- assign tp_read = tp.content | number_of_words | divided_by: 220 | plus: 1 -%}
+<div class="UserProfileTopPostsSectionUnshared-topPostsIndicator"><span class="UserProfileTopPostsSectionUnshared-topPostsLabel">{{ include.label }}</span></div>
+<a class="UserProfileTopPostsSectionUnshared-postArticle UserProfileTopPostsSectionUnshared-postArticleTop{% unless tp.thumbnail %} site-noImage{% endunless %}" href="{{ tp.url | relative_url }}">
+  <div class="UserProfileTopPostsSectionUnshared-postContent">
+    <h2 class="UserProfileTopPostsSectionUnshared-postTitle UserProfileTopPostsSectionUnshared-topPostTitle">{{ tp.title }}</h2>
+    <div class="UserProfileTopPostsSectionUnshared-postSummaryWrapper"><p class="UserProfileTopPostsSectionUnshared-postSummary">{{ tp.description | strip_html }}</p></div>
+    <div class="UserProfileTopPostsSectionUnshared-postMetaBar">
+      <span class="UserProfileTopPostsSectionUnshared-karmaScore">{{ tp_read }} min read</span>
+      <span class="UserProfileTopPostsSectionUnshared-postDate"><time datetime="{{ tp.date | date_to_xmlschema }}">{{ tp.date | date: '%b %-d, %Y' }}</time></span>
+    </div>
+  </div>
+  {%- if tp.thumbnail %}
+  <div class="UserProfileTopPostsSectionUnshared-postImage" style="background-image:url(&quot;{{ tp.thumbnail | relative_url }}&quot;)" role="img" aria-label="{{ tp.title | escape }}"></div>
+  {%- endif %}
+</a>

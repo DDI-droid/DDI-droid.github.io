@@ -1,0 +1,10 @@
+---
+layout: profile
+---
+{%- comment -%} A profile page holding one list (publications, news): the list on the left, their sidebar on the right. {%- endcomment -%}
+<section class="ProfilePageUnshared-allPostsSection">
+  <div class="ProfilePageTabbedSectionUnshared-allPostsLeftColumn">
+    {{ content }}
+  </div>
+  {% include lw/sidebar.liquid %}
+</section>

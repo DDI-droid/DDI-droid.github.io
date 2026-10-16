@@ -1,0 +1,18 @@
+{%- comment -%} Their phone-width stand-in for the sidebar (shown below 630px, where the sidebar hides). {%- endcomment -%}
+{%- assign author_name = site.first_name | append: ' ' | append: site.last_name -%}
+{%- assign about_page = site.pages | where: 'permalink', '/' | first -%}
+{%- assign roles = about_page.subtitle | split: ' · ' -%}
+<div class="ProfilePageSidebarUnshared-mobileProfileBio">
+  <div class="ProfilePageSidebarUnshared-mobileProfileHeaderRow">
+    <h4 class="ProfilePageSidebarUnshared-mobileProfileName">{{ author_name }}</h4>
+    <div class="ProfilePageSidebarUnshared-mobileProfileActions"><a class="ProfilePageSidebarUnshared-sidebarSubscribe" href="{{ '/feed.xml' | relative_url }}">Subscribe</a></div>
+  </div>
+  <div class="ProfilePageSidebarUnshared-sidebarAuthorBio ProfilePageSidebarUnshared-sidebarAuthorBioContent">
+    <p>{% for role in roles %}{{ role | strip }}{% unless forloop.last %}<br>{% endunless %}{% endfor %}</p>
+    <p>
+      {%- assign contact_email = site.data.socials.email | default: site.email -%}
+      {%- if contact_email %}<a href="mailto:{{ contact_email }}">Email</a>{% endif -%}
+      {%- if site.data.socials.github_username %} · <a href="https://github.com/{{ site.data.socials.github_username }}">GitHub</a>{% endif -%}
+    </p>
+  </div>
+</div>

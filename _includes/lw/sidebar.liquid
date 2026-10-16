@@ -1,0 +1,54 @@
+{%- comment -%}
+  Their profile sidebar: name with a Subscribe link (the RSS feed), counts, the about page's subtitle
+  as the bio, contact links. include.topics adds the blog's tags and years, in their section style.
+{%- endcomment -%}
+{%- assign author_name = site.first_name | append: ' ' | append: site.last_name -%}
+{%- assign about_page = site.pages | where: 'permalink', '/' | first -%}
+{%- assign roles = about_page.subtitle | split: ' · ' -%}
+<aside class="ProfilePageSidebarUnshared-postsSidebar">
+  <div class="ProfilePageSidebarUnshared-sidebarAuthorBlock">
+    <h4 class="ProfilePageSidebarUnshared-sidebarAuthorName"><a class="ProfilePageSidebarUnshared-sidebarAuthorNameLink" href="{{ '/' | relative_url }}">{{ author_name }}</a></h4>
+    <div class="ProfilePageSidebarUnshared-sidebarBioMeta"><a class="ProfilePageSidebarUnshared-sidebarSubscribe" href="{{ '/feed.xml' | relative_url }}">Subscribe</a></div>
+  </div>
+  <div class="ProfilePageSidebarUnshared-sidebarBioSection">
+    <div class="ProfilePageSidebarUnshared-sidebarMetaInfo">
+      <div class="UserMetaInfo-root">
+        <div class="UserMetaInfo-info">{{ site.posts.size }} posts</div>
+        <div class="UserMetaInfo-info">{% bibliography_count %} papers</div>
+      </div>
+    </div>
+    <div class="ProfilePageSidebarUnshared-sidebarBioWrapper">
+      <div class="ProfilePageSidebarUnshared-sidebarAuthorBio ProfilePageSidebarUnshared-sidebarAuthorBioContent">
+        <p>{% for role in roles %}{{ role | strip }}{% unless forloop.last %}<br>{% endunless %}{% endfor %}</p>
+        <p>
+          {%- assign contact_email = site.data.socials.email | default: site.email -%}
+          {%- if contact_email %}<a href="mailto:{{ contact_email }}">Email</a>{% endif -%}
+          {%- if site.data.socials.github_username %} · <a href="https://github.com/{{ site.data.socials.github_username }}">GitHub</a>{% endif -%}
+        </p>
+      </div>
+    </div>
+  </div>
+  {%- if include.topics %}
+  {%- assign topics = site.tags | sort -%}
+  <div class="ProfileDiamondSectionsUnshared-diamondsSection">
+    <div class="ProfileDiamondSectionsUnshared-diamondsSectionHeader"><span class="ProfileDiamondSectionsUnshared-diamondsSectionTitle">Topics <span class="ProfileDiamondSectionsUnshared-diamondsSectionCount">({{ topics.size }})</span></span></div>
+    <ul class="site-sidebarList">
+      {%- for topic in topics -%}
+        {%- assign topic_name = topic[0] -%}
+        {%- assign topic_url = topic_name | slugify | prepend: '/blog/tag/' | append: '/' -%}
+        <li><a{% if page.url == topic_url %} class="is-current"{% endif %} href="{{ topic_url | relative_url }}"><span>{% include lw/tag_label.liquid tag=topic_name %}</span><span class="site-count">{{ topic[1].size }}</span></a></li>
+      {%- endfor -%}
+    </ul>
+  </div>
+  {%- assign years = site.posts | group_by_exp: 'post', "post.date | date: '%Y'" -%}
+  <div class="ProfileDiamondSectionsUnshared-diamondsSection">
+    <div class="ProfileDiamondSectionsUnshared-diamondsSectionHeader"><span class="ProfileDiamondSectionsUnshared-diamondsSectionTitle">Archive</span></div>
+    <ul class="site-sidebarList">
+      {%- for year in years -%}
+        {%- assign year_url = year.name | prepend: '/blog/' | append: '/' -%}
+        <li><a{% if page.url == year_url %} class="is-current"{% endif %} href="{{ year_url | relative_url }}"><span>{{ year.name }}</span><span class="site-count">{{ year.items.size }}</span></a></li>
+      {%- endfor -%}
+    </ul>
+  </div>
+  {%- endif %}
+</aside>

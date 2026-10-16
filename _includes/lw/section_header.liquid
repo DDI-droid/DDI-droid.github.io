@@ -1,0 +1,7 @@
+{%- comment -%} A section label in their profile-tab style. include.label; include.count shows on the right where their sort control is. {%- endcomment -%}
+<div class="ProfilePageTabbedSectionUnshared-allPostsHeader">
+  <div class="ProfilePageTabbedSectionUnshared-allPostsLeftHeader">
+    <div class="ProfilePageTabbedSectionUnshared-profileTabs"><h2 class="ProfilePageTabbedSectionUnshared-profileTab ProfilePageTabbedSectionUnshared-profileTabActive">{{ include.label }}</h2></div>
+    {%- if include.count %}<div class="ProfilePageTabbedSectionUnshared-sortControl">{{ include.count }}</div>{% endif %}
+  </div>
+</div>

@@ -1,0 +1,4 @@
+{%- comment -%} Their list date: "Oct 8" in the current year, "Jun 6, 2022" before it. {%- endcomment -%}
+{%- assign sd_year = include.date | date: '%Y' -%}
+{%- assign sd_now = site.time | date: '%Y' -%}
+{%- if sd_year == sd_now -%}{{ include.date | date: '%b %-d' }}{%- else -%}{{ include.date | date: '%b %-d, %Y' }}{%- endif -%}

@@ -1,0 +1,78 @@
+---
+---
+{%- comment -%}
+  One jekyll-scholar entry as their profile-page list row: title (linked to the paper), authors
+  with the site's author in bold, venue as the summary, then venue tag, year and links in the meta
+  line; the preview image, when the entry has one, in their row-image slot.
+{%- endcomment -%}
+{%- assign proceedings = 'inproceedings,incollection' | split: ',' -%}
+{%- assign thesis = 'thesis,mastersthesis,phdthesis' | split: ',' -%}
+{%- if entry.type == 'article' -%}
+  {%- assign venue = entry.journal -%}
+{%- elsif proceedings contains entry.type -%}
+  {%- assign venue = entry.booktitle -%}
+{%- elsif thesis contains entry.type -%}
+  {%- assign venue = entry.school -%}
+{%- else -%}
+  {%- assign venue = entry.howpublished -%}
+{%- endif -%}
+{%- if venue == entry.abbr -%}{%- assign venue = nil -%}{%- endif -%}
+{%- if entry.html -%}
+  {%- if entry.html contains '://' -%}{%- assign main_link = entry.html -%}{%- else -%}{%- assign main_link = entry.html | prepend: '/assets/html/' | relative_url -%}{%- endif -%}
+{%- elsif entry.arxiv -%}
+  {%- assign main_link = entry.arxiv | prepend: 'https://arxiv.org/abs/' -%}
+{%- elsif entry.pdf -%}
+  {%- if entry.pdf contains '://' -%}{%- assign main_link = entry.pdf -%}{%- else -%}{%- assign main_link = entry.pdf | prepend: '/assets/pdf/' | relative_url -%}{%- endif -%}
+{%- elsif entry.doi -%}
+  {%- assign main_link = entry.doi | prepend: 'https://doi.org/' -%}
+{%- else -%}
+  {%- assign main_link = nil -%}
+{%- endif -%}
+{%- assign preview = nil -%}
+{%- if entry.preview and site.enable_publication_thumbnails -%}
+  {%- if entry.preview contains '://' -%}{%- assign preview = entry.preview -%}{%- else -%}{%- assign preview = entry.preview | prepend: '/assets/img/publication_preview/' | relative_url -%}{%- endif -%}
+{%- endif -%}
+{%- capture links -%}
+  {%- if entry.arxiv %}<a class="ProfilePageAllPostsTabUnshared-listDate site-metaLink" href="https://arxiv.org/abs/{{ entry.arxiv }}">arXiv</a>{% endif -%}
+  {%- if entry.html %}<a class="ProfilePageAllPostsTabUnshared-listDate site-metaLink" href="{% if entry.html contains '://' %}{{ entry.html }}{% else %}{{ entry.html | prepend: '/assets/html/' | relative_url }}{% endif %}">HTML</a>{% endif -%}
+  {%- if entry.pdf %}<a class="ProfilePageAllPostsTabUnshared-listDate site-metaLink" href="{% if entry.pdf contains '://' %}{{ entry.pdf }}{% else %}{{ entry.pdf | prepend: '/assets/pdf/' | relative_url }}{% endif %}">PDF</a>{% endif -%}
+  {%- if entry.doi %}<a class="ProfilePageAllPostsTabUnshared-listDate site-metaLink" href="https://doi.org/{{ entry.doi }}">DOI</a>{% endif -%}
+  {%- if entry.code %}<a class="ProfilePageAllPostsTabUnshared-listDate site-metaLink" href="{{ entry.code }}">Code</a>{% endif -%}
+  {%- if entry.blog %}<a class="ProfilePageAllPostsTabUnshared-listDate site-metaLink" href="{{ entry.blog }}">Blog</a>{% endif -%}
+  {%- if entry.slides %}<a class="ProfilePageAllPostsTabUnshared-listDate site-metaLink" href="{% if entry.slides contains '://' %}{{ entry.slides }}{% else %}{{ entry.slides | prepend: '/assets/pdf/' | relative_url }}{% endif %}">Slides</a>{% endif -%}
+  {%- if entry.poster %}<a class="ProfilePageAllPostsTabUnshared-listDate site-metaLink" href="{% if entry.poster contains '://' %}{{ entry.poster }}{% else %}{{ entry.poster | prepend: '/assets/pdf/' | relative_url }}{% endif %}">Poster</a>{% endif -%}
+  {%- if entry.website %}<a class="ProfilePageAllPostsTabUnshared-listDate site-metaLink" href="{{ entry.website }}">Website</a>{% endif -%}
+{%- endcapture -%}
+<article class="ProfilePageAllPostsTabUnshared-listArticle" id="{{ entry.key }}">
+  <div class="ProfilePageAllPostsTabUnshared-listArticleContent">
+    <div class="ProfilePageAllPostsTabUnshared-listArticleBody{% unless preview %} ProfilePageAllPostsTabUnshared-listArticleBodyNoImage{% endunless %}">
+      <div class="ProfilePageAllPostsTabUnshared-listArticleText{% unless preview %} ProfilePageAllPostsTabUnshared-listArticleTextNoImage{% endunless %}">
+        <h3 class="ProfilePageAllPostsTabUnshared-listArticleTitle">
+          {%- if main_link %}<a class="ProfilePageAllPostsTabUnshared-listArticleTitleText" href="{{ main_link }}">{{ entry.title }}</a>{% else %}<span class="ProfilePageAllPostsTabUnshared-listArticleTitleText">{{ entry.title }}</span>{% endif -%}
+        </h3>
+        <div class="ProfilePageAllPostsTabUnshared-listArticleAuthors">
+          {%- for author in entry.author_array -%}
+            {%- assign author_last = author.last | regex_replace: '[*∗†‡§¶‖&^]', '' -%}
+            {%- unless forloop.first %}{% if forloop.last %}{% if forloop.length > 2 %},{% endif %} and {% else %}, {% endif %}{% endunless -%}
+            {%- if author_last == site.last_name and author.first == site.first_name -%}
+              <span class="site-self">{{ author.first }} {{ author.last }}</span>
+            {%- else -%}
+              {{ author.first }} {{ author.last }}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        {%- if venue %}
+        <div class="ProfilePageAllPostsTabUnshared-listArticleSummaryWrapper{% unless preview %} ProfilePageAllPostsTabUnshared-listArticleSummaryWrapperNoImage{% endunless %}"><p class="ProfilePageAllPostsTabUnshared-listArticleSummary{% unless preview %} ProfilePageAllPostsTabUnshared-listArticleSummaryNoImage{% endunless %}"><em>{{ venue }}</em></p></div>
+        {%- endif %}
+        <div class="ProfilePageAllPostsTabUnshared-listArticleMeta">
+          {%- if entry.abbr %}<span class="ProfilePageAllPostsTabUnshared-listKarma">{{ entry.abbr }}</span><span class="ProfilePageAllPostsTabUnshared-listMetaDivider" aria-hidden="true">•</span>{% endif -%}
+          <span class="ProfilePageAllPostsTabUnshared-listDate">{{ entry.year }}</span>
+          {%- if links != '' %}<span class="ProfilePageAllPostsTabUnshared-listMetaDivider" aria-hidden="true">•</span>{{ links }}{% endif -%}
+        </div>
+      </div>
+      {%- if preview %}
+      <div class="ProfilePageAllPostsTabUnshared-listArticleImage" style="background-image:url(&quot;{{ preview }}&quot;)" role="img" aria-label="{{ entry.title | escape }}"></div>
+      {%- endif %}
+    </div>
+  </div>
+</article>

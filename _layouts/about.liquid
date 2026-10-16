@@ -1,0 +1,44 @@
+---
+layout: profile
+---
+{%- comment -%}
+  The home page as their profile page: the bio and portrait in the top-post slot, then the latest
+  posts, selected publications and news as their post lists, with their sidebar.
+{%- endcomment -%}
+{%- assign author_name = site.first_name | append: ' ' | append: site.last_name -%}
+<div class="UserProfileTopPostsSectionUnshared-topPostsIndicator"><span class="UserProfileTopPostsSectionUnshared-topPostsLabel">About</span></div>
+<div class="UserProfileTopPostsSectionUnshared-postArticle UserProfileTopPostsSectionUnshared-postArticleTop site-aboutHero{% unless page.profile.image %} site-noImage{% endunless %}">
+  <div class="UserProfileTopPostsSectionUnshared-postContent">
+    <div class="site-aboutBio">{{ content }}</div>
+  </div>
+  {%- if page.profile.image %}
+  <div class="UserProfileTopPostsSectionUnshared-postImage site-aboutPhoto" style="background-image:url(&quot;{{ page.profile.image | prepend: '/assets/img/' | relative_url }}&quot;)" role="img" aria-label="{{ author_name }}"></div>
+  {%- endif %}
+</div>
+{% include lw/mobile_bio.liquid %}
+<section class="ProfilePageUnshared-allPostsSection">
+  <div class="ProfilePageTabbedSectionUnshared-allPostsLeftColumn">
+    {%- if page.latest_posts.enabled %}
+    <div class="site-section">
+      {% include lw/section_header.liquid label='Latest posts' %}
+      {% include lw/post_rows.liquid posts=site.posts limit=page.latest_posts.limit %}
+      <a class="LoadMore-root LoadMore-afterPostsListMarginTop" href="{{ '/blog/' | relative_url }}">All posts ({{ site.posts.size }})</a>
+    </div>
+    {%- endif %}
+    {%- if page.selected_papers %}
+    <div class="site-section publications">
+      {% include lw/section_header.liquid label='Selected publications' %}
+      {% bibliography --group_by none --query @*[selected=true]* %}
+      <a class="LoadMore-root LoadMore-afterPostsListMarginTop" href="{{ '/publications/' | relative_url }}">All publications ({% bibliography_count %})</a>
+    </div>
+    {%- endif %}
+    {%- if page.announcements.enabled %}
+    <div class="site-section">
+      {% include lw/section_header.liquid label='News' %}
+      {% include news.liquid limit=true %}
+      <a class="LoadMore-root LoadMore-afterPostsListMarginTop" href="{{ '/news/' | relative_url }}">All news ({{ site.news.size }})</a>
+    </div>
+    {%- endif %}
+  </div>
+  {% include lw/sidebar.liquid %}
+</section>

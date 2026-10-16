@@ -1,0 +1,22 @@
+{%- comment -%}
+  Their profile tabs over the blog's lists: All, then each category; on a tag or year archive the
+  archive itself is the active tab. The post count sits where their sort control is.
+{%- endcomment -%}
+{%- assign categories = site.categories | sort -%}
+{%- assign tab = 'ProfilePageTabbedSectionUnshared-profileTab' -%}
+{%- assign active = 'ProfilePageTabbedSectionUnshared-profileTab ProfilePageTabbedSectionUnshared-profileTabActive' -%}
+<div class="ProfilePageTabbedSectionUnshared-allPostsHeader">
+  <div class="ProfilePageTabbedSectionUnshared-allPostsLeftHeader">
+    <nav class="ProfilePageTabbedSectionUnshared-profileTabs" aria-label="Posts">
+      <a class="{% if page.url == '/blog/' %}{{ active }}{% else %}{{ tab }}{% endif %}" href="{{ '/blog/' | relative_url }}">All</a>
+      {%- for category in categories -%}
+        {%- assign category_url = category[0] | slugify | prepend: '/blog/category/' | append: '/' -%}
+        <a class="{% if page.url == category_url %}{{ active }}{% else %}{{ tab }}{% endif %}" href="{{ category_url | relative_url }}">{{ category[0] }}</a>
+      {%- endfor -%}
+      {%- if page.type == 'tags' or page.type == 'year' -%}
+        <span class="{{ active }}">{% include lw/page_title.liquid %}</span>
+      {%- endif -%}
+    </nav>
+    <div class="ProfilePageTabbedSectionUnshared-sortControl">{{ include.count }} {% if include.count == 1 %}post{% else %}posts{% endif %}</div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+---
+layout: default
+---
+{%- comment -%} lesswrong.com's profile page: the centred name over a rule, then the page's own sections. {%- endcomment -%}
+{%- capture profile_title -%}{% include lw/page_title.liquid %}{%- endcapture -%}
+<div class="ProfilePageUnshared-page">
+  <div class="ProfilePageUnshared-profileContent">
+    <main class="ProfilePageUnshared-profileMain">
+      <div class="ProfilePageUnshared-profileHeader">
+        <h1 class="ProfilePageUnshared-profileName"><a class="ProfilePageUnshared-profileNameLink" href="{{ page.url | relative_url }}">{{ profile_title | strip }}</a></h1>
+      </div>
+      {{ content }}
+    </main>
+  </div>
+</div>
