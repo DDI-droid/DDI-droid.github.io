@@ -193,6 +193,13 @@ body.theme-dark .Header-themeToggle path {
   fill: currentColor;
 }
 
+/* Body text one step darker than their 87%: Windows draws Warnock (CFF outlines) with darker stroke
+   cores than Crimson (TrueType); measured in a real Chrome window, 90% gives Crimson Warnock's stroke
+   grey (58 vs 58) and ink (within 3%). */
+.ContentStyles-base {
+  color: light-dark(rgba(0, 0, 0, 0.9), rgba(255, 255, 255, 0.9));
+}
+
 /* Posts are written with ##, ### and ####; LessWrong authors use h1, h2, h3. */
 .ContentStyles-postBody #markdown-content h2 {
   margin-top: 1em;
