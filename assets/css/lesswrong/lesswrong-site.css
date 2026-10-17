@@ -303,7 +303,7 @@ body.theme-dark .publications .ProfilePageAllPostsTabUnshared-listArticleImage {
   mix-blend-mode: normal;
 }
 
-/* About: the bio in the top post's summary style, at full length; the portrait in its image slot. */
+/* About: the bio in the top post's summary style, at full length; the photo in their image box. */
 .site-aboutHero .UserProfileTopPostsSectionUnshared-postContent {
   aspect-ratio: auto;
 }
@@ -328,7 +328,7 @@ body.theme-dark .publications .ProfilePageAllPostsTabUnshared-listArticleImage {
 }
 
 .site-aboutPhoto {
-  background-position: center 25%;
+  background-position: center;
   mix-blend-mode: normal;
 }
 
