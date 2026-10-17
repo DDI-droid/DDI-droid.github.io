@@ -11,7 +11,9 @@
       (markdown headings, scholar's bibliography lists) mapped onto their styles. */
 
 /* Crimson Pro, static instances at weight 400 (text) and 650 (bold), scaled 5% so its x-height
-   meets Warnock Pro's; measured on the page, it then puts the same ink on a paragraph as Warnock. */
+   meets Warnock Pro's. In the files, capitals are scaled up 9.5% and figures 7.7% in height to
+   Warnock's cap height, and the word space is widened to Warnock's; measured on the page, a
+   paragraph then breaks lines where Warnock does and carries the same ink. */
 @font-face {
   font-family: warnock-pro;
   src: url("../../fonts/crimson-pro-latin-400-normal.woff2") format("woff2");
