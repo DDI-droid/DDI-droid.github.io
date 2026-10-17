@@ -1,0 +1,19 @@
+---
+---
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- The site icon (an emoji) in the site's greys: its own shading kept, the colour taken out.
+       Light browsers get charcoal with near-black folds, dark browsers a light grey. -->
+  <defs>
+    <filter id="ink" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="0.238 0.801 0.081 0 -0.469  0.238 0.801 0.081 0 -0.469  0.238 0.801 0.081 0 -0.469  0 0 0 1 0"/>
+    </filter>
+    <filter id="paper" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="0.255 0.858 0.087 0 -0.038  0.255 0.858 0.087 0 -0.038  0.255 0.858 0.087 0 -0.038  0 0 0 1 0"/>
+    </filter>
+  </defs>
+  <style>
+    text { filter: url(#ink); }
+    @media (prefers-color-scheme: dark) { text { filter: url(#paper); } }
+  </style>
+  <text x="50" y="50" font-size="98" text-anchor="middle" dominant-baseline="central">{{ site.icon | default: '🧠' }}</text>
+</svg>
