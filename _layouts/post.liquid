@@ -54,7 +54,7 @@ layout: default
                   <div class="LWPostsPageHeader-authorAndSecondaryInfo">
                     {%- if page.date %}
                     {%- if is_post %}
-                    <div class="LWPostsPageHeader-authorInfo"><span class="PostsAuthors-root"><span class="PostsAuthors-authorName UsersNameDisplay-userName">{{ author_name }}</span></span></div>
+                    <div class="LWPostsPageHeader-authorInfo"><span class="Typography-root Typography-body1 PostsAuthors-root">by <span class="PostsAuthors-authorName"><a class="UsersNameDisplay-noColor" href="{{ '/' | relative_url }}">{{ author_name }}</a></span></span></div>
                     {%- endif %}
                     <div class="LWPostsPageHeader-date"><span class="PostsPageDate-date"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date_to_string: 'ordinal' }}</time></span></div>
                     {%- if is_post %}

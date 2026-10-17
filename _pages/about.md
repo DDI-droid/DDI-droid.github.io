@@ -6,7 +6,7 @@ subtitle: Researcher, Kairosity · Independent Researcher · Data Scientist, Dec
 
 profile:
   align: right
-  image: prof_pic.jpg
+  image: prof_pic_munich.jpg
   image_circular: false # crops the image to make it circular
   more_info:
 
