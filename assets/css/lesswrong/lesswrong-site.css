@@ -136,6 +136,11 @@ html[data-theme="dark"] body.creamBackground.theme-default {
   font: inherit;
 }
 
+/* The moon is drawn in outline; in dark mode it fills. */
+body.theme-dark .Header-themeToggle path {
+  fill: currentColor;
+}
+
 /* Posts are written with ##, ### and ####; LessWrong authors use h1, h2, h3. */
 .ContentStyles-postBody #markdown-content h2 {
   margin-top: 1em;
