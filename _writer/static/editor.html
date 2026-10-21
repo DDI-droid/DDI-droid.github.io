@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Writer</title>
+<link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+<link rel="stylesheet" href="/vendor/codemirror.css">
+<link rel="stylesheet" href="/_writer/editor.css">
+</head>
+<body>
+<header class="bar">
+  <span class="brand">Writer</span>
+  <select id="drafts" title="Drafts"></select>
+  <button id="new" type="button" title="New draft">New</button>
+  <span class="sep"></span>
+  <span id="status" class="status">Loading</span>
+  <span id="words" class="status"></span>
+  <span class="grow"></span>
+  <label class="toggle" title="Keep the preview scrolled to where you are writing"><input type="checkbox" id="sync" checked> Sync scroll</label>
+  <label class="toggle" title="Lay the preview out at desktop width and scale it to fit, so sidenotes show as on lesswrong.com"><input type="checkbox" id="wide" checked> Desktop width</label>
+  <button id="help" type="button" title="Syntax">Syntax</button>
+  <a id="open" class="button" href="/preview" target="_blank" title="Open the preview in its own tab">Preview tab</a>
+  <button id="publish" type="button" class="primary" title="Write this draft to _posts (nothing is pushed)">Publish</button>
+</header>
+<main class="split" id="split">
+  <section class="pane left"><div class="editor"><div class="hl cm-s-default" id="hl" aria-hidden="true"></div><textarea id="source" spellcheck="true" aria-label="Post source"></textarea></div></section>
+  <div class="divider" id="divider" title="Drag to resize"></div>
+  <section class="pane right"><iframe id="preview" src="/preview" title="Preview"></iframe></section>
+</main>
+<aside id="sheet" class="sheet" hidden>
+  <div class="sheet-head"><strong>Syntax</strong><button id="sheet-close" type="button" aria-label="Close">×</button></div>
+  <table>
+    <tr><td><code>## Section</code></td><td>section heading (### and #### below it)</td></tr>
+    <tr><td><code>**bold** *italic* ~~struck~~</code></td><td>emphasis</td></tr>
+    <tr><td><code>[text](url)</code></td><td>link</td></tr>
+    <tr><td><code>- item</code> / <code>1. item</code></td><td>lists; indent two spaces to nest</td></tr>
+    <tr><td><code>&gt; quote</code></td><td>block quote</td></tr>
+    <tr><td><code>$x^2$</code></td><td>inline math</td></tr>
+    <tr><td><code>$$</code> … <code>$$</code></td><td>display math, on their own lines</td></tr>
+    <tr><td><code>text[^1]</code> + <code>[^1]: note</code></td><td>footnote; indent 4 spaces for more paragraphs</td></tr>
+    <tr><td><code>![alt](src "caption")</code></td><td>figure; add <code>{width=60%}</code> to resize</td></tr>
+    <tr><td>paste or drop an image</td><td>uploads it next to the post and inserts the figure</td></tr>
+    <tr><td><code>| a | b |</code></td><td>table (a <code>|---|---|</code> row under the header)</td></tr>
+    <tr><td><code>```python</code> … <code>```</code></td><td>code block</td></tr>
+    <tr><td><code>&gt;! secret</code></td><td>spoiler, revealed on hover</td></tr>
+    <tr><td><code>+++ Title</code> … <code>+++</code></td><td>collapsible section</td></tr>
+    <tr><td><code>::build /assets/img/posts/x/name 5 "alt"</code></td><td>stepped figure: name-1.png … name-5.png</td></tr>
+    <tr><td>a YouTube link on its own line</td><td>embedded video</td></tr>
+    <tr><td><code>---</code></td><td>horizontal rule</td></tr>
+    <tr><td><code>&lt;!-- note --&gt;</code></td><td>a note to yourself; Grammarly reads it, the post never shows it (Ctrl+/)</td></tr>
+    <tr><td>HTML</td><td>passes through as written</td></tr>
+  </table>
+  <p class="keys">Ctrl+B bold · Ctrl+I italic · Ctrl+K link · Ctrl+/ note · Ctrl+S save now · double-click the preview to jump to the source</p>
+</aside>
+<div id="toast" class="toast" hidden></div>
+<script src="/vendor/codemirror.js"></script>
+<script src="/vendor/overlay.js"></script>
+<script src="/vendor/markdown-mode.js"></script>
+<script src="/vendor/gfm-mode.js"></script>
+<script src="/vendor/yaml-mode.js"></script>
+<script src="/vendor/yaml-frontmatter.js"></script>
+<script src="/vendor/runmode.js"></script>
+<script src="/vendor/markdown-it.js"></script>
+<script src="/vendor/markdown-it-footnote.js"></script>
+<script src="/vendor/markdown-it-container.js"></script>
+<script src="/_writer/render.js"></script>
+<script src="/_writer/editor.js"></script>
+</body>
+</html>

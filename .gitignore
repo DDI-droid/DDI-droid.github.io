@@ -15,3 +15,6 @@ node_modules/
 output/playwright/
 test-results/
 vendor
+
+# Writer: local only (recreation-test copies of LessWrong posts are not ours to publish)
+_writer/tests/lw/

@@ -1,0 +1,19 @@
+{
+  "name": "anshul-writer",
+  "private": true,
+  "description": "Local writing environment for the site: write Markdown on the left, see the real post page on the right, publish to _posts.",
+  "scripts": {
+    "start": "node server.cjs"
+  },
+  "dependencies": {
+    "codemirror": "5.65.18",
+    "markdown-it": "14.1.0",
+    "markdown-it-container": "4.0.0",
+    "markdown-it-footnote": "4.0.0"
+  },
+  "devDependencies": {
+    "jsdom": "^25.0.1",
+    "turndown": "7.2.0",
+    "turndown-plugin-gfm": "1.0.2"
+  }
+}

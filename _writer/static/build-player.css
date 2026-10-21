@@ -1,0 +1,9 @@
+.plm-build{margin:1.6rem auto 2rem;max-width:960px}
+.plm-build .plm-frame{display:block;width:100%;height:auto;aspect-ratio:16/9;border:1px solid rgba(128,128,128,.25);border-radius:4px;background:#fff;cursor:pointer}
+.plm-build .plm-bar{display:flex;align-items:center;gap:.5rem;margin-top:.45rem;font-size:.85rem;opacity:.85}
+.plm-build button{font:inherit;font-size:.85rem;padding:.15rem .6rem;border:1px solid rgba(128,128,128,.45);border-radius:4px;background:transparent;color:inherit;cursor:pointer}
+.plm-build button:disabled{opacity:.35;cursor:default}
+.plm-build .plm-dots{display:flex;gap:.3rem;margin-left:.3rem}
+.plm-build .plm-dot{width:.55rem;height:.55rem;border-radius:50%;background:rgba(128,128,128,.35);cursor:pointer}
+.plm-build .plm-dot.on{background:#1446a0}
+.plm-build .plm-count{margin-left:auto;font-variant-numeric:tabular-nums}
