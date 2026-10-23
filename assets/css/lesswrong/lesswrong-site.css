@@ -249,10 +249,6 @@ body.theme-dark .Header-themeToggle path {
   box-sizing: border-box;
 }
 
-.FixedPositionToC-rowWrapper {
-  min-height: 0;
-}
-
 .FixedPositionToC-rowWrapper[style*="flex-grow"] {
   justify-content: flex-start;
 }

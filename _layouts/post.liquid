@@ -110,8 +110,10 @@ layout: default
 <script src="{{ '/assets/js/lw-footnotes.js' | relative_url }}"></script>
 <script>
   (() => {
-    // Contents rail: one row per heading, each row sized by the length of its section,
-    // a progress bar for the viewport, the current section highlighted, revealed on hover.
+    // Contents rail: one row per heading, each row sized by the length of its section but never shorter
+    // than its own text (as on lesswrong.com), a progress bar for the viewport, the current section
+    // highlighted, revealed on hover. When the rows are taller than the window the rail scrolls, and it
+    // follows the section being read.
     const article = document.getElementById('markdown-content');
     const rows = document.getElementById('toc-rows');
     const toc = document.getElementById('fixed-toc');
@@ -141,11 +143,20 @@ layout: default
         e.wrap.style.flex = len + ' 1 0px';
       });
     };
+    const scroller = toc.closest('.MultiToCLayout-stickyBlockScroller');
+    let shown = -1;
+    const follow = current => {
+      if (current < 0 || current === shown || !scroller || scroller.scrollHeight <= scroller.clientHeight + 1) return;
+      shown = current;
+      const r = entries[current].wrap.getBoundingClientRect(), s = scroller.getBoundingClientRect();
+      if (r.top < s.top + 40 || r.bottom > s.bottom - 40) scroller.scrollTop += r.top - s.top - scroller.clientHeight * 0.3;
+    };
     const track = () => {
       const t = tops(), y = window.scrollY, mark = y + window.innerHeight * 0.3;
       let current = -1;
       t.forEach((top, i) => { if (top <= mark) current = i; });
       entries.forEach((e, i) => e.row.classList.toggle('TableOfContentsRow-highlighted', i === current));
+      follow(current);
       const first = t[0] || 0, span = Math.max(1, docEnd() - first);
       const h = rows.getBoundingClientRect().height;
       const top = Math.max(0, Math.min(h, (y - first) / span * h));
