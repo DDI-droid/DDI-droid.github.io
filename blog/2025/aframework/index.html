@@ -93,8 +93,10 @@
     <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
 </code></pre></div></div> <p>Nothing here starts a server or manages a process. The daemon comes up on the first call, the worker registers the tool from its import path, the agent calls it, the verifier watches the loop, and the answer comes back. The application only ever described what it wanted.</p> <p>AFramework is open source on <a href="https://github.com/Curiosity-Oneiroi/AFramework" rel="external nofollow noopener" target="_blank">GitHub</a>.</p> </div> </div> </div> </div> </div> </div> </div> <div class="MultiToCLayout-rhs" style="grid-area:rhs0"> <div class="PostsPage-reserveSpaceForSidenotes"></div> <div class="SideItems-sidebar"></div> </div> <div class="MultiToCLayout-gap1"></div> <div class="MultiToCLayout-content" style="grid-area:content1"> <div class="PostsPage-centralColumn PostsPage-betweenPostAndComments"> <div class="PostsPagePostFooter-root"> <div class="PostsPagePostFooter-footerTagList post-tags"> <div class="FooterTagList-root"> <a class="FooterTag-root FooterTag-core" href="/blog/tag/systems/">systems</a><a class="FooterTag-root FooterTag-core" href="/blog/tag/llm/">llm</a><a class="FooterTag-root FooterTag-core" href="/blog/tag/agents/">agents</a><a class="FooterTag-root FooterTag-core" href="/blog/category/engineering/">engineering</a><a class="FooterTag-root FooterTag-core" href="/blog/2025/">2025</a> </div> </div> </div> </div> </div> </div> </div> <script src="/assets/js/lw-footnotes.js"></script> <script>
   (() => {
-    // Contents rail: one row per heading, each row sized by the length of its section,
-    // a progress bar for the viewport, the current section highlighted, revealed on hover.
+    // Contents rail: one row per heading, each row sized by the length of its section but never shorter
+    // than its own text (as on lesswrong.com), a progress bar for the viewport, the current section
+    // highlighted, revealed on hover. When the rows are taller than the window the rail scrolls, and it
+    // follows the section being read.
     const article = document.getElementById('markdown-content');
     const rows = document.getElementById('toc-rows');
     const toc = document.getElementById('fixed-toc');
@@ -124,11 +126,20 @@
         e.wrap.style.flex = len + ' 1 0px';
       });
     };
+    const scroller = toc.closest('.MultiToCLayout-stickyBlockScroller');
+    let shown = -1;
+    const follow = current => {
+      if (current < 0 || current === shown || !scroller || scroller.scrollHeight <= scroller.clientHeight + 1) return;
+      shown = current;
+      const r = entries[current].wrap.getBoundingClientRect(), s = scroller.getBoundingClientRect();
+      if (r.top < s.top + 40 || r.bottom > s.bottom - 40) scroller.scrollTop += r.top - s.top - scroller.clientHeight * 0.3;
+    };
     const track = () => {
       const t = tops(), y = window.scrollY, mark = y + window.innerHeight * 0.3;
       let current = -1;
       t.forEach((top, i) => { if (top <= mark) current = i; });
       entries.forEach((e, i) => e.row.classList.toggle('TableOfContentsRow-highlighted', i === current));
+      follow(current);
       const first = t[0] || 0, span = Math.max(1, docEnd() - first);
       const h = rows.getBoundingClientRect().height;
       const top = Math.max(0, Math.min(h, (y - first) / span * h));
