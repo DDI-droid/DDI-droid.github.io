@@ -3,6 +3,7 @@
 # for more information, please refer to the documentation of jekyll-socials plugin: https://github.com/george-gca/jekyll-socials
 email: thakur.17@iitj.ac.in # your email address
 github_username: DDI-droid # your GitHub username
+scholar_profile_id: o5j62AsAAAAJ # Google Scholar link in the sidebar (scholar_userid is left unset: it would switch on the citation-update workflow)
 # TODO: fill these in — ask Anshul for handles
 # scholar_userid: # your Google Scholar ID
 # linkedin_username: # your LinkedIn username
