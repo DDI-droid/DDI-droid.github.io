@@ -200,19 +200,66 @@ body.theme-dark .Header-themeToggle path {
   color: light-dark(rgba(0, 0, 0, 0.9), rgba(255, 255, 255, 0.9));
 }
 
+/* Post text one step larger than theirs, for easier reading: every fixed size and vertical space of
+   their post body scaled by --post-scale (15/14 takes their 18.2px text to 19.5px), so text, headings,
+   lists, quotes, code and footnotes keep their proportions. The 682px column stays, and lines come to
+   about 78 characters. Sizes in em follow on their own. */
+.ContentStyles-base.ContentStyles-postBody {
+  --post-scale: calc(15 / 14);
+  font-size: calc(18.2px * var(--post-scale));
+  line-height: calc(26px * var(--post-scale));
+}
+
+.ContentStyles-base.ContentStyles-postBody li {
+  font-size: calc(18.2px * var(--post-scale));
+  line-height: calc(26px * var(--post-scale));
+  margin-bottom: calc(6.5px * var(--post-scale));
+}
+
+.ContentStyles-base.ContentStyles-postBody blockquote {
+  font-size: calc(18.2px * var(--post-scale));
+  line-height: calc(26px * var(--post-scale));
+  padding: calc(16px * var(--post-scale));
+}
+
+.ContentStyles-base.ContentStyles-postBody pre {
+  padding: calc(13px * var(--post-scale));
+}
+
+.ContentStyles-base.ContentStyles-postBody hr {
+  margin: calc(32px * var(--post-scale)) 0;
+}
+
+.ContentStyles-base.ContentStyles-postBody .footnotes {
+  margin-top: calc(40px * var(--post-scale));
+  padding-top: calc(40px * var(--post-scale));
+}
+
+/* Their footnote rules, restated: the list item and quote rules above would otherwise win. */
+.ContentStyles-base.ContentStyles-postBody .footnotes li {
+  font-size: 0.9em;
+  line-height: calc(21.06px * var(--post-scale));
+}
+
+.ContentStyles-base.ContentStyles-postBody .footnotes blockquote {
+  padding: 1px 1px 1px 3px;
+  font-size: 0.9em;
+  line-height: 1.5em;
+}
+
 /* Posts are written with ##, ### and ####; LessWrong authors use h1, h2, h3. */
 .ContentStyles-postBody #markdown-content h2 {
   margin-top: 1em;
   margin-left: -0.02em;
   color: light-dark(#424242, #e8e8e8);
-  font-size: 36.4px;
+  font-size: calc(36.4px * var(--post-scale, 1));
   line-height: 1.13333em;
 }
 
 .ContentStyles-postBody #markdown-content h3 {
   margin-top: 1em;
   color: light-dark(#424242, #e8e8e8);
-  font-size: 26px;
+  font-size: calc(26px * var(--post-scale, 1));
   line-height: 1.20588em;
 }
 
@@ -220,7 +267,7 @@ body.theme-dark .Header-themeToggle path {
   margin-top: 1em;
   color: light-dark(#616161, #d5d5d5);
   font-family: ETBookRoman, warnock-pro, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
-  font-size: 20.8px;
+  font-size: calc(20.8px * var(--post-scale, 1));
   font-weight: 400;
   line-height: 1.20588em;
 }
