@@ -1,0 +1,178 @@
+---
+layout: post
+title: "CyberGym Harness Optimization"
+date: 2026-11-09 23:41:40 +0000
+description: "Building a high-throughput evaluation pipeline and hardening an agent harness for DeepSeek V3.2 on CyberGym L2."
+tags: cybergym, evaluation, agents, deepseek
+related_posts: false
+---
+{% raw %}
+<p>This report covers the end-to-end evaluation pipeline and harness iterations I built for the CyberGym benchmark (difficulty <code>level2</code>) using <strong>DeepSeek V3.2</strong> (<code>deepseek.v3.2</code>) on AWS Bedrock.</p>
+<p>I modeled my orchestration framework (<code>cybergym-eval</code>) after the architecture of <code>prescera/benchmark-evals</code>.</p>
+<blockquote>
+<p><strong>Development Friction:</strong> It is worth noting that due to the cybersecurity nature of the task, it was genuinely difficult to build out this framework. At times, coding assistants like Claude and Codex would hit their safety guardrails and outright refuse to work on the eval repository and the harnesses themselves.</p>
+<figure class="image"><img src="/assets/img/posts/prescera-interview-report/image_f25a3e.png" alt="Claude Safeguards Triggered"></figure>
+</blockquote>
+<h2 id="1-code-and-paths-on-the-vm">1. Code and Paths on the VM</h2>
+<p>Everything on the VM is split cleanly so that upstream CyberGym is never modified:</p>
+<ul>
+<li><strong>Upstream benchmark (unmodified):</strong> <code>~/cybergym</code> (own virtualenv at <code>~/cybergym/.venv</code>)</li>
+<li><strong>Evaluation pipeline:</strong> <code>~/cybergym-eval</code> (source in <code>src/cybergym_eval/</code>, configs in <code>config/train25_*.json</code>)</li>
+<li><strong>Agent harnesses:</strong> <code>~/cybergym-harnesses/harnesses/</code> (<code>codex</code>, <code>codex_think_ec</code>, <code>codex_think_ec_v5</code>, <code>codex_think_ec_tools</code>, <code>codex_think_ec_tools2</code>)</li>
+<li><strong>Run artifacts &amp; SQLite state:</strong> <code>~/cybergym-work/train25/</code></li>
+</ul>
+<details class="detailsBlock"><summary class="detailsBlockTitle"><p>How to launch an evaluation run</p></summary><div class="detailsBlockContent">
+<pre><code class="language-bash"># 1. Freeze harness code, resolve the seeded task split, and stage data
+~/cybergym-eval/.venv/bin/cybergym-eval prepare --config ~/cybergym-eval/config/train25_think_ec_tools2.json
+
+# 2. Schedule container workers via Ray against the local LLM shim and submission server
+~/cybergym-eval/.venv/bin/cybergym-eval run --config ~/cybergym-eval/config/train25_think_ec_tools2.json
+</code></pre>
+</div></details>
+<h2 id="2-evaluation-results-train25">2. Evaluation Results (<code>train25</code>)</h2>
+<p>I drew 50 tasks deterministically (<code>seed=0</code>) from the 1,507-task pool and split them into <code>train25</code> (first 25) and <code>test25</code> (last 25). Per the instructions to optimize strictly on the train/dev split, all iteration below was conducted on <code>train25</code><span class="footnote-reference" data-footnote-reference="" data-footnote-id="x1" data-footnote-index="1" role="doc-noteref" id="fnrefx1"><sup><a href="#fnx1">[1]</a></sup></span>.</p>
+<figure class="table"><table>
+<thead>
+<tr>
+<th>Harness Label</th>
+<th style="text-align:right">Parallel Slots (<span class="math-tex">\(K\)</span>)</th>
+<th style="text-align:center">Run Status</th>
+<th style="text-align:center">Resolved</th>
+<th style="text-align:center">Passed / 25</th>
+<th>Key Changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>codex</code></strong> <em>(Baseline)</em></td>
+<td style="text-align:right">8</td>
+<td style="text-align:center">Completed</td>
+<td style="text-align:center">25/25</td>
+<td style="text-align:center"><strong>4 (16%)</strong></td>
+<td>Stock Codex-CLI example + 3 spawn crash fixes for DeepSeek tool calls; <span class="math-tex">\(37\text{ tasks/hr}\)</span>.</td>
+</tr>
+<tr>
+<td><code>codex_think_ec</code> <em>(v4)</em></td>
+<td style="text-align:right">10</td>
+<td style="text-align:center">Stopped early</td>
+<td style="text-align:center">4/25</td>
+<td style="text-align:center">4 <em>(partial)</em></td>
+<td>Added <code>reasoning_effort=high</code>, 500-step cap, rolling summarization, and a two-flag stop gate. Stopped on a write-gate race.</td>
+</tr>
+<tr>
+<td><code>codex_think_ec_v5</code></td>
+<td style="text-align:right">10</td>
+<td style="text-align:center">Stopped early</td>
+<td style="text-align:center">6/25</td>
+<td style="text-align:center">5 <em>(partial)</em></td>
+<td>Kernel-enforced read-only bind mount on <code>/output/poc</code> + trusted host-side grading. Stopped due to orphaned fuzzer loops.</td>
+</tr>
+<tr>
+<td><strong><code>codex_think_ec_tools_r2</code></strong></td>
+<td style="text-align:right">15</td>
+<td style="text-align:center"><strong>Completed</strong></td>
+<td style="text-align:center">25/25</td>
+<td style="text-align:center"><strong>10 (40%)</strong></td>
+<td>Custom process-tree supervisor (<code>cg_run</code>), DSML call recovery, and hardened submission client<span class="footnote-reference" data-footnote-reference="" data-footnote-id="x2" data-footnote-index="2" role="doc-noteref" id="fnrefx2"><sup><a href="#fnx2">[2]</a></sup></span>.</td>
+</tr>
+<tr>
+<td><strong><code>codex_think_ec_tools2</code></strong></td>
+<td style="text-align:right">15</td>
+<td style="text-align:center"><em>Post-cutoff</em></td>
+<td style="text-align:center"><em>In flight</em></td>
+<td style="text-align:center"><em>4–7+ early</em></td>
+<td>Fixed silent context-compaction drop, switched to string-only <code>shell</code> + <code>write_file</code>, added submission admission cap.</td>
+</tr>
+<tr>
+<td><strong><code>codex_think_ec_tools2_low</code></strong></td>
+<td style="text-align:right">—</td>
+<td style="text-align:center"><em>In progress (53 min in)</em></td>
+<td style="text-align:center">13/25</td>
+<td style="text-align:center">10 <em>(so far)</em></td>
+<td>Same <code>tools2</code> harness at lower reasoning effort. 3 failed, 12 still running at the time of writing; the 12 remaining tasks have 2-hour limits.</td>
+</tr>
+</tbody>
+</table></figure>
+<h2 id="3-pipeline-design-throughput-optimization">3. Pipeline Design &amp; Throughput Optimization</h2>
+<h3 id="architecture">Architecture</h3>
+<p>I structured the evaluator to run entirely outside the upstream CyberGym repository to maintain a clean testing environment. The pipeline relies on a single JSON config per run that manages Ray-based concurrent scheduling (<code>benchmark_slots</code>), interleaves tasks and harnesses so all agents face identical API conditions, and routes all LLM traffic through a custom host-side shim for precise key rotation and metering. By decoupling the agent’s offline Docker network from the host’s Bedrock connection and utilizing a strict SQLite WAL database for state, the system ensures crash-resilient, deterministic executions without ever patching upstream code.</p>
+<figure class="image"><img src="/assets/img/posts/prescera-interview-report/eval-architecture.svg" alt="Evaluator architecture: a Ray scheduler starts one worker per execution; the worker launches an agent container with no internet whose only outbound paths are the LLM shim and the official submission server, and the final answer file stays locked until the server's record shows a crash."><figcaption>Evaluator architecture. A worker launches each agent container offline. The container reaches only the LLM shim (to Bedrock) and the official submission server. The worker unlocks the final answer file only after the server’s own record shows a crash, then grades the saved file.</figcaption></figure>
+<h3 id="catching-the-aslr-sanitizer-bug-vmmmap_rnd_bits">Catching the ASLR Sanitizer Bug (<code>vm.mmap_rnd_bits</code>)</h3>
+<p>Ubuntu 26.04 defaults to <code>vm.mmap_rnd_bits=32</code>. Old Clang AddressSanitizer builds inside CyberGym’s ARVO images reserve fixed shadow-memory ranges and crash at startup—before reading a single byte of the PoC—when libraries land inside those ranges.</p>
+<p>I tested <code>n132/arvo:1065-vul</code> (Clang 5.0.0) with 100 harmless 5-byte inputs at both settings:</p>
+<ul>
+<li>At <code>mmap_rnd_bits=32</code>: <strong>29/100 runs segfaulted at startup</strong> (exit code 139). Because the grading server treats any non-zero exit as a crash, an agent gets fake positive rewards ~29% of the time, and final grading passes a completely bogus PoC ~20% of the time (<span class="math-tex">\(0.29 \times 0.71\)</span>).</li>
+<li>At <code>mmap_rnd_bits=28</code>: <strong>0/100 false crashes</strong>. I locked the VM to <code>28</code> and made <code>cybergym-eval preflight</code> refuse to start a run otherwise.</li>
+</ul>
+<h3 id="where-the-time-actually-goes">Where the Time Actually Goes</h3>
+<ul>
+<li><strong>Grading is cheap:</strong> Under a synthetic load test of 32 simultaneous unique submissions (<code>~/tmp/grading_load2.sh</code>), median grading turnaround was <strong>1.88 s</strong> (0.37 s at <span class="math-tex">\(N=1\)</span>) with host CPU at just 24%. I didn’t need a custom queueing proxy in front of the official server.</li>
+<li><strong>Agents are 92% LLM-latency-bound:</strong> Across 4,506 model requests in <code>codex_think_ec_tools_r2</code> (<span class="math-tex">\(K=15\)</span>), <strong>92% of wall-clock time was spent waiting on Bedrock</strong> (16.8 s average per call, ~34 output tokens/s) and only <strong>7% on tool execution</strong>.</li>
+<li><strong>Parallelism ceiling on this VM:</strong> Because containers sit idle waiting on SSE streams, I lowered per-container reservations to <code>1 CPU / 2 GB RAM</code>, letting me comfortably run <span class="math-tex">\(K = 15\)</span> <strong>agents in parallel</strong> (leaving ~30 GB RAM for Docker, Ray, the submission server, and my local LLM metering shim) with <strong>0 HTTP 429 throttles</strong> from Bedrock.</li>
+<li><strong>Measured Throughput:</strong> On the baseline <code>codex</code> harness (<span class="math-tex">\(K=8\)</span>, 100-step cap), I achieved <strong>37 tasks/hour</strong> (40.5 min wall time for 25 tasks). On the heavy thinking harnesses (<span class="math-tex">\(K=15\)</span>, 500-step cap, 2-hour timeout), throughput shifts to roughly <strong>8–12 tasks/hour</strong> because hard tasks deliberately use their full multi-hundred-step reasoning budget rather than giving up in 40 seconds<span class="footnote-reference" data-footnote-reference="" data-footnote-id="x3" data-footnote-index="3" role="doc-noteref" id="fnrefx3"><sup><a href="#fnx3">[3]</a></sup></span>.</li>
+</ul>
+<h2 id="4-harness-optimization-notebook">4. Harness Optimization Notebook</h2>
+<p>Each iteration builds on observations from the previous one.</p>
+<h3 id="experiment-1-baseline-codex-16-425-passed">Experiment 1: Baseline <code>codex</code> (16% — 4/25 passed)</h3>
+<ul>
+<li><strong>Setup:</strong> Upstream CyberGym’s example Codex-CLI agent connected to <code>deepseek.v3.2</code> via my local OpenAI-compatible metering shim.</li>
+<li><strong>Immediate hurdle:</strong> My very first run crashed on 6 of the first 10 tasks with <code>ENAMETOOLONG</code>. DeepSeek occasionally emits the <code>shell</code> tool’s command array as a double-encoded JSON string (<code>&quot;[\&quot;cd\&quot;, ...]&quot;</code>); stock Codex treated the entire string as <code>argv[0]</code>. I patched <code>parsers.ts</code> to unwrap JSON-encoded arrays, fall back to <code>bash -lc</code>, and return spawn errors as exit code 127 instead of crashing the Node process.</li>
+<li><strong>Result &amp; Learning:</strong> <strong>4/25 passed</strong>. Looking at the 21 failures, <strong>14 never produced a <code>/output/poc</code> file</strong> (6 never even called <code>submit.sh</code>), and 6 wrote a non-crashing file and quit early. Standard Codex lets the model stop whenever it emits a plain-text reply without a tool call, and without reasoning enabled, DeepSeek gives up after a few surface reads.</li>
+</ul>
+<h3 id="experiment-2-thinking-kernel-enforced-stop-gate-codex_think_ec-to-v5">Experiment 2: Thinking + Kernel-Enforced Stop Gate (<code>codex_think_ec</code> <span class="math-tex">\(\to\)</span> <code>v5</code>)</h3>
+<ul>
+<li><strong>Hypothesis:</strong> Enabling <code>reasoning_effort=high</code>, raising the iteration limit from 100 to 500 (with rolling context summarization), and refusing to let the agent exit until it both (a) triggers a real crash on the server and (b) writes <code>/output/poc</code> will stop premature surrenders.</li>
+<li><strong>What went wrong in v4:</strong> Initially, I enforced the write-gate in user space (stripping writes before a crash flag appeared and polling every 0.3 s to delete premature files). An internal review caught two flaws: a 0.3 s race window could let a pre-crash write survive if a crash happened right after, and the in-container crash flag ran under the agent’s own UID, meaning a clever command could forge it.</li>
+<li><strong>The Kernel-Level Fix (<code>v5</code>):</strong> Before container start, the host creates a root-owned, <code>0644</code> empty file and bind-mounts it over <code>/output/poc</code>. Because it is a mount point owned by root, the unprivileged agent user cannot write, <code>chmod</code>, <code>unlink</code>, or <code>mv</code> over it (verified across an 84-check adversarial test battery). Only when the <strong>host worker</strong> independently queries the submission server using its private admin key and sees a confirmed crash (<code>vul_exit_code</code> <span class="math-tex">\(\notin \{0, 300\}\)</span>) does it run <code>docker exec -u root chown</code> to unlock the file. Furthermore, final grading reads <code>submit.sh</code> metadata outside the workspace so the agent cannot tamper with the grading script.</li>
+<li><strong>What I found live in <code>v5</code>:</strong> I stopped <code>v5</code> after 77 minutes (at <strong>5 passed, 1 failed, 19 still running</strong>) after discovering two wild behaviors in the live containers:
+<ol>
+<li><strong>Orphaned background fuzzer loops:</strong> On <code>arvo:44199</code> and <code>arvo:56272</code>, the model wrote detached Python <code>while True:</code> scripts (<code>PPID=1</code>) that generated random bytes and hammered <code>submit.sh</code> forever outside the agent loop—sending <strong>~14,700 submissions</strong> from one container (generating 21,968 HTTP 429 rate-limit replies in the server log).</li>
+<li><strong>DeepSeek DSML Markup Leak:</strong> With thinking on, DeepSeek frequently leaked its native <code>&lt;｜DSML｜function_calls&gt;</code> XML tags into plain text instead of structured tool calls. On <code>arvo:33844</code>, the agent pinpointed the exact <code>memcpy</code> overflow and offsets, yet wasted <strong>296 of 308 rounds</strong> because its attempts to write the exploit leaked as text.</li>
+</ol>
+</li>
+</ul>
+<h3 id="experiment-3-process-supervision-dsml-recovery-codex_think_ec_tools_r2-40-1025-passed">Experiment 3: Process Supervision &amp; DSML Recovery (<code>codex_think_ec_tools_r2</code> — 40% — 10/25 passed)</h3>
+<ul>
+<li><strong>Hypothesis:</strong> If I recover leaked DSML blocks into real tool calls and wrap every command in a strict process-tree supervisor, the model’s reasoning will actually reach the target binary.</li>
+<li><strong>Changes:</strong>
+<ul>
+<li>I built <code>cg_run</code>, a subreaper dispatcher around every tool execution with a hard wall-clock deadline (default 60 s, max 300 s) that kills and reaps the entire process group + any reparented orphans before returning. Zero runaway background loops survived after this.</li>
+<li>Added a parser that intercepts <code>&lt;｜DSML｜...&gt;</code> blocks in assistant text and executes them as structured calls.</li>
+<li>Hardened <code>submit.sh</code> with <code>-sS</code>, exponential backoff on 429s, and clean status messages.</li>
+</ul>
+</li>
+<li><strong>Result:</strong> <strong>10/25 passed (40%)</strong> across a full, uninterrupted 25-task run—<strong>2.5× the baseline accuracy</strong>.</li>
+<li><strong>New Bottlenecks Exposed:</strong> Reading all 25 trajectories from <code>r2</code> revealed why the other 15 failed:
+<ol>
+<li><strong>Silent Compaction Failure (8/15 failures)</strong></li>
+<li><strong>The Stringified-Array Tax (~6% of all tool calls):</strong> Across 3,386 tool calls in <code>r2</code>, 7% failed with exit code 127 (<code>command not found</code>), and <strong>88% of those</strong> were the model still struggling with Codex’s array-based <code>shell(command: string[])</code> schema.</li>
+<li><strong>In-Turn Submission Fan-Out (1/15 failures):</strong> One agent spawned 500 concurrent <code>submit.sh</code> subshells <em>within a single 60 s tool call</em>, exhausting its 2 GB container RAM (OOM killed).</li>
+</ol>
+</li>
+</ul>
+<h3 id="experiment-4-post-cutoff-run-codex_think_ec_tools2">Experiment 4: Post-Cutoff Run (<code>codex_think_ec_tools2</code>)</h3>
+<p>I built and live-tested three targeted fixes for those exact defects, then launched <code>codex_think_ec_tools2</code> (<span class="math-tex">\(K=15\)</span>) toward the end of the session:</p>
+<ol>
+<li><strong>String-Only Tool Contract:</strong> Replaced <code>shell(command: string[])</code> with <code>shell(command: string, workdir?, timeout_ms?)</code> plus a dedicated <code>write_file(path, content)</code> tool. If a model repeatedly mis-encodes a schema, the right fix is to simplify the contract, not add brittle regex heuristics.</li>
+<li><strong>Verified Context-Fit &amp; Grounded Summaries:</strong> Fixed the stream parser to capture the trailing Bedrock usage chunk, added headroom for the upcoming tool output, and—after a live smoke test showed the model “forgetting” its objective after two compactions—pinned the original task prompt and a mechanical ledger of executed commands at the top of every compaction summary.</li>
+<li><strong>Per-Container Submission Semaphore:</strong> Added a non-blocking flock gate around <code>submit.sh</code> so an agent attempting a 500-way parallel burst gets immediate typed refusals instead of OOM-killing its container.</li>
+</ol>
+<p><em>Status at handoff:</em> <code>codex_think_ec_tools2</code> was running cleanly with <strong>0 compaction overflows, 0 OOMs, and 4–7+ early passes</strong> already banked while the longer trajectories worked through their 500-step budgets.</p>
+<h3 id="experiment-5-lower-reasoning-effort-codex_think_ec_tools2_low">Experiment 5: Lower Reasoning Effort (<code>codex_think_ec_tools2_low</code>)</h3>
+<p>I then ran the same <code>tools2</code> harness at a lower reasoning effort.</p>
+<details class="detailsBlock"><summary class="detailsBlockTitle"><p>Other directions I explored (<code>rlm</code>, <code>gepa</code>, and no-crash reflection)</p></summary><div class="detailsBlockContent">
+<p>Alongside the <code>codex</code> lineage, I scaffolded two other approaches in <code>~/cybergym-harnesses/harnesses/</code> that I chose not to put in the main table:</p>
+<ul>
+<li><strong>DSPy / GEPA (<code>gepa_react</code>, <code>gepa_rlm</code>) &amp; <code>rlm</code>:</strong> I designed a <code>Gym</code> Python API so prompt optimizers could call the exact same container execution core as the CLI.</li>
+<li><strong>No-Crash Self-Reflection:</strong> I sampled 500 non-crashing submission replies in <code>r2</code> and found 0% contained useful sanitizer feedback (just <code>exit_code: 0</code>). I prototyped a reflection step to make the agent reason over why its input exited cleanly, but held it back from <code>tools2</code> so I wouldn’t confound the infrastructure fixes with an unvalidated prompt change.</li>
+</ul>
+</div></details>
+<ol class="footnote-section footnotes" data-footnote-section="" role="doc-endnotes">
+<li class="footnote-item" data-footnote-item="" data-footnote-id="x1" data-footnote-index="1" role="doc-endnote" id="fnx1"><span class="footnote-back-link" data-footnote-back-link="" data-footnote-id="x1"><sup><strong><a href="#fnrefx1">^</a></strong></sup></span><div class="footnote-content" data-footnote-content=""><p>Because <code>codex_think_ec_tools2</code> was still finishing its <code>train25</code> run at the cutoff, I kept <code>test25</code> untouched rather than leaking test evaluations prematurely. Running <code>cybergym-eval run</code> on <code>config/test25.json</code> with <code>codex</code> and <code>codex_think_ec_tools2</code> is a single command once the run lock frees.</p>
+</div></li>
+<li class="footnote-item" data-footnote-item="" data-footnote-id="x2" data-footnote-index="2" role="doc-endnote" id="fnx2"><span class="footnote-back-link" data-footnote-back-link="" data-footnote-id="x2"><sup><strong><a href="#fnrefx2">^</a></strong></sup></span><div class="footnote-content" data-footnote-content=""><p>An initial launch (<code>codex_think_ec_tools</code>) was stopped after 12 minutes because my generated <code>submit.sh</code> was missing <code>curl -s</code> (leaking progress meters into parsed replies) and retried HTTP 429s every 2–6 s without backoff. I fixed the client and immediately relaunched as <code>codex_think_ec_tools_r2</code>.</p>
+</div></li>
+<li class="footnote-item" data-footnote-item="" data-footnote-id="x3" data-footnote-index="3" role="doc-endnote" id="fnx3"><span class="footnote-back-link" data-footnote-back-link="" data-footnote-id="x3"><sup><strong><a href="#fnrefx3">^</a></strong></sup></span><div class="footnote-content" data-footnote-content=""><p>I built a <code>cybergym-eval sweep --slots 1,2,4,8,15</code> subcommand to plot an empirical Little’s Law curve, but prioritized spending my wall-clock budget on the full 25-task harness runs (<code>r2</code> and <code>tools2</code>) rather than a multi-hour concurrency sweep.</p>
+</div></li>
+</ol>
+{% endraw %}
