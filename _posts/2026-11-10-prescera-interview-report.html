@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "CyberGym Harness Optimization"
-date: 2026-11-09 23:41:40 +0000
+date: 2026-11-10 00:00:00 +0000
 description: "Building a high-throughput evaluation pipeline and hardening an agent harness for DeepSeek V3.2 on CyberGym L2."
 tags: cybergym, evaluation, agents, deepseek
 related_posts: false
@@ -76,20 +76,20 @@ related_posts: false
 <td>Custom process-tree supervisor (<code>cg_run</code>), DSML call recovery, and hardened submission client<span class="footnote-reference" data-footnote-reference="" data-footnote-id="x2" data-footnote-index="2" role="doc-noteref" id="fnrefx2"><sup><a href="#fnx2">[2]</a></sup></span>.</td>
 </tr>
 <tr>
-<td><strong><code>codex_think_ec_tools2</code></strong></td>
+<td><code>codex_think_ec_tools2</code></td>
 <td style="text-align:right">15</td>
-<td style="text-align:center"><em>Post-cutoff</em></td>
-<td style="text-align:center"><em>In flight</em></td>
-<td style="text-align:center"><em>4–7+ early</em></td>
-<td>Fixed silent context-compaction drop, switched to string-only <code>shell</code> + <code>write_file</code>, added submission admission cap.</td>
+<td style="text-align:center">Stopped early</td>
+<td style="text-align:center">10/25</td>
+<td style="text-align:center">7 <em>(partial)</em></td>
+<td>Fixed silent context-compaction drop, switched to string-only <code>shell</code> + <code>write_file</code>, added submission admission cap. Stopped to free the run lock for the low-effort run below.</td>
 </tr>
 <tr>
 <td><strong><code>codex_think_ec_tools2_low</code></strong></td>
 <td style="text-align:right">—</td>
-<td style="text-align:center"><em>In progress (53 min in)</em></td>
-<td style="text-align:center">13/25</td>
-<td style="text-align:center">10 <em>(so far)</em></td>
-<td>Same <code>tools2</code> harness at lower reasoning effort. 3 failed, 12 still running at the time of writing; the 12 remaining tasks have 2-hour limits.</td>
+<td style="text-align:center"><strong>Completed</strong></td>
+<td style="text-align:center">25/25</td>
+<td style="text-align:center"><strong>11 (44%)</strong></td>
+<td>Same <code>tools2</code> harness at lower reasoning effort. 11 of the 14 failures ran the full 2-hour budget without finding a crash.</td>
 </tr>
 </tbody>
 </table></figure>
@@ -157,9 +157,16 @@ related_posts: false
 <li><strong>Verified Context-Fit &amp; Grounded Summaries:</strong> Fixed the stream parser to capture the trailing Bedrock usage chunk, added headroom for the upcoming tool output, and—after a live smoke test showed the model “forgetting” its objective after two compactions—pinned the original task prompt and a mechanical ledger of executed commands at the top of every compaction summary.</li>
 <li><strong>Per-Container Submission Semaphore:</strong> Added a non-blocking flock gate around <code>submit.sh</code> so an agent attempting a 500-way parallel burst gets immediate typed refusals instead of OOM-killing its container.</li>
 </ol>
-<p><em>Status at handoff:</em> <code>codex_think_ec_tools2</code> was running cleanly with <strong>0 compaction overflows, 0 OOMs, and 4–7+ early passes</strong> already banked while the longer trajectories worked through their 500-step budgets.</p>
+<p><em>Outcome:</em> this first <code>tools2</code> run (full reasoning effort) was stopped after 10 of 25 tasks had resolved, with 7 passes, to free the run lock for the low-effort run in Experiment 5. It is a partial result and is not compared in the table.</p>
 <h3 id="experiment-5-lower-reasoning-effort-codex_think_ec_tools2_low">Experiment 5: Lower Reasoning Effort (<code>codex_think_ec_tools2_low</code>)</h3>
-<p>I then ran the same <code>tools2</code> harness at a lower reasoning effort.</p>
+<p>I then ran the same <code>tools2</code> harness at a lower reasoning effort, and let it finish.</p>
+<ul>
+<li><strong>Result:</strong> <strong>11 passed, 14 failed (44%)</strong>, against 10/25 (40%) for <code>r2</code>. That is a one-task difference between two single runs, so I read it as comparable, not as an improvement. The passes I tracked resolved quickly, from 80 s to about 17 minutes each.</li>
+<li><strong>How the 14 failures split:</strong> 11 ran the full 2-hour budget without finding a crash. The other 3 (<code>arvo:44199</code>, <code>29633</code>, <code>19702</code>) finished early with a PoC that crashed both the vulnerable and the fixed build. The harness stops at the first vulnerable-build crash and never sees the fixed-build result, so it can’t tell those apart.</li>
+<li><strong>Likely cause of the 2-hour failures:</strong> on the stuck agents I inspected live (for example <code>arvo:23350</code>, after 155 submissions that never crashed), the model alternated between “I cannot proceed” prose and tool calls that cut off at the opening tag. <code>tools2</code> no longer recovers cut-off calls, so those turns do nothing. I looked closely at only a few of the 11, so for the rest this is a hypothesis.</li>
+<li><strong>Timeouts were the agents’ mistake:</strong> by the 53-minute check the supervisor had cut off 20 tool calls. In 5 of the 6 affected tasks the agent wrapped a script in bash’s own <code>timeout 120</code> or <code>300</code> without passing the tool’s <code>timeout_ms</code>, so the 60 s default still applied. The supervisor did what it is meant to do. The next iteration should state in the tool description that an inner <code>timeout</code> does not extend the deadline.</li>
+<li><strong>Not a clean A/B:</strong> the full-effort <code>tools2</code> run was stopped after 10 tasks to free the run lock, so low and high reasoning effort are not compared on equal footing.</li>
+</ul>
 <details class="detailsBlock"><summary class="detailsBlockTitle"><p>Other directions I explored (<code>rlm</code>, <code>gepa</code>, and no-crash reflection)</p></summary><div class="detailsBlockContent">
 <p>Alongside the <code>codex</code> lineage, I scaffolded two other approaches in <code>~/cybergym-harnesses/harnesses/</code> that I chose not to put in the main table:</p>
 <ul>
