@@ -96,7 +96,15 @@
   function mathPlugin(md) {
     md.inline.ruler.after('escape', 'math_inline', (state, silent) => {
       const src = state.src, start = state.pos;
-      if (src[start] !== '$' || src[start + 1] === '$') return false;
+      if (src[start] !== '$') return false;
+      if (src[start + 1] === '$') {
+        // Kramdown style inline $$...$$ inside a sentence, as the site renders it
+        const end = src.indexOf('$$', start + 2);
+        if (end === -1 || end === start + 2) return false;
+        if (!silent) { const t = state.push('math_inline', 'span', 0); t.content = src.slice(start + 2, end).trim(); }
+        state.pos = end + 2;
+        return true;
+      }
       const next = src[start + 1];
       if (!next || /\s/.test(next)) return false;
       let pos = start + 1;
@@ -114,6 +122,9 @@
       let pos = state.bMarks[startLine] + state.tShift[startLine], max = state.eMarks[startLine];
       if (state.src.slice(pos, pos + 2) !== '$$') return false;
       let first = state.src.slice(pos + 2, max).trim();
+      // $$x$$ followed by text on the same line is inline math, not a display block
+      const close = first.indexOf('$$');
+      if (close !== -1 && close !== first.length - 2) return false;
       let last = '', line = startLine, found = false;
       if (first.endsWith('$$')) { first = first.slice(0, -2).trim(); found = true; }
       if (silent) return true;
