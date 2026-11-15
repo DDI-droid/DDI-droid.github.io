@@ -1,5 +1,5 @@
 // Screenshot the writer with a draft open: node tests/shot_editor.cjs <slug> <out.png> [previewFull.png]
-const playwright = require('../../node_modules/playwright');
+const playwright = require('playwright');
 (async () => {
   const [slug, out, full] = process.argv.slice(2);
   const browser = await playwright.chromium.launch({ headless: true, executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe' });

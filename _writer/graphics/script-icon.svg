@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="112" viewBox="0 0 220 112">
+  <!-- Original white script-page icon with a folded corner and exactly five lines. -->
+  <path fill="#FFFFFF" stroke="#D9DEE5" stroke-width="1.2" d="M14 4 H176 L208 36 V98 Q208 108 198 108 H14 Q4 108 4 98 V14 Q4 4 14 4 Z"/>
+  <path fill="#C7CED7" d="M176 4 L208 36 H184 Q176 36 176 28 Z"/>
+  <g fill="none" stroke-width="5" stroke-linecap="round">
+    <path stroke="#BCA7E8" d="M24 24 H143"/>
+    <path stroke="#77B7D8" d="M38 41 H154"/>
+    <path stroke="#76C7B6" d="M38 58 H184"/>
+    <path stroke="#E8BE71" d="M24 75 H165"/>
+    <path stroke="#737B86" d="M24 92 H132"/>
+  </g>
+</svg>

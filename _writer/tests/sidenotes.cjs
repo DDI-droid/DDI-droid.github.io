@@ -2,7 +2,7 @@
 // sidenotes beside their references at desktop width, the hover card at tablet width, the dialog on a phone.
 //   node tests/sidenotes.cjs <out_dir> [post.md]      (the writer must be running on :4400)
 const fs = require('fs'), path = require('path');
-const playwright = require('../../node_modules/playwright');
+const playwright = require('playwright');
 const SiteRender = require('../render.js');
 const out = process.argv[2], md = process.argv[3] || path.join(__dirname, 'lw', 'chinchilla-s-wild-implications.md');
 const r = SiteRender.render(fs.readFileSync(md, 'utf8'));

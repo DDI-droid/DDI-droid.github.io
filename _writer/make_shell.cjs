@@ -27,7 +27,7 @@ h = h.slice(0, open) + '<div id="markdown-content"></div>' + h.slice(close + '</
 const rail = h.search(/<script>\s*\(\(\) => \{\s*\/\/ Contents rail/);
 if (rail < 0) throw new Error('contents-rail script not found');
 const railEnd = h.indexOf('</script>', rail) + '</script>'.length;
-h = h.slice(0, rail) + '<script src="/_writer/bridge.js"></script>' + h.slice(railEnd);
+h = h.slice(0, rail) + '<script src="/_writer/live-reload.js"></script>\n<script src="/_writer/bridge.js"></script>' + h.slice(railEnd);
 
 // 3. Title and header fields get neutral placeholders; the bridge fills them.
 h = h.replace(/<title>[\s\S]*?<\/title>/, '<title>Preview | Anshul Thakur</title>');

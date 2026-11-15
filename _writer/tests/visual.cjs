@@ -2,7 +2,7 @@
 // Markdown.  node tests/visual.cjs <selected.json> <outDir> <slug> [heightCssPx]
 const fs = require('fs');
 const path = require('path');
-const playwright = require('../../node_modules/playwright');
+const playwright = require('playwright');
 (async () => {
   const [sel, outDir, slug, h] = process.argv.slice(2);
   const height = Number(h) || 2200;

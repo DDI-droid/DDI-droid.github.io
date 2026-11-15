@@ -1,7 +1,7 @@
 // Layered editor check: node tests/editor_layers.cjs <out_dir>  (server running; the drafts API is faked, no draft is touched).
 // Verifies the highlighted copy lines up with the textarea character by character, plus shortcuts, lists, autosave, scroll sync, jumps.
 const fs = require('node:fs');
-const playwright = require('../../node_modules/playwright');
+const playwright = require('playwright');
 const sink = fs.readFileSync(require('node:path').join(__dirname, 'kitchen_sink.md'), 'utf8');
 const wrapped = Array.from({length: 12}, (_, i) => `Paragraph ${i + 1} has **bold words that wrap** and *italic words that wrap*, \`inline code\`, $x^2 + y_i$ math, ~~struck~~ and a [link](https://example.com) so styled spans cross line breaks. `.repeat(2));
 const SAMPLE = sink.replace(/\r/g, '') + '\n\n## Wrapping test\n\n- item one\n1. first\n\n' + wrapped.join('\n\n') + '\n\nThe end.\n';
@@ -71,7 +71,7 @@ const SAMPLE = sink.replace(/\r/g, '') + '\n\n## Wrapping test\n\n- item one\n1.
   await ta.evaluate(t => { t.style.color = 'rgba(255,0,0,.75)'; });
   await page.screenshot({path: process.argv[2] + '/writer_ghost.png', clip: {x: 0, y: 40, width: 640, height: 420}});
   await ta.evaluate(t => { t.style.color = ''; });
-  await page.evaluate(() => window.postMessage({type: 'jump', line: 40}, '*'));
+  await frame.evaluate(() => parent.postMessage({type: 'jump', line: 40}, location.origin));
   await page.waitForTimeout(200);
   out.push('jump: cursor line=' + await ta.evaluate(t => t.value.slice(0, t.selectionStart).split('\n').length - 1) + ', copy in step=' + await page.evaluate(() => document.getElementById('hl').scrollTop === document.getElementById('source').scrollTop));
   // Grammarly's ways of applying a fix (TextareaExecCommandReplacementService): select the range, execCommand

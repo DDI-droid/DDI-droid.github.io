@@ -10,8 +10,15 @@
     {
       // Same rules as the renderer: $$ blocks; $x$ only with a closing $ on the line that is not
       // preceded by a space or followed by a digit, so "$5 and $10" stays plain text.
-      startState: () => ({ block: false, note: false }),
+      startState: () => ({ block: false, note: false, fn: false }),
+      blankLine(state) { /* a blank line may sit between paragraphs of one footnote */ },
       token(stream, state) {
+        // A footnote definition ([^1]: ...) and its 4-space-indented paragraphs are greyed as a whole.
+        if (stream.sol()) {
+          if (stream.match(/^\[\^[^\]\s]+\]:/, false)) state.fn = true;
+          else if (state.fn && !/^(    |\t)/.test(stream.string)) state.fn = false;
+          if (state.fn) { stream.skipToEnd(); return 'footnote'; }
+        }
         if (state.note) {
           if (stream.match(/^.*?-->/)) state.note = false; else stream.skipToEnd();
           return 'note';
@@ -178,21 +185,34 @@
   const api = (url, opts) => fetch(url, opts).then(r => r.ok ? r : r.text().then(t => { throw new Error(t); }));
 
   // ---- rendering into the preview ----
+  const previewChannel = new BroadcastChannel('writer-preview');
   function renderNow(sync) {
+    if (!slug) return;
     const text = ta.value;
     const out = SiteRender.render(text, { sourceLines: true });
     $('words').textContent = out.words + ' words';
+    const message = { type: 'render', slug, html: out.html, meta: out.meta, words: out.words, hasMath: out.hasMath,
+      syncLine: sync && $('sync').checked ? topLine() : null };
+    previewChannel.postMessage({ ...message, syncLine: null });
     if (!frameReady) return;
     if (text === lastRendered && !sync) return;
     lastRendered = text;
-    frame.contentWindow.postMessage({ type: 'render', html: out.html, meta: out.meta, words: out.words, hasMath: out.hasMath,
-      syncLine: sync && $('sync').checked ? topLine() : null }, '*');
+    frame.contentWindow.postMessage(message, location.origin);
   }
   let renderTimer = null;
   const scheduleRender = () => { clearTimeout(renderTimer); renderTimer = setTimeout(() => renderNow(false), 150); };
 
   // ---- saving ----
-  let saveTimer = null;
+  // baseHash is the version of the file this editor last loaded or saved. A save based on it is refused by the
+  // server if the file changed on disk in between, so nothing written outside the editor is silently overwritten.
+  let saveTimer = null, baseHash = null, conflictFor = null;
+  async function putDraft(text) {
+    const r = await fetch('/api/drafts/' + slug, { method: 'PUT', body: text, headers: baseHash ? { 'x-base-hash': baseHash } : {} });
+    if (r.status === 409) return { conflict: (await r.json()).hash };
+    if (!r.ok) throw new Error(await r.text());
+    baseHash = (await r.json()).hash;
+    return { ok: true };
+  }
   function save(now) {
     if (!slug) return;
     clearTimeout(saveTimer);
@@ -200,17 +220,97 @@
     if (saving) { saveTimer = setTimeout(() => save(true), 300); return; }
     saving = true; const text = ta.value;
     status('Saving');
-    api('/api/drafts/' + slug, { method: 'PUT', body: text })
-      .then(() => { if (ta.value === text) dirty = false; const d = new Date(); status('Saved ' + d.toTimeString().slice(0, 5)); refreshTitle(); })
+    putDraft(text)
+      .then(res => {
+        if (res.conflict) { status('Not saved: the file changed on disk'); showConflict(res.conflict); return; }
+        if (ta.value === text) dirty = false; const d = new Date(); status('Saved ' + d.toTimeString().slice(0, 5)); refreshTitle(); refreshStatus(1200);
+      })
       .catch(err => status('Not saved: ' + err.message))
       .finally(() => { saving = false; });
   }
-  function edited() { highlight(); dirty = true; status('Editing'); scheduleRender(); save(false); }
+
+  // ---- changes made on disk by something else ----
+  // With no unsaved typing, take the disk version in place (cursor and scroll kept); otherwise ask.
+  async function reloadFromDisk() {
+    const r = await api('/api/drafts/' + slug), text = await r.text();
+    const s = ta.selectionStart, e = ta.selectionEnd, top = ta.scrollTop;
+    ta.value = text; highlight(); dirty = false;
+    baseHash = r.headers.get('x-draft-hash'); conflictFor = null;
+    ta.setSelectionRange(Math.min(s, text.length), Math.min(e, text.length));
+    ta.scrollTop = top; hl.scrollTop = top;
+    renderNow(false); refreshTitle(); refreshStatus(0);
+    status('Updated from disk ' + new Date().toTimeString().slice(0, 5));
+  }
+  function showConflict(diskHash) {
+    if (conflictFor === diskHash) return;
+    conflictFor = diskHash;
+    toast('This draft changed on disk while you were typing. <button type="button" id="cf-disk">Load the disk version</button> ' +
+      '<button type="button" id="cf-mine">Keep mine</button>', 600000);
+    $('cf-disk').onclick = () => { $('toast').hidden = true; reloadFromDisk().catch(err => status('Could not load: ' + err.message)); };
+    $('cf-mine').onclick = () => { $('toast').hidden = true; baseHash = diskHash; conflictFor = null; save(true); };
+  }
+  setInterval(() => {
+    if (!slug || saving || liveReloading || !baseHash) return;
+    fetch('/api/drafts/' + slug + '/hash').then(r => r.ok ? r.json() : null).then(j => {
+      if (!j || j.hash === baseHash || saving) return;
+      if (!dirty && shownText === ta.value) reloadFromDisk().catch(err => status('Could not load: ' + err.message));
+      else showConflict(j.hash);
+    }).catch(() => {});
+  }, 2000);
+  function edited() { highlight(); dirty = true; status('Editing'); scheduleRender(); if (!liveReloading) save(false); }
   ta.addEventListener('input', edited);
   // Grammarly applies a fix with insertText, which fires input; when that fails it sets the value directly, with no
   // event. Catch any such change so the coloured copy, preview and autosave never fall behind the text.
   setInterval(() => { if (shownText !== null && ta.value !== shownText) edited(); }, 250);
   window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+  // ---- always-on live reload ----
+  // Save the current draft before reloading so an edit to the studio itself never discards writing.
+  async function flushDraftForReload() {
+    clearTimeout(saveTimer);
+    while (saving) await new Promise(resolve => setTimeout(resolve, 40));
+    clearTimeout(saveTimer);
+    // Writing extensions can change .value without input; do not wait for the polling tick.
+    if (slug && shownText !== null && ta.value !== shownText) { highlight(); dirty = true; }
+    if (!slug || !dirty) return true;
+    const text = ta.value;
+    saving = true;
+    status('Saving before update');
+    try {
+      const res = await putDraft(text);
+      if (res.conflict) { status('Not saved: the file changed on disk'); showConflict(res.conflict); return false; }
+      if (ta.value === text) dirty = false;
+      status('Saved');
+    } catch (err) {
+      status('Not saved: ' + err.message);
+      toast('Could not save the draft. The requested action was cancelled; your text is still here.', 7000);
+      return false;
+    } finally {
+      saving = false;
+    }
+    return dirty ? flushDraftForReload() : true;
+  }
+  let liveReloading = false;
+  function applyLiveUpdate() {
+    if (liveReloading) return;
+    liveReloading = true;
+    flushDraftForReload().then(ok => {
+      if (ok) {
+        try { sessionStorage.setItem('writer.reloadPosition', JSON.stringify({ slug,
+          start: ta.selectionStart, end: ta.selectionEnd, scroll: ta.scrollTop })); } catch (_) {}
+        window.location.reload();
+      }
+      else liveReloading = false;
+    }).catch(err => {
+      liveReloading = false;
+      status('Live update paused: ' + err.message);
+    });
+  }
+  function connectLiveReload() {
+    // Asset changes belong to preview documents, not the text editor. Source-code
+    // changes still flush unsaved writing before a safe editor reload.
+    WriterLiveReload.connect({ onTools: applyLiveUpdate });
+  }
 
   // ---- scroll sync, both ways ----
   let scrollRaf = 0;
@@ -221,59 +321,308 @@
     scrollRaf = requestAnimationFrame(() => frame.contentWindow.postMessage({ type: 'scroll', line: topLine() }, '*'));
   });
   window.addEventListener('message', e => {
+    if (e.origin !== location.origin || e.source !== frame.contentWindow) return;
     const msg = e.data || {};
     if (msg.type === 'ready') { frameReady = true; lastRendered = ''; renderNow(true); }
     if (msg.type === 'jump') goLine(msg.line, true);
   });
+  // Either script may load first. Probe now and after each frame navigation instead of
+  // relying on a one-shot ready message that can arrive before this script is loaded.
+  const probePreview = () => frame.contentWindow.postMessage({ type: 'request-ready' }, location.origin);
+  frame.addEventListener('load', () => { frameReady = false; probePreview(); });
+  probePreview();
+  previewChannel.onmessage = e => {
+    if (e.data?.type === 'request-render' && e.data.slug === slug) renderNow(false);
+  };
 
-  // ---- drafts ----
+  // ---- drafts: every post, the ones on the site included; the list says which are not on the site yet ----
+  const SUFFIX = { new: ' · not on the site', changed: ' · changed' };
+  const label = (title, state) => title + (SUFFIX[state] || '');
   function loadList(select) {
     return api('/api/drafts').then(r => r.json()).then(list => {
       const sel = $('drafts'); sel.innerHTML = '';
-      for (const d of list) { const o = document.createElement('option'); o.value = d.slug; o.textContent = d.title; sel.append(o); }
+      conflicts = list.filter(d => d.conflict);
+      if (lastRemote) renderRemote(lastRemote);
+      for (const d of list) {
+        const o = document.createElement('option'); o.value = d.slug;
+        o.dataset.title = d.title; o.dataset.state = d.state || ''; o.textContent = label(d.title, d.state);
+        sel.append(o);
+      }
       if (select) sel.value = select;
       return list;
     });
   }
   function refreshTitle() {
     const o = [...$('drafts').options].find(x => x.value === slug);
-    const t = SiteRender.splitFrontMatter(ta.value).meta.title;
-    if (o && t && o.textContent !== t) o.textContent = t;
+    const meta = SiteRender.splitFrontMatter(ta.value).meta.title;
+    const t = meta && (slug.startsWith('page-') ? 'Page: ' : '') + meta;
+    if (o && t && o.dataset.title !== t) { o.dataset.title = t; o.textContent = label(t, o.dataset.state); }
   }
-  function open(s) {
-    if (dirty) save(true);
-    return api('/api/drafts/' + s).then(r => r.text()).then(text => {
+  let opening = 0;
+  async function open(s) {
+    const request = ++opening;
+    if (!(await flushDraftForReload())) { $('drafts').value = slug; return; }
+    const response = await api('/api/drafts/' + s);
+    const text = await response.text();
+    if (request !== opening) return;
+    {
       slug = s; location.hash = s;
+      $('open').href = '/preview?slug=' + encodeURIComponent(s);
+      try { localStorage.setItem('writer.activeDraft', s); } catch (_) {}
       ta.value = text; highlight(); dirty = false;
-      $('drafts').value = s; status('Opened'); lastRendered = ''; renderNow(true);
+      baseHash = response.headers.get('x-draft-hash'); conflictFor = null;
+      $('drafts').value = s; $('delete').hidden = true; status('Opened'); lastRendered = ''; renderNow(true); refreshStatus(0);
       const line = text.indexOf('\n---', 4) >= 0 ? text.slice(0, text.indexOf('\n---', 4)).split('\n').length + 1 : 0;
       goLine(line, false);
-    });
+      try {
+        const position = JSON.parse(sessionStorage.getItem('writer.reloadPosition'));
+        sessionStorage.removeItem('writer.reloadPosition');
+        if (position?.slug === slug) {
+          ta.setSelectionRange(position.start, position.end);
+          ta.scrollTop = position.scroll;
+          hl.scrollTop = ta.scrollTop;
+          renderNow(true);
+        }
+      } catch (_) {}
+    }
   }
-  $('drafts').addEventListener('change', e => open(e.target.value));
+  $('drafts').addEventListener('change', e => open(e.target.value).catch(err => status('Could not open draft: ' + err.message)));
   $('new').addEventListener('click', () => {
     const title = window.prompt('Title of the new post', '');
     if (title === null) return;
     api('/api/drafts', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ title: title || 'Untitled' }) })
       .then(r => r.json()).then(({ slug: s }) => loadList(s).then(() => open(s)));
   });
-
-  // ---- publishing ----
-  $('publish').addEventListener('click', () => {
-    if (!slug) return;
-    save(true);
-    setTimeout(() => api('/api/publish/' + slug, { method: 'POST' }).then(r => r.json()).then(res => {
-      toast('Written to <code>' + res.file + '</code>. Live at <code>' + res.url + '</code> after a push.', 7000);
-    }).catch(err => toast('Publish failed: ' + err.message, 7000)), 300);
+  // Delete: only for a draft the site does not have (the button shows only then). Its text stays in History.
+  $('delete').addEventListener('click', async () => {
+    const target = slug; if (!target) return;
+    const o = [...$('drafts').options].find(x => x.value === target);
+    const name = (o && o.dataset.title) || target;
+    if (!window.confirm('Delete "' + name + '"? It is not on the site, so this removes it from the writer.')) return;
+    if (!(await flushDraftForReload()) || slug !== target) return;
+    status('Deleting');
+    try { await api('/api/drafts/' + target, { method: 'DELETE' }); }
+    catch (err) { toast('Could not delete: ' + esc(err.message), 8000); refreshStatus(0); return; }
+    clearTimeout(saveTimer); dirty = false; slug = null; $('delete').hidden = true;
+    const list = await loadList();
+    if (list.length) await open(list[0].slug);
+    else {
+      const { slug: s } = await (await api('/api/drafts', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ title: 'Untitled' }) })).json();
+      await loadList(s); await open(s);
+    }
+    toast('Deleted "' + esc(name) + '".', 5000);
   });
+
+  // ---- the post on the site: its state, Commit, Push, History ----
+  // Commit writes the post into _posts, commits it with its images (nothing else) and pushes, so the site
+  // rebuilds. The source, notes included, is kept as a version on this machine only.
+  const STATE_TEXT = { new: 'Not on the site', changed: 'Changed', live: 'On the site' };
+  const STATE_TIP = { new: 'Never committed: the site does not have this post yet', changed: 'Edited since the last commit',
+    live: 'The site has this version' };
+  const siteLink = (href, text) => '<a href="' + esc(href).replace(/"/g, '&quot;') + '" target="_blank" rel="noopener">' + esc(text) + '</a>';
+  let statusTimer = null;
+  function showStatus(st) {
+    const el = $('state');
+    el.textContent = STATE_TEXT[st.state] || ''; el.className = 'state ' + (st.state || '');
+    el.title = (STATE_TIP[st.state] || '') + (st.ahead ? '. ' + st.ahead + ' commit(s) not pushed yet' : '');
+    $('delete').hidden = !st.deletable;
+    if (lastRemote && lastRemote.ahead !== st.ahead) renderRemote({ ...lastRemote, ahead: st.ahead });
+    const o = [...$('drafts').options].find(x => x.value === st.slug);
+    if (o) { o.dataset.state = st.state; o.textContent = label(o.dataset.title || st.title, st.state); }
+  }
+  function refreshStatus(wait) {
+    clearTimeout(statusTimer);
+    statusTimer = setTimeout(() => {
+      const target = slug; if (!target) return;
+      fetch('/api/status/' + target).then(r => r.ok ? r.json() : null)
+        .then(st => { if (st && st.slug === slug) showStatus(st); }).catch(() => {});
+    }, wait || 0);
+  }
+  const closeSheets = () => { for (const id of ['sheet', 'commit-sheet', 'history-sheet', 'remote-sheet']) $(id).hidden = true; };
+
+  $('commit').addEventListener('click', async () => {
+    if (!slug) return;
+    const target = slug;
+    $('commit').disabled = true;
+    try {
+      if (!(await flushDraftForReload()) || slug !== target) return;
+      const st = await (await api('/api/status/' + target)).json();
+      if (slug !== target) return;
+      showStatus(st);
+      $('commit-what').textContent = st.error ? 'Cannot commit: ' + st.error
+        : st.state === 'new' ? 'Adds this post to the site.'
+        : st.state === 'changed' ? 'Updates this post on the site.'
+        : 'The site already has this version; nothing new to commit.';
+      $('commit-msg').value = (st.state === 'new' ? 'Add post: ' : 'Update post: ') + st.title;
+      $('commit-files').innerHTML = st.files.map(f => '<li><code>' + esc(f.path) + '</code><span class="tag">' + esc(f.change) + '</span></li>').join('');
+      $('commit-note').hidden = !st.ahead;
+      $('commit-note').textContent = st.ahead ? 'Also pushes ' + st.ahead + ' earlier commit(s) that are only on this machine.' : '';
+      $('commit-go').disabled = !!st.error;
+      closeSheets(); $('commit-sheet').hidden = false;
+      $('commit-msg').focus(); $('commit-msg').select();
+    } catch (err) { toast('Could not check the post: ' + esc(err.message), 7000); }
+    finally { $('commit').disabled = false; }
+  });
+  async function commitNow() {
+    if (!slug || $('commit-go').disabled) return;
+    const target = slug, go = $('commit-go');
+    go.disabled = true; go.textContent = 'Committing';
+    try {
+      if (!(await flushDraftForReload()) || slug !== target) return;
+      const res = await (await api('/api/commit/' + target, { method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ message: $('commit-msg').value }) })).json();
+      $('commit-sheet').hidden = true;
+      if (!res.commit && res.pushed) toast('Nothing new to commit: the site already has this version. ' + siteLink(res.site, res.url), 8000);
+      else if (res.pushed) toast('Committed ' + esc(res.commit) + ' and pushed. ' + siteLink(res.site, res.url) +
+        ' shows it once GitHub has rebuilt the site, in a minute or two.', 12000);
+      else toast('Committed ' + esc(res.commit || '') + ' on this machine, but it was not pushed: ' + esc(res.pushError || 'unknown error') +
+        '. The GitHub button shows what differs.', 20000);
+    } catch (err) { toast('Commit failed: ' + esc(err.message), 12000); }
+    finally { go.disabled = false; go.textContent = 'Commit and push'; refreshStatus(0); checkRemote(false); loadList(slug).catch(() => {}); }
+  }
+  $('commit-go').addEventListener('click', commitNow);
+  $('commit-msg').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); commitNow(); } });
+  $('commit-cancel').addEventListener('click', () => { $('commit-sheet').hidden = true; });
+  $('commit-close').addEventListener('click', () => { $('commit-sheet').hidden = true; });
+
+  // ---- this copy and GitHub: pull before push, and show what differs ----
+  // The button reads ↓n (commits on GitHub, not here), ↑n (here, not on GitHub) and "!n" (posts edited here
+  // and on the site since their last version). Its sheet pulls, then pushes, and resolves those posts.
+  let lastRemote = null, conflicts = [], remoteBusy = false, remoteChecked = 0;
+  function renderRemote(r) {
+    lastRemote = r;
+    const b = $('remote'), bits = [];
+    if (r.behind) bits.push('↓' + r.behind);
+    if (r.ahead) bits.push('↑' + r.ahead);
+    if (conflicts.length) bits.push('!' + conflicts.length);
+    b.textContent = r.fetchError ? 'GitHub: offline' : bits.length ? 'GitHub ' + bits.join(' ') : 'GitHub: in sync';
+    b.classList.toggle('out', !!(r.fetchError || bits.length));
+    b.title = r.fetchError ? 'Could not reach GitHub: ' + r.fetchError
+      : bits.length ? [r.behind && r.behind + ' commit(s) on GitHub not here', r.ahead && r.ahead + ' commit(s) here not on GitHub',
+        conflicts.length && conflicts.length + ' post(s) edited here and on the site'].filter(Boolean).join('; ') + '. Click to sync.'
+      : 'This copy and GitHub match';
+  }
+  async function checkRemote(fetchIt) {
+    try {
+      const r = await (await api('/api/remote' + (fetchIt ? '?fetch=1' : ''))).json();
+      if (fetchIt) remoteChecked = Date.now();
+      renderRemote(r);
+      return r;
+    } catch (err) { return null; }
+  }
+  function remoteSheet() {
+    const r = lastRemote || {}, out = [];
+    const commitList = cs => '<ul class="files">' + cs.map(c => '<li><code>' + esc(c.id) + '</code> ' + esc(c.subject) +
+      '<span class="tag">' + esc(c.author + ', ' + c.date) + '</span></li>').join('') + '</ul>';
+    if (r.fetchError) out.push('<p class="note">Could not reach GitHub: ' + esc(r.fetchError) + '</p>');
+    if (!r.fetchError && !r.behind && !r.ahead && !conflicts.length) out.push('<p class="what">This copy and GitHub match. Nothing to pull or push.</p>');
+    if (r.behind) out.push('<p class="field">On GitHub, not here</p>' + commitList(r.incoming || []));
+    if (r.blocked && r.blocked.length) out.push('<p class="note">These files changed on GitHub and also have uncommitted changes here, so the pull ' +
+      'will stop rather than overwrite them: ' + r.blocked.map(f => '<code>' + esc(f) + '</code>').join(', ') + '. Commit or undo them first.</p>');
+    if (r.ahead) out.push('<p class="field">Here, not on GitHub</p>' + commitList(r.outgoing || []));
+    if (conflicts.length) out.push('<p class="field">Edited here and on the site</p><ul class="files">' + conflicts.map(d =>
+      '<li>' + esc(d.title) + ' <button type="button" data-take="' + esc(d.slug) + '">Use the site version</button> <button type="button" data-keep="' +
+      esc(d.slug) + '">Keep mine</button></li>').join('') + '</ul><p class="what">Use the site version replaces your draft with the site file ' +
+      '(your text stays in History). Keep mine leaves your draft; your next Commit writes it over the site version.</p>');
+    $('remote-body').innerHTML = out.join('');
+    const go = $('remote-go');
+    go.hidden = !(r.behind || r.ahead) || !!r.fetchError;
+    go.textContent = r.behind && r.ahead ? 'Pull, then push' : r.behind ? 'Pull' : 'Push';
+    $('remote-body').querySelectorAll('button[data-take], button[data-keep]').forEach(b => b.addEventListener('click', () => resolve(b)));
+  }
+  async function openRemote() {
+    closeSheets(); $('remote-sheet').hidden = false;
+    $('remote-body').innerHTML = '<p class="what">Checking GitHub</p>'; $('remote-go').hidden = true;
+    await checkRemote(true); await loadList(slug).catch(() => {});
+    remoteSheet();
+  }
+  async function resolve(button) {
+    const target = button.dataset.take || button.dataset.keep, take = !!button.dataset.take;
+    button.disabled = true;
+    try {
+      if (take && target === slug && !(await flushDraftForReload())) return;
+      await api('/api/drafts/' + target + (take ? '/take-site' : '/keep-mine'), { method: 'POST' });
+      await loadList(slug);
+      if (take && target === slug) await reloadFromDisk();
+      renderRemote(lastRemote || {}); remoteSheet();
+      toast(take ? 'Took the site version; your text is in History.' : 'Kept your draft; Commit will write it over the site version.', 7000);
+    } catch (err) { toast('Could not resolve: ' + esc(err.message), 8000); button.disabled = false; }
+  }
+  $('remote').addEventListener('click', openRemote);
+  $('remote-close').addEventListener('click', () => { $('remote-sheet').hidden = true; });
+  $('remote-refresh').addEventListener('click', openRemote);
+  $('remote-go').addEventListener('click', async () => {
+    if (remoteBusy) return;
+    remoteBusy = true; const go = $('remote-go'); go.disabled = true; go.textContent = 'Syncing';
+    try {
+      if (slug) await flushDraftForReload();
+      const res = await (await api('/api/sync', { method: 'POST' })).json();
+      await loadList(slug).catch(() => {});
+      renderRemote(res);
+      const done = [res.brought && 'pulled ' + res.brought + ' commit(s)', res.sent && 'pushed ' + res.sent].filter(Boolean).join(', then ');
+      if (res.pushed) toast('In sync with GitHub' + (done ? ': ' + done + '.' : '.') + (res.sent ? ' The site rebuilds in a minute or two.' : ''), 9000);
+      else toast('Not synced: ' + esc(res.pushError || res.pullError || 'unknown error'), 20000);
+      remoteSheet();
+    } catch (err) { toast('Sync failed: ' + esc(err.message), 15000); }
+    finally { remoteBusy = false; go.disabled = false; refreshStatus(0); }
+  });
+  // Check GitHub on start, every five minutes, and when the tab comes back after a while.
+  setInterval(() => { if (!remoteBusy) checkRemote(true); }, 5 * 60 * 1000);
+  window.addEventListener('focus', () => { if (!remoteBusy && Date.now() - remoteChecked > 60 * 1000) checkRemote(true); });
+
+  // History: restoring keeps the current text as a version first, so nothing is lost by trying an old one.
+  let armed = null;
+  $('history').addEventListener('click', async () => {
+    if (!slug) return;
+    const target = slug, list = $('history-list');
+    list.innerHTML = '<li class="empty">Loading</li>';
+    closeSheets(); $('history-sheet').hidden = false;
+    try {
+      const entries = await (await api('/api/history/' + target)).json();
+      if (slug !== target) return;
+      list.innerHTML = entries.length ? '' : '<li class="empty">No versions yet. Commit makes the first one.</li>';
+      for (const e of entries) {
+        const when = new Date(e.date).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+        const where = e.source === 'site' ? 'site commit ' + e.site + ', before the writer' : e.site ? 'site commit ' + e.site : 'kept on this machine';
+        const li = document.createElement('li');
+        li.innerHTML = '<span class="msg">' + esc(e.message) + '</span><span class="meta">' + esc(when + ' · ' + where) + '</span><button type="button">Restore</button>';
+        const button = li.querySelector('button');
+        button.addEventListener('click', () => restore(target, e, when, button));
+        list.append(li);
+      }
+    } catch (err) { list.innerHTML = '<li class="empty">' + esc(err.message) + '</li>'; }
+  });
+  async function restore(target, e, when, button) {
+    if (armed !== button) {
+      if (armed) armed.textContent = 'Restore';
+      armed = button; button.textContent = 'Replace the text?';
+      setTimeout(() => { if (armed === button) { armed = null; button.textContent = 'Restore'; } }, 4000);
+      return;
+    }
+    armed = null; button.disabled = true;
+    try {
+      if (slug !== target || !(await flushDraftForReload())) return;
+      await api('/api/history/' + target + '/snapshot', { method: 'POST' });
+      const text = await (await api('/api/history/' + target + '/version?id=' + e.id + (e.source === 'site' ? '&source=site' : ''))).text();
+      if (slug !== target) return;
+      ta.value = text; edited(); save(true);
+      $('history-sheet').hidden = true;
+      toast('Restored the version from ' + esc(when) + '. Your previous text is in History. Commit puts this version on the site.', 10000);
+    } catch (err) { toast('Restore failed: ' + esc(err.message), 8000); }
+    finally { button.disabled = false; button.textContent = 'Restore'; }
+  }
+  $('history-close').addEventListener('click', () => { $('history-sheet').hidden = true; });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheets(); });
 
   // ---- images: paste or drop to upload ----
   function upload(file) {
     if (!slug) return;
+    const target = slug;
     status('Uploading ' + file.name);
     const name = file.name && file.name !== 'image.png' ? file.name : 'image-' + Date.now() + '.' + (file.type.split('/')[1] || 'png');
-    api('/api/upload?slug=' + slug + '&name=' + encodeURIComponent(name), { method: 'POST', body: file })
+    api('/api/upload?slug=' + target + '&name=' + encodeURIComponent(name), { method: 'POST', body: file })
       .then(r => r.json()).then(({ url }) => {
+        if (slug !== target) { toast('Image uploaded for ' + esc(target) + ': <code>' + esc(url) + '</code>', 7000); return; }
         const alt = name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ');
         insert((currentLineText().trim() ? '\n\n' : '') + '![' + alt + '](' + url + ' "")\n\n');
         status('Uploaded');
@@ -317,7 +666,7 @@
   }
   new ResizeObserver(sizeFrame).observe(pane);
   wide.addEventListener('change', () => { try { localStorage.setItem('writer.wide', wide.checked ? '1' : '0'); } catch (e) {} sizeFrame(); });
-  $('help').addEventListener('click', () => { $('sheet').hidden = !$('sheet').hidden; });
+  $('help').addEventListener('click', () => { const show = $('sheet').hidden; closeSheets(); $('sheet').hidden = !show; });
   $('sheet-close').addEventListener('click', () => { $('sheet').hidden = true; });
 
   // ---- start ----
@@ -327,5 +676,6 @@
     if (list.length) return open(list[0].slug);
     return api('/api/drafts', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ title: 'Untitled' }) })
       .then(r => r.json()).then(({ slug: s }) => loadList(s).then(() => open(s)));
-  }).catch(err => status('Could not load drafts: ' + err.message));
+  }).then(() => connectLiveReload()).catch(err => status('Could not load drafts: ' + err.message));
+  checkRemote(true);
 })();

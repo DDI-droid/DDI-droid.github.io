@@ -2,7 +2,7 @@
 // Desktop width preview. Uses a fake drafts API, so real drafts are never touched.
 //   node tests/notes.cjs <out_dir>      (the writer must be running on :4400)
 const path = require('path');
-const playwright = require('../../node_modules/playwright');
+const playwright = require('playwright');
 const out = process.argv[2];
 const DRAFT = '---\ntitle: Notes test\ndate: 2026-10-21\n---\n\n<!-- Meta: benchmark literature in past tense; the target in present tense. -->\n\n' +
   'Last week I surveyed the benchmarks.<!-- past --> The target is a maker benchmark.[^1]\n\nA plain line to comment out.\n\n[^1]: The note.\n';
@@ -21,6 +21,11 @@ const DRAFT = '---\ntitle: Notes test\ndate: 2026-10-21\n---\n\n<!-- Meta: bench
   await page.goto('http://localhost:4400/#notes-test'); await page.waitForTimeout(1500);
   const res = {};
   res.noteSpans = await page.$$eval('#hl .cm-note', s => s.map(x => x.textContent));
+  // the footnote definition line is greyed as a whole: every piece carries cm-footnote and the same colour
+  res.footnoteLine = await page.$$eval('#hl > div', rows => {
+    const r = rows.find(d => d.textContent.startsWith('[^1]:'));
+    return r ? [...r.querySelectorAll('span')].map(x => [x.textContent, x.className, getComputedStyle(x).color]) : null;
+  });
   const frame = page.frame({ url: /\/preview/ });
   res.previewLeaks = await frame.evaluate(() => /Meta: benchmark|<!--|past -->/.test(document.getElementById('markdown-content').innerHTML));
   res.previewText = await frame.evaluate(() => document.querySelector('#markdown-content p:nth-of-type(1)').textContent.slice(0, 80));
