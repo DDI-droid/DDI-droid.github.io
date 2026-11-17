@@ -18,3 +18,8 @@ vendor
 
 # Writer: local only (recreation-test copies of LessWrong posts are not ours to publish)
 _writer/tests/lw/
+# Writer: post sources and their version history stay on this machine (they hold private notes);
+# Commit puts only the rendered post and its images in the repository.
+_writer/drafts/
+_writer/.history/
+_writer/.incoming/

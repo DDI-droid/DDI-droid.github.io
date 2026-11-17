@@ -202,10 +202,67 @@
   let renderTimer = null;
   const scheduleRender = () => { clearTimeout(renderTimer); renderTimer = setTimeout(() => renderNow(false), 150); };
 
+  // ---- three-way merge (line based) ----
+  // base: the text this editor last loaded or saved; mine: the editor now; theirs: the file on disk now.
+  // Changes from the two sides that touch different lines are combined; a clash returns { conflict: true }.
+  function diffHunks(a, b) {
+    const n = a.length, m = b.length;
+    let pre = 0; while (pre < n && pre < m && a[pre] === b[pre]) pre++;
+    let suf = 0; while (suf < n - pre && suf < m - pre && a[n - 1 - suf] === b[m - 1 - suf]) suf++;
+    const A = a.slice(pre, n - suf), B = b.slice(pre, m - suf), N = A.length, M = B.length;
+    const L = []; for (let i = 0; i <= N; i++) L.push(new Int32Array(M + 1));
+    for (let i = N - 1; i >= 0; i--) for (let j = M - 1; j >= 0; j--)
+      L[i][j] = A[i] === B[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+    const hunks = []; let i = 0, j = 0, cur = null;
+    while (i < N || j < M) {
+      if (i < N && j < M && A[i] === B[j]) { if (cur) { hunks.push(cur); cur = null; } i++; j++; }
+      else if (j < M && (i >= N || L[i][j + 1] >= L[i + 1][j])) { if (!cur) cur = { s: pre + i, e: pre + i, lines: [] }; cur.lines.push(B[j]); j++; }
+      else { if (!cur) cur = { s: pre + i, e: pre + i, lines: [] }; cur.e = pre + i + 1; i++; }
+    }
+    if (cur) hunks.push(cur);
+    return hunks;
+  }
+  function merge3(base, mine, theirs) {
+    if (mine === theirs || base === theirs) return { text: mine, conflict: false };
+    if (base === mine) return { text: theirs, conflict: false };
+    const B = base.split('\n');
+    const all = diffHunks(B, mine.split('\n')).map(h => Object.assign(h, { side: 'm' }))
+      .concat(diffHunks(B, theirs.split('\n')).map(h => Object.assign(h, { side: 't' })))
+      .sort((x, y) => x.s - y.s || x.e - y.e);
+    const groups = [];
+    for (const h of all) {
+      const g = groups[groups.length - 1];
+      if (g && (h.s < g.e || (h.s === g.e && g.s === g.e))) { g.hunks.push(h); g.e = Math.max(g.e, h.e); }
+      else groups.push({ s: h.s, e: h.e, hunks: [h] });
+    }
+    const out = []; let pos = 0;
+    const apply = (g, side) => {
+      const seg = []; let p = g.s;
+      for (const h of g.hunks) if (h.side === side) { seg.push(...B.slice(p, h.s), ...h.lines); p = h.e; }
+      seg.push(...B.slice(p, g.e));
+      return seg;
+    };
+    for (const g of groups) {
+      out.push(...B.slice(pos, g.s));
+      const sides = new Set(g.hunks.map(h => h.side));
+      if (sides.size === 1) out.push(...apply(g, g.hunks[0].side));
+      else {
+        const a = apply(g, 'm'), b = apply(g, 't');
+        if (a.join('\n') !== b.join('\n')) return { conflict: true };
+        out.push(...a);
+      }
+      pos = g.e;
+    }
+    out.push(...B.slice(pos));
+    return { text: out.join('\n'), conflict: false };
+  }
+
   // ---- saving ----
   // baseHash is the version of the file this editor last loaded or saved. A save based on it is refused by the
   // server if the file changed on disk in between, so nothing written outside the editor is silently overwritten.
-  let saveTimer = null, baseHash = null, conflictFor = null;
+  let saveTimer = null, baseHash = null, conflictFor = null, baseText = null, merging = false;
+  let lastTyped = 0, applyingIncoming = false, clashShown = null;
+  const IDLE_MS = 60000;
   async function putDraft(text) {
     const r = await fetch('/api/drafts/' + slug, { method: 'PUT', body: text, headers: baseHash ? { 'x-base-hash': baseHash } : {} });
     if (r.status === 409) return { conflict: (await r.json()).hash };
@@ -222,8 +279,8 @@
     status('Saving');
     putDraft(text)
       .then(res => {
-        if (res.conflict) { status('Not saved: the file changed on disk'); showConflict(res.conflict); return; }
-        if (ta.value === text) dirty = false; const d = new Date(); status('Saved ' + d.toTimeString().slice(0, 5)); refreshTitle(); refreshStatus(1200);
+        if (res.conflict) { tryMerge(res.conflict); return; }
+        baseText = text; clearBackup(text); if (ta.value === text) dirty = false; const d = new Date(); status('Saved ' + d.toTimeString().slice(0, 5)); refreshTitle(); refreshStatus(1200);
       })
       .catch(err => status('Not saved: ' + err.message))
       .finally(() => { saving = false; });
@@ -234,7 +291,7 @@
   async function reloadFromDisk() {
     const r = await api('/api/drafts/' + slug), text = await r.text();
     const s = ta.selectionStart, e = ta.selectionEnd, top = ta.scrollTop;
-    ta.value = text; highlight(); dirty = false;
+    ta.value = text; highlight(); dirty = false; baseText = text;
     baseHash = r.headers.get('x-draft-hash'); conflictFor = null;
     ta.setSelectionRange(Math.min(s, text.length), Math.min(e, text.length));
     ta.scrollTop = top; hl.scrollTop = top;
@@ -246,18 +303,136 @@
     conflictFor = diskHash;
     toast('This draft changed on disk while you were typing. <button type="button" id="cf-disk">Load the disk version</button> ' +
       '<button type="button" id="cf-mine">Keep mine</button>', 600000);
-    $('cf-disk').onclick = () => { $('toast').hidden = true; reloadFromDisk().catch(err => status('Could not load: ' + err.message)); };
+    $('cf-disk').onclick = () => { $('toast').hidden = true; reloadFromDisk().then(() => offerRestore(ta.value)).catch(err => status('Could not load: ' + err.message)); };
     $('cf-mine').onclick = () => { $('toast').hidden = true; baseHash = diskHash; conflictFor = null; save(true); };
   }
+  // Typing here while something else (an agent, another tab) writes the same file: merge both instead of
+  // forcing a choice. Only when both changed the same lines does the old choice appear.
+  async function mergeFromDisk(diskHash) {
+    if (baseText === null) { showConflict(diskHash); return false; }
+    merging = true;
+    try {
+      const r = await api('/api/drafts/' + slug), disk = await r.text(), hash = r.headers.get('x-draft-hash');
+      const mine = ta.value, m = merge3(baseText, mine, disk);
+      if (m.conflict) { showConflict(hash || diskHash); return false; }
+      let prefix = 0; while (prefix < mine.length && prefix < m.text.length && mine[prefix] === m.text[prefix]) prefix++;
+      const shift = m.text.length - mine.length, s0 = ta.selectionStart, e0 = ta.selectionEnd, top = ta.scrollTop;
+      ta.value = m.text; highlight();
+      ta.setSelectionRange(s0 > prefix ? s0 + shift : s0, e0 > prefix ? e0 + shift : e0);
+      ta.scrollTop = top; hl.scrollTop = top;
+      baseText = disk; baseHash = hash; conflictFor = null; dirty = m.text !== disk;
+      renderNow(false); refreshTitle();
+      status('Merged in changes made on disk ' + new Date().toTimeString().slice(0, 5));
+      return true;
+    } finally { merging = false; }
+  }
+
+  // ---- never lose typing ----
+  // A copy of unsaved writing is kept in this browser until the file holds it, so a reload, a refused save or
+  // "Load the disk version" can always be undone: on opening the draft the writer offers to merge it back.
+  const backupKey = s => 'writer.unsaved.' + s;
+  function keepBackup() {
+    if (!slug) return;
+    try { localStorage.setItem(backupKey(slug), JSON.stringify({ text: ta.value, base: baseText, t: Date.now() })); } catch (_) {}
+  }
+  function clearBackup(savedText) {
+    if (!slug) return;
+    try { if (ta.value === savedText) localStorage.removeItem(backupKey(slug)); } catch (_) {}
+  }
+  function offerRestore(diskText) {
+    let b = null;
+    try { b = JSON.parse(localStorage.getItem(backupKey(slug)) || 'null'); } catch (_) {}
+    if (!b || typeof b.text !== 'string' || b.text === diskText) { try { localStorage.removeItem(backupKey(slug)); } catch (_) {} return; }
+    const when = new Date(b.t).toTimeString().slice(0, 5), key = backupKey(slug), name = slug;
+    const show = canMerge => {
+      toast((canMerge ? 'You have unsaved writing from ' + when + ' that is not in the file. <button type="button" id="bk-restore">Restore it</button> '
+        : 'Your unsaved writing from ' + when + ' and the file changed the same lines, so it was not merged. ') +
+        '<button type="button" id="bk-download">Download it</button> <button type="button" id="bk-discard">Discard</button>', 3600000);
+      if (canMerge) $('bk-restore').onclick = () => {
+        const m = b.base != null ? merge3(b.base, b.text, ta.value) : { conflict: true };
+        if (m.conflict) return show(false);
+        $('toast').hidden = true;
+        ta.value = m.text; highlight(); dirty = true; renderNow(false); save(true);
+        status('Restored your unsaved writing ' + new Date().toTimeString().slice(0, 5));
+      };
+      $('bk-download').onclick = () => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([b.text], { type: 'text/markdown' }));
+        a.download = name + '.unsaved-' + when.replace(':', '') + '.md'; a.click();
+      };
+      $('bk-discard').onclick = () => { $('toast').hidden = true; try { localStorage.removeItem(key); } catch (_) {} };
+    };
+    show(true);
+  }
+
+  // ---- agent edits ----
+  // Agents queue their edits instead of writing the file; they are merged in after a minute without typing,
+  // so they never land under the cursor. An edit that changed the same lines as the author is not applied.
+  async function applyIncoming() {
+    if (!slug || applyingIncoming || saving || merging) return;
+    applyingIncoming = true;
+    try {
+      const { items } = await (await api('/api/drafts/' + slug + '/incoming')).json();
+      if (!items.length) return;
+      const mine = ta.value; let text = mine; const done = [];
+      for (const it of items) {
+        const m = merge3(it.base, text, it.text);
+        if (m.conflict) { showIncomingClash(it); continue; }   // hold back only the clashing edit
+        text = m.text; done.push(it.id);
+      }
+      if (!done.length) return;
+      if (text !== mine) {
+        let prefix = 0; while (prefix < mine.length && prefix < text.length && mine[prefix] === text[prefix]) prefix++;
+        const shift = text.length - mine.length, s0 = ta.selectionStart, e0 = ta.selectionEnd, top = ta.scrollTop;
+        ta.value = text; highlight();
+        ta.setSelectionRange(s0 > prefix ? s0 + shift : s0, e0 > prefix ? e0 + shift : e0);
+        ta.scrollTop = top; hl.scrollTop = top; renderNow(false);
+        saving = true;
+        let res; try { res = await putDraft(text); } finally { saving = false; }
+        if (res.conflict) { tryMerge(res.conflict); return; }
+        baseText = text; clearBackup(text); if (ta.value === text) dirty = false;
+      }
+      await fetch('/api/drafts/' + slug + '/incoming', { method: 'DELETE', body: JSON.stringify({ ids: done }) });
+      status('Applied ' + done.length + ' agent edit' + (done.length > 1 ? 's ' : ' ') + new Date().toTimeString().slice(0, 5));
+      refreshTitle();
+    } catch (err) { status('Agent edits not applied: ' + err.message); }
+    finally { applyingIncoming = false; }
+  }
+  function showIncomingClash(it) {
+    if (clashShown === it.id) return;
+    clashShown = it.id;
+    toast('An agent edit (' + it.from + ') changed the same lines you did, so it was not applied. ' +
+      '<button type="button" id="in-download">Download it</button> <button type="button" id="in-skip">Skip it</button>', 3600000);
+    $('in-download').onclick = () => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([it.text], { type: 'text/markdown' }));
+      a.download = slug + '.agent-edit.md'; a.click();
+    };
+    $('in-skip').onclick = () => {
+      $('toast').hidden = true;
+      fetch('/api/drafts/' + slug + '/incoming', { method: 'DELETE', body: JSON.stringify({ ids: [it.id] }) });
+    };
+  }
+  function tryMerge(diskHash) {
+    mergeFromDisk(diskHash).then(ok => { if (ok && dirty) save(true); }).catch(() => showConflict(diskHash));
+  }
   setInterval(() => {
-    if (!slug || saving || liveReloading || !baseHash) return;
+    if (!slug || saving || merging || liveReloading || !baseHash) return;
     fetch('/api/drafts/' + slug + '/hash').then(r => r.ok ? r.json() : null).then(j => {
-      if (!j || j.hash === baseHash || saving) return;
-      if (!dirty && shownText === ta.value) reloadFromDisk().catch(err => status('Could not load: ' + err.message));
-      else showConflict(j.hash);
+      if (!j || saving) return;
+      if (j.hash !== baseHash) {
+        if (!dirty && shownText === ta.value) reloadFromDisk().catch(err => status('Could not load: ' + err.message));
+        else tryMerge(j.hash);
+        return;
+      }
+      if (j.incoming) {
+        const wait = IDLE_MS - (Date.now() - lastTyped);
+        if (wait <= 0) applyIncoming();
+        else status(j.incoming + ' agent edit' + (j.incoming > 1 ? 's' : '') + ' waiting; applied after ' + Math.ceil(wait / 1000) + ' s without typing');
+      }
     }).catch(() => {});
   }, 2000);
-  function edited() { highlight(); dirty = true; status('Editing'); scheduleRender(); if (!liveReloading) save(false); }
+  function edited() { highlight(); dirty = true; lastTyped = Date.now(); keepBackup(); status('Editing'); scheduleRender(); if (!liveReloading) save(false); }
   ta.addEventListener('input', edited);
   // Grammarly applies a fix with insertText, which fires input; when that fails it sets the value directly, with no
   // event. Catch any such change so the coloured copy, preview and autosave never fall behind the text.
@@ -278,8 +453,12 @@
     status('Saving before update');
     try {
       const res = await putDraft(text);
-      if (res.conflict) { status('Not saved: the file changed on disk'); showConflict(res.conflict); return false; }
-      if (ta.value === text) dirty = false;
+      if (res.conflict) {
+        saving = false;
+        if (!(await mergeFromDisk(res.conflict).catch(() => false))) { status('Not saved: the file changed on disk'); return false; }
+        return await flushDraftForReload();
+      }
+      baseText = text; clearBackup(text); if (ta.value === text) dirty = false;
       status('Saved');
     } catch (err) {
       status('Not saved: ' + err.message);
@@ -369,9 +548,10 @@
       slug = s; location.hash = s;
       $('open').href = '/preview?slug=' + encodeURIComponent(s);
       try { localStorage.setItem('writer.activeDraft', s); } catch (_) {}
-      ta.value = text; highlight(); dirty = false;
+      ta.value = text; highlight(); dirty = false; baseText = text;
       baseHash = response.headers.get('x-draft-hash'); conflictFor = null;
       $('drafts').value = s; $('delete').hidden = true; status('Opened'); lastRendered = ''; renderNow(true); refreshStatus(0);
+      offerRestore(text);
       const line = text.indexOf('\n---', 4) >= 0 ? text.slice(0, text.indexOf('\n---', 4)).split('\n').length + 1 : 0;
       goLine(line, false);
       try {

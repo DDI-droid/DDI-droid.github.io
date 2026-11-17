@@ -17,6 +17,8 @@ const HERE = __dirname;
 const SITE = path.resolve(process.env.WRITER_SITE || path.resolve(HERE, '..'));
 const DRAFTS = path.resolve(process.env.WRITER_DRAFTS || path.join(HERE, 'drafts'));
 const HISTORY = path.resolve(process.env.WRITER_HISTORY || path.join(HERE, '.history'));
+// Agent edits wait here while the author is typing; they are merged in after a minute without typing.
+const INCOMING = path.resolve(process.env.WRITER_INCOMING || path.join(HERE, '.incoming'));
 const POSTS = path.join(SITE, '_posts');
 const PAGES = path.join(SITE, '_pages');
 const PAGE_NAMES = (process.env.WRITER_PAGES || 'projects,academics').split(',').map(s => s.trim()).filter(Boolean);
@@ -144,6 +146,34 @@ function newDraft(title) {
 }
 const lf = s => String(s).replace(/\r\n/g, '\n');
 const draftFile = slug => path.join(DRAFTS, slug + '.md');
+const { merge3 } = require('./merge3.cjs');
+const incomingFile = slug => path.join(INCOMING, slug + '.json');
+function readQueue(slug) { try { return JSON.parse(fs.readFileSync(incomingFile(slug), 'utf8')); } catch (_) { return []; } }
+function writeQueue(slug, q) {
+  fs.mkdirSync(INCOMING, { recursive: true });
+  if (!q.length) { try { fs.unlinkSync(incomingFile(slug)); } catch (_) {} return; }
+  const tmp = incomingFile(slug) + '.tmp'; fs.writeFileSync(tmp, JSON.stringify(q)); fs.renameSync(tmp, incomingFile(slug));
+}
+// slug -> last time an open editor asked about it; an editor polls every 2 s.
+const editorSeen = new Map();
+const editorOpen = slug => Date.now() - (editorSeen.get(slug) || 0) < 10000;
+// With no editor open on the draft, queued agent edits go straight into the file (merged); a clash stays queued.
+function applyQueueOnDisk(slug) {
+  const file = draftFile(slug), q = readQueue(slug);
+  if (!q.length || !fs.existsSync(file)) return;
+  const before = fs.readFileSync(file, 'utf8'); let text = before; const left = [];
+  for (const it of q) {   // a clashing edit stays queued; the others still go in
+    const m = merge3(it.base, text, it.text);
+    if (m.conflict) { left.push(Object.assign(it, { conflict: true })); continue; }
+    text = m.text;
+  }
+  if (text !== before) fs.writeFileSync(file, text);
+  writeQueue(slug, left);
+}
+setInterval(() => {
+  let names = []; try { names = fs.readdirSync(INCOMING).filter(f => f.endsWith('.json')); } catch (_) { return; }
+  for (const f of names) { const slug = safeSlug(f.slice(0, -5)); if (slug && !editorOpen(slug)) { try { applyQueueOnDisk(slug); } catch (_) {} } }
+}, 3000).unref();
 const readDraft = slug => fs.readFileSync(draftFile(slug), 'utf8');
 
 // ---- git: the site repository, and a private history of post sources ----
@@ -604,7 +634,31 @@ const server = http.createServer(async (req, res) => {
     if (m && req.method === 'GET') {
       const slug = safeSlug(m[1]); if (!slug) return send(res, 400, 'bad slug');
       const file = draftFile(slug);
-      return fs.existsSync(file) ? json(res, 200, { hash: draftHash(fs.readFileSync(file)) }) : send(res, 404, 'no draft');
+      editorSeen.set(slug, Date.now());
+      return fs.existsSync(file) ? json(res, 200, { hash: draftHash(fs.readFileSync(file)), incoming: readQueue(slug).length }) : send(res, 404, 'no draft');
+    }
+    // Agent edits: queued while the author types, merged in by the editor after a minute without typing.
+    m = /^\/api\/drafts\/([^/]+)\/incoming$/.exec(p);
+    if (m) {
+      const slug = safeSlug(m[1]); if (!slug) return send(res, 400, 'bad slug');
+      if (!fs.existsSync(draftFile(slug))) return send(res, 404, 'no draft');
+      if (req.method === 'GET') return json(res, 200, { items: readQueue(slug) });
+      if (req.method === 'POST') {
+        const b = JSON.parse((await readBody(req, 10e6)).toString() || '{}');
+        if (typeof b.base !== 'string' || typeof b.text !== 'string') return send(res, 400, 'base and text are required');
+        const q = readQueue(slug);
+        const item = { id: Date.now() + '-' + Math.random().toString(36).slice(2, 7), base: b.base, text: b.text, from: String(b.from || 'agent').slice(0, 60), t: Date.now() };
+        q.push(item); writeQueue(slug, q);
+        const open = editorOpen(slug);
+        if (!open) applyQueueOnDisk(slug);
+        const left = readQueue(slug);
+        return json(res, 200, { id: item.id, editorOpen: open, queued: left.length, applied: !left.some(x => x.id === item.id), conflict: left.some(x => x.id === item.id && x.conflict) });
+      }
+      if (req.method === 'DELETE') {
+        const ids = new Set((JSON.parse((await readBody(req, 1e5)).toString() || '{}').ids) || []);
+        writeQueue(slug, readQueue(slug).filter(x => !ids.has(x.id)));
+        return json(res, 200, { queued: readQueue(slug).length });
+      }
     }
     m = /^\/api\/drafts\/([^/]+)$/.exec(p);
     if (m) {
